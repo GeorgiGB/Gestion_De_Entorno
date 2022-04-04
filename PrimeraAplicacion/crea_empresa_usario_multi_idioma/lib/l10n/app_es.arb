@@ -1,0 +1,68 @@
+{
+    "nombreApp": "Gestión usuarios",
+    "@nombreApp": {
+      "description": "Nombre de la Aplicación."
+    },
+  
+    "acceso": "Acceso",
+    "aviso": "Aviso",
+
+    "cargando": "Cargando",
+    "cargandoEmpresa": "Cargando Empresa",
+    "cargandoUsuario": "Cargando Usuario",
+    "centro": "Centro",
+    "centroPadre": "Centro Padre",
+    "comprobandoDatos": "Comprobando datos",
+    "contrasena": "Contraseña",
+    "crea": "Crea: ",
+    "crear": "Crear",
+
+    "dimeElCodigoDeFiltro": "Dime el código del filtro:",
+
+    "empresa": "Empresa",
+    "empresaCreadaCorrectamente": "Empresa creada correctamente",
+    "errNoEspecificado": "Error no especificado: ",
+    "escogeOpcionParaCrear": "Escoge opción para crear.",
+    "esperandoAlServidor": "Esperando al servidor",
+    "etiqSeleccionaLenguage": "Español",
+
+    "filtros": "Filtros",
+    "filtrosDeUsuario": "Filtros de usuario",
+
+    "generaContrasena": "Genera contraseña",
+
+    "hintContrasena": "Contraseña",
+    "hintTuNombre": "Tu nombre",
+
+    "identifica":"Identifícate",
+    "introduceElNombre": "Introduce el nombre",
+    "introContraDesmarcaCasilla": "Para introducir la contraseña desmarca la casilla.",
+    "introduceLaContrasena": "Introduce la contraseña",
+
+    "jefeDeArea": "Jefe de Área",
+
+    "nombreDeLaEmpresa": "Nombre de la empresa:",
+    "nombreDelUsuario": "Nombre del usuario:",
+    "nuevaEmpresa": "Empresa nueva",
+    "nuevoUsuario": "Usuario nuevo",
+    "numeroDeCodigo": "Número código:",
+
+    "ok": "Ok",
+    
+    "pdv": "PDV",
+    "primerRellenaCampos": "Primero rellena los campos",
+
+    "ruta": "Ruta",
+
+    "selecionaLenguage": "Selecciona Lenguaje",
+    "seleccionaFiltro": "Selecciona filtro: ",
+    "servidorNoDisponible": "Servidor no disponible",
+    "siguiente": "Siguiente",
+
+    "usuario": "Usuario:",
+    "usuNoIdentificado": "Usuario no identificado",
+    
+    "codErrorLogin401": "Auntentificación errónea",
+    "codErrorLogin404": "Usuario no encontrado",
+    "codErrorLogin500": "Error de servidor"
+}

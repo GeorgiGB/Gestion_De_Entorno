@@ -1,0 +1,68 @@
+{
+  "nombreApp": "Gestion des utilisateurs",
+  
+
+
+
+  "acceso": "Accès",
+  "aviso": "Avis",
+
+  "cargando": "Chargement",
+  "cargandoEmpresa": "Chargement Compagnie",
+  "cargandoUsuario": "Chargement utilisateur",
+  "centro": "Centre",
+  "centroPadre": "Centre de Base",
+  "comprobandoDatos": "Vérification des données",
+  "contrasena": "Mot de passe",
+  "crea": "Crée :",
+  "crear": "Créer :",
+  
+  "dimeElCodigoDeFiltro": "Dites-moi le code du filtre :",
+
+  "empresa": "Compagnie",
+  "empresaCreadaCorrectamente": "L'entreprise a été correctement créée",
+  "errNoEspecificado": "Erreur non spécifiée : ",
+  "escogeOpcionParaCrear": "Choisissez l'option à créer.",
+  "esperandoAlServidor": "En attendant le serveur",
+  "etiqSeleccionaLenguage": "Français",
+
+  "filtros": "Filter",
+  "filtrosDeUsuario": "User filters",
+
+  "generaContrasena": "Générer le mot de passe",
+
+  "hintContrasena": "Mot de passe",
+  "hintTuNombre": "Votre nom",
+
+  "identifica":"Connexion",
+  "introduceElNombre": "Entrez le nom",
+  "introContraDesmarcaCasilla":  "Pour saisir le mot de passe, décochez la case.",
+  "introduceLaContrasena": "Entrez le mot de passe",
+
+  "jefeDeArea": "Chef de zone",
+  
+  "nombreDeLaEmpresa": "Nom de l'entreprise :",
+  "nombreDelUsuario": "Nom de l'utilisateur:",
+  "nuevaEmpresa": "Nouvelle entreprise",
+  "nuevoUsuario": "UNouveau utilisateur",
+  "numeroDeCodigo": "Numéro de code:",
+
+  "ok": "Ok",
+
+  "pdv": "PDV",
+  "primerRellenaCampos": "Remplir d'abord les champs",
+
+  "ruta": "Route",
+
+  "selecionaLenguage": "Choisir la langue",
+  "seleccionaFiltro": "Sélectionner le filtre: ",
+  "servidorNoDisponible": "Serveur non disponible",
+  "siguiente": "Suivant",
+
+  "usuario": "Utilisateur",
+  "usuNoIdentificado": "Utilisateur non identifié",
+    
+  "codErrorLogin401": "Mauvaise authentification",
+  "codErrorLogin404": "Utilisateur non trouvé",
+  "codErrorLogin500": "Erreur de serveur"
+}

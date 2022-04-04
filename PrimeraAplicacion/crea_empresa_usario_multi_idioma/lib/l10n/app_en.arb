@@ -1,0 +1,70 @@
+{
+    "nombreApp": "User Management",
+ 
+    
+
+    
+    "acceso": "Login",
+    "aviso": "Warning",
+
+    "cargando": "Loading",
+    "cargandoEmpresa": "Loading Company",
+    "cargandoUsuario": "Loading User",
+    "centro": "Centre",
+    "centroPadre": "Parent centre",
+    "comprobandoDatos": "Checking data",
+    "contrasena": "Password",
+    "crea": "Create: ",
+    "crear": "Create",
+
+    
+    "dimeElCodigoDeFiltro": "Filter code:",
+
+    "empresa": "Company",
+    "empresaCreadaCorrectamente": "Company set up ok",
+    "errNoEspecificado": "Unspecified error: ",
+    "escogeOpcionParaCrear": "Choose option to create.",
+    "esperandoAlServidor": "Waiting for server",
+    "etiqSeleccionaLenguage": "Español",
+    
+    "filtros": "Filters",
+    "filtrosDeUsuario": "User filters",
+    
+    "generaContrasena": "Generate password",
+
+    "hintContrasena": "Password",
+    "hintTuNombre": "Your name",
+
+    "identifica":"Login",
+    "introduceElNombre": "Enter your name",
+    "introContraDesmarcaCasilla": "To enter the password, uncheck the box",
+    "introduceLaContrasena": "Introduce your contraseña",
+
+    "jefeDeArea": "Area manager",
+
+    "nombreDeLaEmpresa": "Company name:",
+    "nombreDelUsuario": "User name:",
+    "nuevaEmpresa": "New company",
+    "nuevoUsuario": "New user",
+    "numeroDeCodigo": "Code number:",
+
+    "ok": "Ok",
+    
+    "pdv": "POS",
+    "primerRellenaCampos": "First complete the fields",
+
+    "ruta": "Route",
+
+
+    "selecionaLenguage": "Select Language",
+    "seleccionaFiltro": "Select filter: ",
+    "servidorNoDisponible": "Server not available",
+    "siguiente": "Next",
+
+    "usuario": "User",
+    "usuNoIdentificado": "Unidentified use",
+    
+    "codErrorLogin401": "Wrong authentication",
+    "codErrorLogin404": "User not found",
+    "codErrorLogin500": "Server error"
+}
