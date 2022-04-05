@@ -1,2 +1,4 @@
-#Ignorar carpeta de node_modules
+#Ignorar carpetas
 /node_modules
+package-lock.json
+db.config.js

@@ -1,13 +1,6 @@
 const conexion = require('../db.config')
 
-async function crear_empresa(emp_nombre, emp_pwd){
-  // let res = await conexion.query(`INSERT INTO empresas (emp_nombre,
-  //   emp_pwd) 
-  //   VALUES ($1,
-  //            $2)`,
-  //            [emp_nombre, 
-  //              emp_pwd,
-  //              contrasena_autogenerada]);
+async function crear_empresa(emp_nombre, emp_pwd, contrasena_autogenerada){
   let res = await conexion.query("SELECT * FROM crearempresa('"
                                   +emp_nombre+"', '"
                                     +emp_pwd+", '"
