@@ -204,8 +204,10 @@ class _LoginState extends State<Login> {
             'Content-Type': 'application/json; charset=UTF-8',
           },
           // Adjuntamos al body los datos en formato JSON
-          body: jsonEncode(
-              <String, String>{'usuario': nombre, 'contra': contra_encrypted}),
+          body: jsonEncode(<String, String>{
+            'usu_nombre': nombre,
+            'usu_pwd': contra_encrypted
+          }),
         );
 
         int status = response.statusCode;
