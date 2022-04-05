@@ -122,9 +122,9 @@ app.post('/login', (req, res)=>{
         res.status(401).send("No se ha introducido el nombre o la contraseña")
     }else{
         verificar.login(usu_nombre, usu_pwd).then(response => {
-            debug.msg(response);
+            debug.msg(response.login);
             //  Se genera en la base de datos
-            //  token = getToken(usu_pwd);
+            token = getToken(usu_pwd);
             if(response){
                 //  Si todo se ha rellenado correctamente
                     res.status(200)
@@ -133,14 +133,15 @@ app.post('/login', (req, res)=>{
                     .header("Access-Control-Allow-Methods", "POST")
                     .header("Content-Type", "application/json; charset=utf-8")
                     .header("Pragma", "no-cache")
-            //  El resultado final se pone en send después de enviar todas las cabeceras.
-            .send( JSON.stringify( [{token: token}]))
+                    .send( JSON.stringify( [{token: token}]))
+                    //  El resultado final se pone en send después de enviar todas las cabeceras.
             }else{
                 res.status(404).send([{"msg_error": "Usuario o contraseña no válidos"}]);
                 //  El resultado final se pone en send después de enviar todas las cabeceras.
             }
         })
         .catch(err => {
+            debug.msg(err)
             res.status(500).send([{"msg_error": "Error de servidor"}]);
             })
     }
@@ -221,9 +222,9 @@ app.post('/crear_usuarios_telemetria',authenticateJWT, (req, res)=>{
 });
 
 // Funcion comparativa de tokens
-// function getToken(usuario_contra){
-//     return jwt.sign(
-//         {username: usuario_contra}, tokenSecret);
-// }
+function getToken(usuario_contra){
+    return jwt.sign(
+        {username: usuario_contra}, tokenSecret);
+}
 
     
