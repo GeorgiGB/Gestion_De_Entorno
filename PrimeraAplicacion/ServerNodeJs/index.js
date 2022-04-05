@@ -122,9 +122,9 @@ app.post('/login', (req, res)=>{
         res.status(401).send("No se ha introducido el nombre o la contraseña")
     }else{
         verificar.login(usu_nombre, usu_pwd).then(response => {
-            debug.msg(response.login);
+            debug.msg(response.bok);
 
-            if(response.bOk){
+            if(response.bok){
                 //  Si todo se ha rellenado correctamente
                     res.status(200)
                     .header("Access-Control-Allow-Headers", "Content-Type")
@@ -132,17 +132,18 @@ app.post('/login', (req, res)=>{
                     .header("Access-Control-Allow-Methods", "POST")
                     .header("Content-Type", "application/json; charset=utf-8")
                     .header("Pragma", "no-cache")
-                    .send( JSON.stringify( [{token: token}]))
+                    .send( JSON.stringify( [{
+                        token: token}]))
                     //  El resultado final se pone en send después de enviar todas las cabeceras.
             }else{
                 if(response.iCoderror < 0){
                     res.status(500).send([{
-                        "bOk":'"'+response.bOk+'"',
+                        "bok":'"'+response.bok+'"',
                         "cod_error":'"'+response.iCoderror+'"',
                         "msg_error":'"'+response.cError+'"'}]);
                 }else{
                   res.status(404).send([{
-                    "bOk":'"'+response.bOk+'"',
+                    "bok":'"'+response.bok+'"',
                     "cod_error":'"'+response.iCoderror+'"',
                     "msg_error": "Usuario o contraseña no válidos"}]);
                 //  El resultado final se pone en send después de enviar todas las cabeceras.  
