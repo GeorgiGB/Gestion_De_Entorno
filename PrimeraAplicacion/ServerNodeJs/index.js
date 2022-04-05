@@ -225,6 +225,10 @@ app.post('/crear_usuarios_telemetria',authenticateJWT, (req, res)=>{
 function getToken(usuario_contra){
     return jwt.sign(
         {username: usuario_contra}, tokenSecret);
+<<<<<<< HEAD
 }
+=======
+ }
+>>>>>>> 6546c1c6fa39af87e5b6b7477996ae0f772103f4
 
     
