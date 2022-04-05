@@ -37,6 +37,7 @@ class _filtros_usuarioState extends State<filtros_usuario> {
     traducciones = AppLocalizations.of(context)!;
 
     ute_filtro = traducciones.filtros;
+    
     // limpiamos la lista fitlros
     _filtros.clear();
 
