@@ -1,0 +1,38 @@
+-- FUNCTION: public.crearempresa(character varying, character varying)
+
+-- DROP FUNCTION IF EXISTS public.crearempresa(character varying, character varying);
+
+CREATE OR REPLACE FUNCTION public.crearempresa(
+	cemp_n character varying,
+	cemp_p character varying,
+	OUT bok boolean,
+	OUT iusu_cod integer,
+	OUT icoderror integer,
+	OUT cerror character varying)
+    RETURNS record
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+
+BEGIN
+	
+	bOk := false;
+	iUsu_cod := -1;
+	iCoderror := 0;
+	cError := '';
+
+	INSERT INTO empresas (emp_nombre, emp_pwd) VALUES (cemp_n, cemp_p) RETURNING emp_cod into cerror ;
+   
+	IF FOUND THEN
+		bOk := true;
+	END IF;
+
+	EXCEPTION WHEN OTHERS THEN
+		iCoderror := -1;
+		cError := SQLERRM;
+		END;
+$BODY$;
+
+ALTER FUNCTION public.crearempresa(character varying, character varying)
+    OWNER TO postgres;
