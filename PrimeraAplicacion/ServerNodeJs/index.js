@@ -221,9 +221,9 @@ app.post('/crear_usuarios_telemetria',authenticateJWT, (req, res)=>{
 });
 
 // Funcion comparativa de tokens
-// function getToken(usuario_contra){
-//     return jwt.sign(
-//         {username: usuario_contra}, tokenSecret);
-// }
+function getToken(usuario_contra){
+    return jwt.sign(
+        {username: usuario_contra}, tokenSecret);
+ }
 
     
