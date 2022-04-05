@@ -115,17 +115,16 @@ debug.msg("Servidor ok");
 //  Iniciar sesion con el usuario
 app.post('/login', (req, res)=>{
 
-    let usu_nombre = req.body.usuario;
-    let usu_pwd = req.body.contra;
+    let usu_nombre = req.body.usu_nombre;
+    let usu_pwd = req.body.usu_pwd;
     
     if(!usu_nombre || !usu_pwd){
         res.status(401).send("No se ha introducido el nombre o la contraseña")
     }else{
         verificar.login(usu_nombre, usu_pwd).then(response => {
             debug.msg(response.login);
-            //  Se genera en la base de datos
-            token = getToken(usu_pwd);
-            if(response){
+
+            if(response.bOk){
                 //  Si todo se ha rellenado correctamente
                     res.status(200)
                     .header("Access-Control-Allow-Headers", "Content-Type")
@@ -136,8 +135,19 @@ app.post('/login', (req, res)=>{
                     .send( JSON.stringify( [{token: token}]))
                     //  El resultado final se pone en send después de enviar todas las cabeceras.
             }else{
-                res.status(404).send([{"msg_error": "Usuario o contraseña no válidos"}]);
-                //  El resultado final se pone en send después de enviar todas las cabeceras.
+                if(response.iCoderror < 0){
+                    res.status(500).send([{
+                        "bOk":'"'+response.bOk+'"',
+                        "cod_error":'"'+response.iCoderror+'"',
+                        "msg_error":'"'+response.cError+'"'}]);
+                }else{
+                  res.status(404).send([{
+                    "bOk":'"'+response.bOk+'"',
+                    "cod_error":'"'+response.iCoderror+'"',
+                    "msg_error": "Usuario o contraseña no válidos"}]);
+                //  El resultado final se pone en send después de enviar todas las cabeceras.  
+                }
+                
             }
         })
         .catch(err => {
@@ -225,10 +235,6 @@ app.post('/crear_usuarios_telemetria',authenticateJWT, (req, res)=>{
 function getToken(usuario_contra){
     return jwt.sign(
         {username: usuario_contra}, tokenSecret);
-<<<<<<< HEAD
 }
-=======
- }
->>>>>>> 6546c1c6fa39af87e5b6b7477996ae0f772103f4
 
     
