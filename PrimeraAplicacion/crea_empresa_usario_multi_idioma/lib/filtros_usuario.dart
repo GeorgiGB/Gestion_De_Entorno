@@ -61,7 +61,7 @@ class _filtros_usuarioState extends State<filtros_usuario> {
           ),
           DropdownButton<String>(
             isExpanded: true,
-            value: ute_filtro,
+            value: traducciones.filtros,
             icon: const Icon(Icons.arrow_downward),
             iconSize: 24,
             elevation: 16,
