@@ -16,6 +16,3 @@ x86/
 # but keep track of directories ending in .cache
 !*.[Cc]ache/
 
-.vscode
-launch.json
-setting.json
