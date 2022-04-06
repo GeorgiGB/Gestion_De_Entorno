@@ -28,7 +28,7 @@ class _filtros_usuarioState extends State<filtros_usuario> {
   bool esperandoFiltrado = false;
   late AppLocalizations traducciones;
 
-  String ute_filtro = 'Filtros';
+  late String ute_filtro;
   // Lista de filtros
   // En el se encontraran los diferentes filtros que se pueden asociar al usuario.
   final List<String> _filtros = [];
@@ -36,6 +36,8 @@ class _filtros_usuarioState extends State<filtros_usuario> {
   Widget build(BuildContext context) {
     traducciones = AppLocalizations.of(context)!;
 
+    ute_filtro = traducciones.filtros;
+    
     // limpiamos la lista fitlros
     _filtros.clear();
 
