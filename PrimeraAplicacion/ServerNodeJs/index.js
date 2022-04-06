@@ -28,7 +28,7 @@ const verificarJWT = require('./comandos/verificarJWT');
 const tokenSecret = ('./comandos/authenticateJWT');
 
 // Estas credenciales llevan implicitos el usuario y la contraseña
-// Viene encriptadas en SHA1 de l'aplicación cliente
+// Viene encriptadas en SHA1 de la aplicación cliente
 const administrador = 'admin';
 //const usuarionormal = '731ab4cd8bc667398c0ecfe80da1870cc0545ba4';
 /*
@@ -133,7 +133,9 @@ app.post('/login', (req, res)=>{
                     .header("Content-Type", "application/json; charset=utf-8")
                     .header("Pragma", "no-cache")
                     .send( JSON.stringify( [{
-                        token: token}]))
+                        token: token,
+                        "Usuario":usu_nombre,
+                        "PWD":usu_pwd}]))
                     //  El resultado final se pone en send después de enviar todas las cabeceras.
             }else{
                 if(response.iCoderror < 0){
