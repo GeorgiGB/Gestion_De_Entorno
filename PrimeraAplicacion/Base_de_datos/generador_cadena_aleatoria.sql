@@ -1,11 +1,9 @@
--- FUNCTION: public.genera_pwd(integer)
+-- FUNCTION: public.generador_cadena_aleatoria(integer)
 
--- DROP FUNCTION IF EXISTS public.generador_Cadena_Aleatoria(integer);
--- Función que crea un contraseña alfanumérica de forma aleatoria 
--- Con mayúsculas y minúsculas
--- de una longitud indicada en el parametro iCount
-CREATE OR REPLACE FUNCTION public.generador_Cadena_Aleatoria(
-	IN iCount integer,
+-- DROP FUNCTION IF EXISTS public.generador_cadena_aleatoria(integer);
+
+CREATE OR REPLACE FUNCTION public.generador_cadena_aleatoria(
+	icount integer,
 	OUT cpwd character varying,
 	OUT icoderror integer,
 	OUT cerror character varying)
@@ -20,7 +18,7 @@ DECLARE
 BEGIN
 	
 	cpwd := '';
-	-- ij := 0;
+	icoderror := 0;
 	cerror :='';
 	iAleat := 0;
 	
@@ -59,7 +57,5 @@ BEGIN
 		END;
 $BODY$;
 
-ALTER FUNCTION public.generador_Cadena_Aleatoria(integer)
+ALTER FUNCTION public.generador_cadena_aleatoria(integer)
     OWNER TO postgres;
-	
-select * from generador_Cadena_Aleatoria(16);

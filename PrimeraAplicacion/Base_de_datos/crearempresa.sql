@@ -1,14 +1,15 @@
--- FUNCTION: public.crearempresa(character varying, character varying)
+-- FUNCTION: public.crearempresa(character varying, character varying, boolean, integer);
 
--- DROP FUNCTION IF EXISTS public.crearempresa(character varying, character varying);
+-- DROP FUNCTION IF EXISTS public.crearempresa(character varying, character varying, boolean, integer);
 
 CREATE OR REPLACE FUNCTION public.crearempresa(
 	cemp_nombre character varying,
 	cemp_pwd character varying,
 	bauto_pwd boolean,
+	iusu_cod integer,
 	OUT bok boolean,
 	OUT iemp_cod integer,
-	OUT icoderror integer,
+	OUT icod_error integer,
 	OUT cerror character varying)
     RETURNS record
     LANGUAGE 'plpgsql'
@@ -19,24 +20,29 @@ AS $BODY$
 BEGIN
 	
 	bok := false;
-	iEmp_cod := -1;
-	iCoderror := 0;
-	cError := '';
+	iemp_cod := -1;
+	icod_error := 0;
+	cerror := '';
+	
 	if bauto_pwd then 
 	-- generar contraseña
+		Select cpwd, icoderror as e into cemp_pwd, icod_error from public.generador_cadena_aleatoria(16);
+		IF icod_error !=0 THEN
+				RAISE EXCEPTION 'Error en la generación de la contraseña';
+		END IF;
 	END IF;
 	
-	INSERT INTO empresas (emp_nombre, emp_pwd) VALUES (cemp_nombre, cemp_pwd) RETURNING emp_cod into iEmp_cod;
+	INSERT INTO empresas (emp_nombre, emp_pwd, emp_usu_cod) VALUES (cemp_nombre, cemp_pwd, iusu_cod) RETURNING emp_cod into iemp_cod;
    
 	IF FOUND THEN
-		bOk := true;
+		bok := true;
 	END IF;
 
 	EXCEPTION WHEN OTHERS THEN
-		iCoderror := -1;
-		cError := SQLERRM;
+		icod_error := -1;
+		cerror := SQLERRM;
 		END;
 $BODY$;
 
-ALTER FUNCTION public.crearempresa(character varying, character varying)
+ALTER FUNCTION public.crearempresa(character varying, character varying, boolean, integer)
     OWNER TO postgres;
