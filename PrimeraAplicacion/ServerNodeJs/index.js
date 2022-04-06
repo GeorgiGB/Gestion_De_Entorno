@@ -8,9 +8,6 @@ const cors = require('cors');
 // Tratar datos con formato JSON
 const bodyParser = require('body-parser');
 
-// Generar tokens con formato JWT
-const jwt = require('jsonwebtoken');
-
 //const contentType = require('express/lib/response');
 
 //Verifica si el usuario existe en el sistema
@@ -24,8 +21,6 @@ const crear_ute = require('./comandos/usuarios_telemetria');
 
 const debug = require('./comandos/globales');
 const verificarJWT = require('./comandos/verificarJWT');
-// Constante utilizada para generar el token con JWT
-const tokenSecret = ('./comandos/authenticateJWT');
 
 // Estas credenciales llevan implicitos el usuario y la contraseña
 // Viene encriptadas en SHA1 de la aplicación cliente
@@ -35,6 +30,9 @@ const administrador = 'admin';
 Esto es un token ficticio para las pruebas
 */
 let token;
+
+// Generar tokens con formato JWT
+const jwt = require('jsonwebtoken');
 
 // Creación ficticia de usuarios
 const users = [
@@ -81,13 +79,12 @@ const authenticateJWT = (req, res, next) => {
         if (err) {
             return res.sendStatus(403);
         }
-        // afegim a la petició les dades que venien en el jwt user
             req.user = user;
-        //  s'executa la segïuent funció, un cop s'ha fet el middleware
             next();
         });
-        } else { // no està. contestem directament al client amb un error
-            res.status(401).send("Token incorrecto")
+        } else {
+            res.status(401).send([{
+                "msg_error": "Token invalido"}]);
         }
     };
 
@@ -133,7 +130,7 @@ app.post('/login', (req, res)=>{
                     .header("Content-Type", "application/json; charset=utf-8")
                     .header("Pragma", "no-cache")
                     .send( JSON.stringify( [{
-                        token: token,
+                        //token: token,
                         "Usuario":usu_nombre,
                         "PWD":usu_pwd}]))
                     //  El resultado final se pone en send después de enviar todas las cabeceras.
@@ -233,11 +230,5 @@ app.post('/crear_usuarios_telemetria',authenticateJWT, (req, res)=>{
     }
     
 });
-
-// Funcion comparativa de tokens
-function getToken(usuario_contra){
-    return jwt.sign(
-        {username: usuario_contra}, tokenSecret);
-}
 
     

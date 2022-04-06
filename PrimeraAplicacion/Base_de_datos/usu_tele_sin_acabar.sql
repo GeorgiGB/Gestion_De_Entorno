@@ -26,6 +26,7 @@ BEGIN
 	cError := '';
 	if bauto_pwd then 
 	-- generar contraseña
+	
 	END IF;
 
 	INSERT INTO usuarios_telemetria (ute_nombre, ute_pwd, ute_empresa, ute_centro_padre,

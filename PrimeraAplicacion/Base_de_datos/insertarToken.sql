@@ -1,5 +1,10 @@
-CREATE OR REPLACE FUNCTION public.insertarToken(
+-- FUNCTION: public.insertartoken(character varying, integer)
+
+-- DROP FUNCTION IF EXISTS public.insertartoken(character varying, integer);
+
+CREATE OR REPLACE FUNCTION public.insertartoken(
 	ctoken character varying,
+	iusu_cod integer,
 	OUT ok boolean,
 	OUT coderror integer,
 	OUT error character varying)
@@ -13,7 +18,7 @@ BEGIN
 	ok :=false;
 	coderror :=0;
 	error := '';
-   INSERT INTO usuarios_token (ust_token) VALUES (ctoken) RETURNING ust_cod into coderror;
+   INSERT INTO usuarios_token (ust_token, ust_usuario, ust_activo) VALUES (ctoken, iusu_cod, 'true');
 
 	EXCEPTION WHEN OTHERS THEN
 		coderror := -1;
@@ -21,5 +26,5 @@ BEGIN
 		END;
 $BODY$;
 
-ALTER FUNCTION public.insertarToken(character varying)
+ALTER FUNCTION public.insertartoken(character varying, integer)
     OWNER TO postgres;
