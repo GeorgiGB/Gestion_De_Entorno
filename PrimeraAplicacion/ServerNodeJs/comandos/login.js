@@ -19,7 +19,6 @@ async function login(usu_nombre, usu_pwd){
             //  let instoken = await conexion.query()
 
         }
-        debug.msg(fila.bok);
         return fila;
     }
 
