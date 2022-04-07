@@ -1,13 +1,11 @@
 CREATE OR REPLACE FUNCTION public.crearusuariostelemetria(
+	ctoken character varying,
+	iusu_cod integer,
 	cute_nombre character varying,
 	cute_pwd character varying,
 	bauto_pwd boolean,
-	iute_emp integer,
-	iute_centro integer,
-	iute_centro_padre integer,
-	iute_pdv integer,
-	iute_jefe_area integer,
-	iute_ruta integer,
+	cute_filtro character varying,
+	iute_cod_filtro integer,
 	OUT bok boolean,
 	OUT iusu_cod integer,
 	OUT icoderror integer,
@@ -20,29 +18,33 @@ AS $BODY$
 
 BEGIN
 	
-	bOk := false;
-	iUsu_cod := -1;
-	iCoderror := 0;
-	cError := '';
+	bok := false;
+	iusu_cod := -1;
+	icoderror := 0;
+	cerror := '';
 	if bauto_pwd then 
 	-- generar contraseña
-	
+		Select cpwd, icoderror as e into cemp_pwd, icod_error from public.generador_cadena_aleatoria(16);
+			IF icod_error !=0 THEN
+					RAISE EXCEPTION 'Error en la generación de la contraseña';
+			END IF;
 	END IF;
-
-	INSERT INTO usuarios_telemetria (ute_nombre, ute_pwd, ute_empresa, ute_centro_padre,
-									ute_centro, ute_pdv, ute_jefe_area, ute_ruta) 
-			VALUES (cute_nombre, cute_pwd, iute_emp,
-					iute_centro_padre, iute_centro, iute_pdv,
-					iute_jefe_area, iute_ruta);
-					
-			RETURNING emp_cod into cerror;
+	
+	
+	IF EXISTS (SELECT bok FROM validar_token(ctoken, iusu_cod)) THEN
+		INSERT INTO usuarios_telemetria (ute_nombre, ute_pwd, iute_filtro, iute_cod_filtro) 
+				VALUES (cute_nombre, cute_pwd, iute_emp,
+						iute_centro_padre, iute_centro, iute_pdv,
+						iute_jefe_area, iute_ruta);
+	END IF;	
+	
 	IF FOUND THEN
-		bOk := true;
+		bok := true;
 	END IF;
 
 	EXCEPTION WHEN OTHERS THEN
-		iCoderror := -1;
-		cError := SQLERRM;
+		icoderror := -1;
+		cerror := SQLERRM;
 		END;
 $BODY$;
 
