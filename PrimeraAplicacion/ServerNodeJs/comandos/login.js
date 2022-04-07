@@ -1,5 +1,11 @@
-const conexion = require('../db.config')
+const conexion = require('../config/db.config')
 const debug = require('./globales')
+// Constante utilizada para generar el token con JWT
+const tokenSecret = ('./comandos/verificarJWT');
+
+// Generar tokens con formato JWT
+const jwt = require('jsonwebtoken');
+const verificarJWT = require('../middleware/verificarJWT');
 
 // Funcion que hara la conexion con la base de datos y mirara si esta el usuario creado con su token
 async function login(usu_nombre, usu_pwd){
@@ -8,21 +14,32 @@ async function login(usu_nombre, usu_pwd){
         // verificar si el usuario existe y proseguir con la operacion
        let reslogin = await conexion.query("SELECT * FROM login('"+usu_nombre+"','"+usu_pwd+"')");
         //resultado de la operacion
-        debug.msg(reslogin.rows[0]);
-        fila = reslogin.rows[0];
-        //let fila = reslogin.rows[0]["login"].replace(/\(|\)/g,"");
-        debug.msg(fila)
+        //debug.msg(reslogin.rows[0]);
+        let fila = reslogin.rows[0];
 
         if(fila.bok){
-            debug.msg("Podemos insertar.")
+            let usu_cod = fila.iusu_cod;
             //  insertar token en base de usuarios
-            //  let instoken = await conexion.query()
-
+            let token = getToken(usu_pwd);
+            //  Hacemos la petición a la base de datos
+            let instoken = await conexion.query("SELECT * FROM insertartoken('"+token+"','"+usu_cod+"')");
+            //  Insertamos el token en fila si todo ha ido correcto
+            fila.bok = instoken.rows[0].bok;
+            //  Entonces crearemos un campo para recibir la respuesta
+            if(fila.bok){
+                fila.token = token;
+            }
         }
         return fila;
     }
 
+// Funcion de generacion de tokens
+function getToken(usuario_contra){
+    return jwt.sign(
+        {username: usuario_contra}, verificarJWT.llaveSecreta);
+}
+
 module.exports = {
     login:login,
-    //guardarToken:guardarToken
+    getToken:getToken
 }   

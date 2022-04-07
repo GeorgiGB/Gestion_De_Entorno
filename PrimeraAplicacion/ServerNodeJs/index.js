@@ -1,4 +1,3 @@
-
 // Creación del servidor
 const express = require('express');
 
@@ -7,11 +6,6 @@ const cors = require('cors');
 
 // Tratar datos con formato JSON
 const bodyParser = require('body-parser');
-
-// Generar tokens con formato JWT
-const jwt = require('jsonwebtoken');
-
-//const contentType = require('express/lib/response');
 
 //Verifica si el usuario existe en el sistema
 const verificar = require('./comandos/login');
@@ -23,18 +17,14 @@ const crear_emp = require('./comandos/empresas');
 const crear_ute = require('./comandos/usuarios_telemetria');
 
 const debug = require('./comandos/globales');
-const verificarJWT = require('./comandos/verificarJWT');
-// Constante utilizada para generar el token con JWT
-const tokenSecret = ('./comandos/authenticateJWT');
 
 // Estas credenciales llevan implicitos el usuario y la contraseña
 // Viene encriptadas en SHA1 de la aplicación cliente
 const administrador = 'admin';
-//const usuarionormal = '731ab4cd8bc667398c0ecfe80da1870cc0545ba4';
-/*
-Esto es un token ficticio para las pruebas
-*/
-let token;
+
+
+// Generar tokens con formato JWT
+const jwt = require('jsonwebtoken');
 
 // Creación ficticia de usuarios
 const users = [
@@ -44,58 +34,40 @@ const users = [
     ];
 
 //  ---------------------------------------------------------
-const rutasProtegidas = express.Router();
 
-rutasProtegidas.use((req, res, next) => {
-    const token = req.headers['access-token'];
-    if(token){
-        jwt.verify(token, app.get(tokenSecret), (err, user) => {
-            if(err){
-                //  Si el token no esta registrado
-                //  en la base de datos este mandara el siguiente mensaje
-                return res.json({msg: 'Token invalida'});
-            }else{
-                //  Si todo es correcto mandara el token
-                //  y continuara la operación
-                req.user = user;
-                next();
-            }
-        });
-    }else{
-        res.send({
-            //  Si no se manda nada saldra este mensaje
-            msg: 'Falta el token'
-        })
-    }
-
-})
-
-// funcion para verificar el token
+// Middleware
+//const authToken = require('./comandos/login')
+const verificarJWT = require('./middleware/verificarJWT');
+// constante para verificar el token y sus cabeceras
 const authenticateJWT = (req, res, next) => {
     // arrepleguem el JWT d'autorització
     const authHeader = req.headers.authorization;
-    if (authHeader) { // si hi ha toquen
-        // recuperem el jwt
+    debug.msg(authHeader)
+    if (authHeader) {
+        //  recogemos el jwt
         const token = authHeader.split(' ')[1];
-        jwt.verify(token, app.get(tokenSecret), (err, user) => {
-        if (err) {
-            return res.sendStatus(403);
-        }
-        // afegim a la petició les dades que venien en el jwt user
+        //  usando el verify accederemos al token y la llaveSecreta
+        jwt.verify(token, verificarJWT.llaveSecreta, (err, user) => {
+            debug.msg("Entro JWT: "+err);
+            if (err) {
+                return headers(res).status(403).json([{
+                    "msg_error":"No tienes permisos"}]);
+            }
+
             req.user = user;
-        //  s'executa la segïuent funció, un cop s'ha fet el middleware
             next();
         });
-        } else { // no està. contestem directament al client amb un error
-            res.status(401).send("Token incorrecto")
-        }
-    };
+    } else {
+        debug.msg("VOY A DAR ERROR DE TOKEN")
+        headers(res).status(401).json([{
+            "msg_error": "Token invalido"}]);
+    }
+};
 
 //  -------------------------------------------------------------
 
-
 let app = express();
-
+app.set('accesTokenSecret', verificarJWT.llaveSecreta)
 var corsOptions = {
     origin: '*',
     optionsSuccessStatus: 200, // For legacy browser support
@@ -106,47 +78,42 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
-app.set('accesTokenSecret', verificarJWT.llaveSecreta)
+app.use(express.json())
 
 app.listen(8080);
 
 debug.msg("Servidor ok");
 
+const headers = require('./comandos/cabecera');
+
 //  Iniciar sesion con el usuario
 app.post('/login', (req, res)=>{
-
+    
     let usu_nombre = req.body.usu_nombre;
     let usu_pwd = req.body.usu_pwd;
     
     if(!usu_nombre || !usu_pwd){
-        res.status(401).send("No se ha introducido el nombre o la contraseña")
+        headers(res).status(401)
+        //.header("Content-Type", "application/json; charset=utf-8")
+        .send([{"msg_error":"No se ha introducido el nombre o la contraseña"}])
     }else{
         verificar.login(usu_nombre, usu_pwd).then(response => {
-            debug.msg(response.bok);
+            //debug.msg(response);
 
             if(response.bok){
                 //  Si todo se ha rellenado correctamente
-                    res.status(200)
-                    .header("Access-Control-Allow-Headers", "Content-Type")
-                    .header("Access-Control-Allow-Credentials", "true")
-                    .header("Access-Control-Allow-Methods", "POST")
-                    .header("Content-Type", "application/json; charset=utf-8")
-                    .header("Pragma", "no-cache")
-                    .send( JSON.stringify( [{
-                        token: token,
-                        "Usuario":usu_nombre,
-                        "PWD":usu_pwd}]))
+                    headers(res).status(200).json([{"token":response.token}])
                     //  El resultado final se pone en send después de enviar todas las cabeceras.
             }else{
-                if(response.iCoderror < 0){
-                    res.status(500).send([{
-                        "bok":'"'+response.bok+'"',
-                        "cod_error":'"'+response.iCoderror+'"',
-                        "msg_error":'"'+response.cError+'"'}]);
+                if(response.icoderror < 0){
+                    headers(res).status(500).json([{
+                        "bok":response.bok,
+                        "cod_error":response.icoderror,
+                        "msg_error":response.cerror}]);
                 }else{
-                  res.status(404).send([{
-                    "bok":'"'+response.bok+'"',
-                    "cod_error":'"'+response.iCoderror+'"',
+                    headers(res).status(404).json([{
+                    "bok":response.bok,
+                    "cod_error":response.icoderror,
                     "msg_error": "Usuario o contraseña no válidos"}]);
                 //  El resultado final se pone en send después de enviar todas las cabeceras.  
                 }
@@ -155,18 +122,18 @@ app.post('/login', (req, res)=>{
         })
         .catch(err => {
             debug.msg(err)
-            res.status(500).send([{"msg_error": "Error de servidor"}]);
+            headers(res).status(500).json([{"msg_error": "Error de servidor"}]);
             })
     }
 });
 
 
 //  Con un post mandaremos al servidor la petición de la creación de una empresa
-//  Crear empresa
+//  Ahora con la creación del middleware tenemos que introducir el authenticateJWT
+//  
 app.post('/crear_empresa', authenticateJWT,(req,res)=>{
-    debug.msg(JSON.stringify(req.body));
-
-    let token = req.header("authorization");
+    debug.msg(req.body);
+    
     // Requerimientos para la creación de una empresa el nombre y la contraseña
     const emp_nombre = req.body.emp_nombre;
     const emp_pwd = req.body.emp_pwd;
@@ -174,26 +141,22 @@ app.post('/crear_empresa', authenticateJWT,(req,res)=>{
     const contrasena_autogenerada = req.body.contrasena_autogenerada;
     
     // si alguno de los campos esta vacio, este mandara un error y no creara nada
-    if (!emp_nombre || !emp_pwd) {
+    if (!emp_nombre || !emp_pwd && !contrasena_autogenerada) {
         console.log(emp_nombre, emp_pwd);
-        res.status(401).send("No se ha introducido el nombre o la contraseña");
+        headers(res).status(401).json([{"msg_error":"No se ha introducido el nombre o la contraseña"}]);
     }else{
         // Datos correctos
+        let token = req.headers.authorization.split(' ')[1];
         crear_emp.crear_empresa(token, emp_nombre, emp_pwd, contrasena_autogenerada).then(response => {
-            debug.msg(response);
+            //debug.msg(response);
             //  Si todo esta correcto el usuario accedera
-            if(response){res.status(200)
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Methods", "POST")
-                .header("Content-Type", "application/json; charset=utf-8")
-                .header("Pragma", "no-cache")
+            if(response){headers(res).status(200)
                 // El resultado final se pone en send después de enviar todas las cabeceras.
-                .send( JSON.stringify( [{"Empresa_creada": true}]))
+                .json(([{"msg": "empresa creada correctamente"}]))
             }}
         )
         .catch(err => {
-            res.status(500).send("Error de servidor.");
+            headers(res).status(500).json("Error de servidor.");
         });
     }
     
@@ -214,30 +177,19 @@ app.post('/crear_usuarios_telemetria',authenticateJWT, (req, res)=>{
     //console.log(req.body);
     //  Si alguno de los dos campos o los dos estan vacios este no mandara nada al servidor
     if (!ute_nombre || !ute_pwd) {
-        res.status(401).send("No se ha introducido el nombre o la contraseña");
+        headers(res).status(401).json("No se ha introducido el nombre o la contraseña");
     }else{
         // Datos correctos
         crear_ute.crear_usuarios_telemetria(ute_nombre, ute_pwd,ute_contra_auto, ute_filtro, filtro_cod).then(
-            () => res.status(200)
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Methods", "POST")
-                .header("Content-Type", "application/json; charset=utf-8")
-                .header("Pragma", "no-cache")
+            () => headers(res).status(200)
                 // El resultado final se pone en send después de enviar todas las cabeceras.
-                .send( JSON.stringify( [{"Usuario_creado": true, "usa_cod": "codigo_devuelto"}]))
+                .json([{"Usuario_creado": true, "usa_cod": "codigo_devuelto"}])
         )
         .catch(err => {
-            res.status(500).send("Error de servidor.");
+            headers(res).status(500).json("Error de servidor.");
         });
     }
     
 });
-
-// Funcion comparativa de tokens
-function getToken(usuario_contra){
-    return jwt.sign(
-        {username: usuario_contra}, tokenSecret);
-}
 
     

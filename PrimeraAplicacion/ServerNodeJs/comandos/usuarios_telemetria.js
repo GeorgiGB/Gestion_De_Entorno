@@ -1,4 +1,4 @@
-const conexion = require('../db.config')
+const conexion = require('../config/db.config')
 
 //  Estos usuarios son los que crea el usuario principal
 //  función asincrona que permite la creacion de un usuario de telemetria
