@@ -24,29 +24,25 @@ class filtros_usuario extends StatefulWidget {
 }
 
 class _filtros_usuarioState extends State<filtros_usuario> {
+  Locale? anteriorLocale;
   final TextEditingController _codigo_filtro = TextEditingController();
   bool esperandoFiltrado = false;
   late AppLocalizations traducciones;
 
-  late String ute_filtro;
+  Filtro? filtroActivo;
   // Lista de filtros
   // En el se encontraran los diferentes filtros que se pueden asociar al usuario.
-  final List<String> _filtros = [];
+  late List<Filtro> _users;
+
+  @override
+  void initState() {
+    _users = _creaFiltro();
+  }
+
   @override
   Widget build(BuildContext context) {
     traducciones = AppLocalizations.of(context)!;
-
-    ute_filtro = traducciones.filtros;
-    
-    // limpiamos la lista fitlros
-    _filtros.clear();
-
-    _filtros.add(traducciones.filtros);
-    _filtros.add(traducciones.centroPadre);
-    _filtros.add(traducciones.centro);
-    _filtros.add(traducciones.pdv);
-    _filtros.add(traducciones.jefeDeArea);
-    _filtros.add(traducciones.ruta);
+    Filtro.traducciones = traducciones;
 
     return Scaffold(
       appBar: AppBar(
@@ -61,9 +57,9 @@ class _filtros_usuarioState extends State<filtros_usuario> {
           Text(
             traducciones.seleccionaFiltro,
           ),
-          DropdownButton<String>(
+          DropdownButton<Filtro>(
             isExpanded: true,
-            value: ute_filtro,
+            value: filtroActivo, //ute_filtro,
             icon: const Icon(Icons.arrow_downward),
             iconSize: 24,
             elevation: 16,
@@ -72,16 +68,15 @@ class _filtros_usuarioState extends State<filtros_usuario> {
               height: 2,
               color: Colors.deepPurpleAccent,
             ),
-            onChanged: (String? filtro) {
+            onChanged: (Filtro? filtro) {
               setState(() {
-                globales.debug(filtro!);
-                ute_filtro = filtro;
+                filtroActivo = filtro;
               });
             },
-            items: _filtros.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
+            items: _users.map<DropdownMenuItem<Filtro>>((Filtro value) {
+              return DropdownMenuItem<Filtro>(
                 value: value,
-                child: Text(value),
+                child: Text(value.traducc),
               );
             }).toList(),
           ),
@@ -114,16 +109,8 @@ class _filtros_usuarioState extends State<filtros_usuario> {
       globales.muestraToast(context, traducciones.esperandoAlServidor);
     } else {
       esperandoFiltrado = true;
-      // Añadir el nombre del usuario y su contraseña
-      String ute_nombre = widget.usa_nombre;
-      String ute_pwd = widget.usa_pwd;
-      String ute_cod_filtro = _codigo_filtro.text;
 
       try {
-        globales.debug(ute_nombre);
-        globales.debug(ute_pwd);
-        globales.debug(ute_filtro);
-
         var response = await http.post(
           Uri.parse(url),
           // Cabecera para enviar JSON con una autorizacion token
@@ -136,8 +123,8 @@ class _filtros_usuarioState extends State<filtros_usuario> {
             'usa_nombre': widget.usa_nombre.toString(),
             'usa_pwd': widget.usa_pwd.toString(),
             'usa_pwd_auto': widget.ute_pwd_auto.toString(),
-            'ute_filtro': ute_filtro,
-            'ute_cod_filtro': ute_cod_filtro
+            'ute_filtro': filtroActivo!.filtro_bbdd,
+            'ute_cod_filtro': _codigo_filtro.text
           }),
         );
         // Hay que tener en cuenta si la contraseña es autogenerada
@@ -174,4 +161,62 @@ class _filtros_usuarioState extends State<filtros_usuario> {
       });
     }
   }
+
+  // A partir de aquí controlamos los filtros
+  List<Filtro> _creaFiltro() {
+    List<Filtro> filtros = [];
+
+    // inicializamos el valor del filtro con el índice de posición
+    // elnombre de la traducción
+    // y el nombre del filtro que le pasamos a la BBDD
+    filtros.add(
+        Filtro(filtros.length, TiposFiltros.centroPadre, "ute_centro_padre"));
+    filtros.add(Filtro(filtros.length, TiposFiltros.centro, "ute_centro"));
+    filtros.add(Filtro(filtros.length, TiposFiltros.pdv, "ute_pdv"));
+    filtros
+        .add(Filtro(filtros.length, TiposFiltros.jefeDeArea, "ute_jefe_area"));
+    filtros.add(Filtro(filtros.length, TiposFiltros.ruta, "ute_ruta"));
+    filtros.add(Filtro(filtros.length, TiposFiltros.empresa, "ute_empresa"));
+
+    return filtros;
+  }
+}
+
+enum TiposFiltros { empresa, centro, centroPadre, pdv, jefeDeArea, ruta }
+
+class Filtro {
+  static late AppLocalizations traducciones;
+
+  static String _getTrd(TiposFiltros tf) {
+    String trd = "";
+    switch (tf) {
+      case TiposFiltros.empresa:
+        trd = traducciones.empresa;
+        break;
+      case TiposFiltros.centro:
+        trd = traducciones.centro;
+        break;
+      case TiposFiltros.centroPadre:
+        trd = traducciones.centroPadre;
+        break;
+      case TiposFiltros.pdv:
+        trd = traducciones.pdv;
+        break;
+      case TiposFiltros.jefeDeArea:
+        trd = traducciones.jefeDeArea;
+        break;
+      case TiposFiltros.ruta:
+        trd = traducciones.ruta;
+        break;
+      default:
+    }
+    return trd;
+  }
+
+  Filtro(this.id, this._traducc, this.filtro_bbdd);
+
+  final String filtro_bbdd;
+  final int id;
+  final TiposFiltros _traducc;
+  String get traducc => _getTrd(_traducc);
 }
