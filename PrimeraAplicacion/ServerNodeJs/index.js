@@ -36,7 +36,7 @@ const users = [
 //  ---------------------------------------------------------
 
 // Middleware
-const authToken = require('./comandos/login')
+//const authToken = require('./comandos/login')
 const verificarJWT = require('./middleware/verificarJWT');
 // constante para verificar el token y sus cabeceras
 const authenticateJWT = (req, res, next) => {
@@ -141,18 +141,18 @@ app.post('/crear_empresa', authenticateJWT,(req,res)=>{
     const contrasena_autogenerada = req.body.contrasena_autogenerada;
     
     // si alguno de los campos esta vacio, este mandara un error y no creara nada
-    if (!emp_nombre || !emp_pwd) {
+    if (!emp_nombre || !emp_pwd && !contrasena_autogenerada) {
         console.log(emp_nombre, emp_pwd);
         headers(res).status(401).json([{"msg_error":"No se ha introducido el nombre o la contraseña"}]);
     }else{
         // Datos correctos
         let token = req.headers.authorization.split(' ')[1];
         crear_emp.crear_empresa(token, emp_nombre, emp_pwd, contrasena_autogenerada).then(response => {
-            debug.msg(response);
+            //debug.msg(response);
             //  Si todo esta correcto el usuario accedera
             if(response){headers(res).status(200)
                 // El resultado final se pone en send después de enviar todas las cabeceras.
-                .json(JSON.stringify([{response}]))
+                .json(([{"msg": "empresa creada correctamente"}]))
             }}
         )
         .catch(err => {
