@@ -102,7 +102,7 @@ app.post('/login', (req, res)=>{
 
             if(response.bok){
                 //  Si todo se ha rellenado correctamente
-                    headers(res).status(200).json([{"token":response.token}])
+                    headers(res).status(200).json([{"token":response.token, "usu_cod": response.iusu_cod}])
                     //  El resultado final se pone en send después de enviar todas las cabeceras.
             }else{
                 if(response.icoderror < 0){

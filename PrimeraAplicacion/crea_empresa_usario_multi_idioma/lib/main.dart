@@ -255,6 +255,7 @@ class _LoginState extends State<Login> {
       MaterialPageRoute(
         builder: (context) => creacion_empre_usua(
           token: lista[0]['token'].toString(),
+          usu_cod: lista[0]['usu_cod'],
         ),
       ),
     );
