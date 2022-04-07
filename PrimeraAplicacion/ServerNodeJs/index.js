@@ -7,8 +7,6 @@ const cors = require('cors');
 // Tratar datos con formato JSON
 const bodyParser = require('body-parser');
 
-//const contentType = require('express/lib/response');
-
 //Verifica si el usuario existe en el sistema
 const verificar = require('./comandos/login');
 
@@ -42,7 +40,8 @@ const users = [
 //  ---------------------------------------------------------
 
 // Middleware
-const verificarJWT = require('./comandos/verificarJWT');
+
+const verificarJWT = require('./middleware/verificarJWT');
 // funcion para verificar el token
 const authenticateJWT = (req, res, next) => {
     // arrepleguem el JWT d'autorització
@@ -50,7 +49,7 @@ const authenticateJWT = (req, res, next) => {
     if (authHeader) { // si hi ha toquen
         // recuperem el jwt
         const token = authHeader.split(' ')[1];
-        jwt.verify(token, app.get(llaveSecreta), (err, user) => {
+        jwt.verify(token, app.get(verificarJWT), (err, user) => {
         if (err) {
             return headers(res).status(403).json([{
                 "msg_error":"No tienes permisos"}]);
@@ -66,9 +65,8 @@ const authenticateJWT = (req, res, next) => {
 
 //  -------------------------------------------------------------
 
-
 let app = express();
-
+app.set('accesTokenSecret', verificarJWT.llaveSecreta)
 var corsOptions = {
     origin: '*',
     optionsSuccessStatus: 200, // For legacy browser support
@@ -79,18 +77,17 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
-app.set('accesTokenSecret', verificarJWT.llaveSecreta)
+app.use(express.json())
 
 app.listen(8080);
 
 debug.msg("Servidor ok");
 
 const headers = require('./comandos/cabecera');
-const { llaveSecreta } = require('./comandos/verificarJWT');
 
 //  Iniciar sesion con el usuario
 app.post('/login', (req, res)=>{
-
+    
     let usu_nombre = req.body.usu_nombre;
     let usu_pwd = req.body.usu_pwd;
     

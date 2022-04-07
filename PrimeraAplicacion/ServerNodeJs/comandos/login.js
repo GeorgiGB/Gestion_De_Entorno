@@ -13,7 +13,7 @@ async function login(usu_nombre, usu_pwd){
         // verificar si el usuario existe y proseguir con la operacion
        let reslogin = await conexion.query("SELECT * FROM login('"+usu_nombre+"','"+usu_pwd+"')");
         //resultado de la operacion
-        debug.msg(reslogin.rows[0]);
+        //debug.msg(reslogin.rows[0]);
         let fila = reslogin.rows[0];
 
         if(fila.bok){
