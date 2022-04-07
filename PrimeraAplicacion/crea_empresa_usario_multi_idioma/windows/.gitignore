@@ -16,3 +16,5 @@ x86/
 # but keep track of directories ending in .cache
 !*.[Cc]ache/
 
+# Mis ignores
+CMakeLists.txt
