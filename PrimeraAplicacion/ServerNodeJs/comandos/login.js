@@ -1,7 +1,7 @@
-const conexion = require('../db.config')
+const conexion = require('../config/db.config')
 const debug = require('./globales')
 // Constante utilizada para generar el token con JWT
-const tokenSecret = ('./comandos/authenticateJWT');
+const tokenSecret = ('./comandos/verificarJWT');
 
 // Generar tokens con formato JWT
 const jwt = require('jsonwebtoken');
@@ -14,20 +14,23 @@ async function login(usu_nombre, usu_pwd){
        let reslogin = await conexion.query("SELECT * FROM login('"+usu_nombre+"','"+usu_pwd+"')");
         //resultado de la operacion
         debug.msg(reslogin.rows[0]);
-        fila = reslogin.rows[0];
-
-        debug.msg(fila)
+        let fila = reslogin.rows[0];
 
         if(fila.bok){
             let usu_cod = fila.iusu_cod;
-            debug.msg("Podemos insertar.")
+            //debug.msg("Podemos insertar.")
             //  insertar token en base de usuarios
             let token = getToken(usu_pwd);
             let instoken = await conexion.query("SELECT * FROM insertartoken('"+token+"','"+usu_cod+"')");
+            fila.bok = instoken.rows[0].bok;
+            if(fila.bok){
+                fila.token = token;
+            }
+            //return instoken;
             //reslogin.token = instoken.rows[0].token;
-            debug.msg("otro: "+instoken.rows[0]);
+            debug.msg("otro: "+instoken);
         }
-        return reslogin;
+        return fila;
     }
 
 // Funcion comparativa de tokens
@@ -37,6 +40,5 @@ function getToken(usuario_contra){
 }
 
 module.exports = {
-    login:login,
-    //guardarToken:guardarToken
+    login:login
 }   

@@ -1,4 +1,3 @@
-
 // Creación del servidor
 const express = require('express');
 
@@ -20,12 +19,11 @@ const crear_emp = require('./comandos/empresas');
 const crear_ute = require('./comandos/usuarios_telemetria');
 
 const debug = require('./comandos/globales');
-const verificarJWT = require('./comandos/verificarJWT');
 
 // Estas credenciales llevan implicitos el usuario y la contraseña
 // Viene encriptadas en SHA1 de la aplicación cliente
 const administrador = 'admin';
-//const usuarionormal = '731ab4cd8bc667398c0ecfe80da1870cc0545ba4';
+
 /*
 Esto es un token ficticio para las pruebas
 */
@@ -42,32 +40,9 @@ const users = [
     ];
 
 //  ---------------------------------------------------------
-const rutasProtegidas = express.Router();
 
-rutasProtegidas.use((req, res, next) => {
-    const token = req.headers['access-token'];
-    if(token){
-        jwt.verify(token, app.get(tokenSecret), (err, user) => {
-            if(err){
-                //  Si el token no esta registrado
-                //  en la base de datos este mandara el siguiente mensaje
-                return res.json({msg: 'Token invalida'});
-            }else{
-                //  Si todo es correcto mandara el token
-                //  y continuara la operación
-                req.user = user;
-                next();
-            }
-        });
-    }else{
-        res.send({
-            //  Si no se manda nada saldra este mensaje
-            msg: 'Falta el token'
-        })
-    }
-
-})
-
+// Middleware
+const verificarJWT = require('./comandos/verificarJWT');
 // funcion para verificar el token
 const authenticateJWT = (req, res, next) => {
     // arrepleguem el JWT d'autorització
@@ -75,15 +50,16 @@ const authenticateJWT = (req, res, next) => {
     if (authHeader) { // si hi ha toquen
         // recuperem el jwt
         const token = authHeader.split(' ')[1];
-        jwt.verify(token, app.get(tokenSecret), (err, user) => {
+        jwt.verify(token, app.get(llaveSecreta), (err, user) => {
         if (err) {
-            return res.sendStatus(403);
+            return headers(res).status(403).json([{
+                "msg_error":"No tienes permisos"}]);
         }
             req.user = user;
             next();
         });
         } else {
-            res.status(401).send([{
+            headers(res).status(401).json([{
                 "msg_error": "Token invalido"}]);
         }
     };
@@ -109,6 +85,9 @@ app.listen(8080);
 
 debug.msg("Servidor ok");
 
+const headers = require('./comandos/cabecera');
+const { llaveSecreta } = require('./comandos/verificarJWT');
+
 //  Iniciar sesion con el usuario
 app.post('/login', (req, res)=>{
 
@@ -116,34 +95,27 @@ app.post('/login', (req, res)=>{
     let usu_pwd = req.body.usu_pwd;
     
     if(!usu_nombre || !usu_pwd){
-        res.status(401).send("No se ha introducido el nombre o la contraseña")
+        headers(res).status(401)
+        //.header("Content-Type", "application/json; charset=utf-8")
+        .send([{"msg_error":"No se ha introducido el nombre o la contraseña"}])
     }else{
         verificar.login(usu_nombre, usu_pwd).then(response => {
-            debug.msg(response.bok);
+            debug.msg(response);
 
             if(response.bok){
                 //  Si todo se ha rellenado correctamente
-                    res.status(200)
-                    .header("Access-Control-Allow-Headers", "Content-Type")
-                    .header("Access-Control-Allow-Credentials", "true")
-                    .header("Access-Control-Allow-Methods", "POST")
-                    .header("Content-Type", "application/json; charset=utf-8")
-                    .header("Pragma", "no-cache")
-                    .send( JSON.stringify( [{
-                        //token: token,
-                        "Usuario":usu_nombre,
-                        "PWD":usu_pwd}]))
+                    headers(res).status(200).json([{"token":response.token}])
                     //  El resultado final se pone en send después de enviar todas las cabeceras.
             }else{
-                if(response.iCoderror < 0){
-                    res.status(500).send([{
-                        "bok":'"'+response.bok+'"',
-                        "cod_error":'"'+response.iCoderror+'"',
-                        "msg_error":'"'+response.cError+'"'}]);
+                if(response.icoderror < 0){
+                    headers(res).status(500).json([{
+                        "bok":response.bok,
+                        "cod_error":response.icoderror,
+                        "msg_error":response.cerror}]);
                 }else{
-                  res.status(404).send([{
-                    "bok":'"'+response.bok+'"',
-                    "cod_error":'"'+response.iCoderror+'"',
+                    headers(res).status(404).json([{
+                    "bok":response.bok,
+                    "cod_error":response.icoderror,
                     "msg_error": "Usuario o contraseña no válidos"}]);
                 //  El resultado final se pone en send después de enviar todas las cabeceras.  
                 }
@@ -152,7 +124,7 @@ app.post('/login', (req, res)=>{
         })
         .catch(err => {
             debug.msg(err)
-            res.status(500).send([{"msg_error": "Error de servidor"}]);
+            headers(res).status(500).json([{"msg_error": "Error de servidor"}]);
             })
     }
 });
@@ -163,7 +135,7 @@ app.post('/login', (req, res)=>{
 app.post('/crear_empresa', authenticateJWT,(req,res)=>{
     debug.msg(JSON.stringify(req.body));
 
-    let token = req.header("authorization");
+    let token = req.body.token;
     // Requerimientos para la creación de una empresa el nombre y la contraseña
     const emp_nombre = req.body.emp_nombre;
     const emp_pwd = req.body.emp_pwd;
@@ -173,24 +145,19 @@ app.post('/crear_empresa', authenticateJWT,(req,res)=>{
     // si alguno de los campos esta vacio, este mandara un error y no creara nada
     if (!emp_nombre || !emp_pwd) {
         console.log(emp_nombre, emp_pwd);
-        res.status(401).send("No se ha introducido el nombre o la contraseña");
+        headers(res).status(401).json([{"msg_error":"No se ha introducido el nombre o la contraseña"}]);
     }else{
         // Datos correctos
         crear_emp.crear_empresa(token, emp_nombre, emp_pwd, contrasena_autogenerada).then(response => {
             debug.msg(response);
             //  Si todo esta correcto el usuario accedera
-            if(response){res.status(200)
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Methods", "POST")
-                .header("Content-Type", "application/json; charset=utf-8")
-                .header("Pragma", "no-cache")
+            if(response){headers(res).status(200)
                 // El resultado final se pone en send después de enviar todas las cabeceras.
-                .send( JSON.stringify( [{"Empresa_creada": true}]))
+                .json([{"Empresa_creada": true}])
             }}
         )
         .catch(err => {
-            res.status(500).send("Error de servidor.");
+            headers(res).status(500).json("Error de servidor.");
         });
     }
     
@@ -211,21 +178,16 @@ app.post('/crear_usuarios_telemetria',authenticateJWT, (req, res)=>{
     //console.log(req.body);
     //  Si alguno de los dos campos o los dos estan vacios este no mandara nada al servidor
     if (!ute_nombre || !ute_pwd) {
-        res.status(401).send("No se ha introducido el nombre o la contraseña");
+        headers(res).status(401).json("No se ha introducido el nombre o la contraseña");
     }else{
         // Datos correctos
         crear_ute.crear_usuarios_telemetria(ute_nombre, ute_pwd,ute_contra_auto, ute_filtro, filtro_cod).then(
-            () => res.status(200)
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Methods", "POST")
-                .header("Content-Type", "application/json; charset=utf-8")
-                .header("Pragma", "no-cache")
+            () => headers(res).status(200)
                 // El resultado final se pone en send después de enviar todas las cabeceras.
-                .send( JSON.stringify( [{"Usuario_creado": true, "usa_cod": "codigo_devuelto"}]))
+                .json([{"Usuario_creado": true, "usa_cod": "codigo_devuelto"}])
         )
         .catch(err => {
-            res.status(500).send("Error de servidor.");
+            headers(res).status(500).json("Error de servidor.");
         });
     }
     

@@ -5,7 +5,7 @@
 CREATE OR REPLACE FUNCTION public.insertartoken(
 	ctoken character varying,
 	iusu_cod integer,
-	OUT ok boolean,
+	OUT bok boolean,
 	OUT coderror integer,
 	OUT error character varying)
     RETURNS record
@@ -13,13 +13,21 @@ CREATE OR REPLACE FUNCTION public.insertartoken(
     COST 100
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
+DECLARE
+	iust_cod integer;
 
 BEGIN
-	ok :=false;
+	bok :=false;
 	coderror :=0;
 	error := '';
-   INSERT INTO usuarios_token (ust_token, ust_usuario, ust_activo) VALUES (ctoken, iusu_cod, 'true');
-
+	iust_cod := -1;
+	
+   INSERT INTO usuarios_token (ust_token, ust_usuario, ust_activo) VALUES (ctoken, iusu_cod, 'true') RETURNING ust_cod into iust_cod;
+	
+	IF FOUND then
+		bok := true;
+	END IF;
+	
 	EXCEPTION WHEN OTHERS THEN
 		coderror := -1;
 		error := SQLERRM;
