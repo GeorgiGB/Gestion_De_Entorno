@@ -1,4 +1,4 @@
 #Ignorar carpetas
 /node_modules
 package-lock.json
-/config/db.config.js
+*/db.config.js
