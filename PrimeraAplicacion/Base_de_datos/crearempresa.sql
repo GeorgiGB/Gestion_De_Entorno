@@ -1,6 +1,6 @@
 -- FUNCTION: public.crearempresa(character varying, character varying, boolean, integer)
 
--- DROP FUNCTION IF EXISTS public.crearempresa(character varying, character varying, boolean, integer);
+-- DROP FUNCTION IF EXISTS public.crearempresa(character varying, character varying, character varying, boolean, integer);
 
 CREATE OR REPLACE FUNCTION public.crearempresa(
 	ctoken character varying,
@@ -33,12 +33,10 @@ BEGIN
 		END IF;
 	END IF;
 	
-	IF EXISTS (SELECT ust_token FROM usuarios_token VALUES (ctoken)) THEN
-	
+	IF EXISTS (SELECT * FROM usuarios_token where ust_token = ctoken) THEN
 		INSERT INTO empresas (emp_nombre, emp_pwd, emp_usu_cod) 
 		VALUES (cemp_nombre, cemp_pwd, iusu_cod) 
 		RETURNING emp_cod into iemp_cod;
-   
    	END IF;
 	
 	IF FOUND THEN
@@ -51,5 +49,5 @@ BEGIN
 		END;
 $BODY$;
 
-ALTER FUNCTION public.crearempresa(character varying, character varying, boolean, integer)
+ALTER FUNCTION public.crearempresa(character varying, character varying, character varying, boolean, integer)
     OWNER TO postgres;

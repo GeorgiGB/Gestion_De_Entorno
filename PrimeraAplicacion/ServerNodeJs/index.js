@@ -22,10 +22,6 @@ const debug = require('./comandos/globales');
 // Viene encriptadas en SHA1 de la aplicación cliente
 const administrador = 'admin';
 
-/*
-Esto es un token ficticio para las pruebas
-*/
-let token;
 
 // Generar tokens con formato JWT
 const jwt = require('jsonwebtoken');
@@ -40,28 +36,33 @@ const users = [
 //  ---------------------------------------------------------
 
 // Middleware
-
+const authToken = require('./comandos/login')
 const verificarJWT = require('./middleware/verificarJWT');
-// funcion para verificar el token
+// constante para verificar el token y sus cabeceras
 const authenticateJWT = (req, res, next) => {
     // arrepleguem el JWT d'autorització
     const authHeader = req.headers.authorization;
-    if (authHeader) { // si hi ha toquen
-        // recuperem el jwt
+    debug.msg(authHeader)
+    if (authHeader) {
+        //  recogemos el jwt
         const token = authHeader.split(' ')[1];
-        jwt.verify(token, app.get(verificarJWT), (err, user) => {
-        if (err) {
-            return headers(res).status(403).json([{
-                "msg_error":"No tienes permisos"}]);
-        }
+        //  usando el verify accederemos al token y la llaveSecreta
+        jwt.verify(token, verificarJWT.llaveSecreta, (err, user) => {
+            debug.msg("Entro JWT: "+err);
+            if (err) {
+                return headers(res).status(403).json([{
+                    "msg_error":"No tienes permisos"}]);
+            }
+
             req.user = user;
             next();
         });
-        } else {
-            headers(res).status(401).json([{
-                "msg_error": "Token invalido"}]);
-        }
-    };
+    } else {
+        debug.msg("VOY A DAR ERROR DE TOKEN")
+        headers(res).status(401).json([{
+            "msg_error": "Token invalido"}]);
+    }
+};
 
 //  -------------------------------------------------------------
 
@@ -97,7 +98,7 @@ app.post('/login', (req, res)=>{
         .send([{"msg_error":"No se ha introducido el nombre o la contraseña"}])
     }else{
         verificar.login(usu_nombre, usu_pwd).then(response => {
-            debug.msg(response);
+            //debug.msg(response);
 
             if(response.bok){
                 //  Si todo se ha rellenado correctamente
@@ -128,11 +129,11 @@ app.post('/login', (req, res)=>{
 
 
 //  Con un post mandaremos al servidor la petición de la creación de una empresa
-//  Crear empresa
+//  Ahora con la creación del middleware tenemos que introducir el authenticateJWT
+//  
 app.post('/crear_empresa', authenticateJWT,(req,res)=>{
-    debug.msg(JSON.stringify(req.body));
-
-    let token = req.body.token;
+    debug.msg(req.body);
+    
     // Requerimientos para la creación de una empresa el nombre y la contraseña
     const emp_nombre = req.body.emp_nombre;
     const emp_pwd = req.body.emp_pwd;
@@ -145,12 +146,13 @@ app.post('/crear_empresa', authenticateJWT,(req,res)=>{
         headers(res).status(401).json([{"msg_error":"No se ha introducido el nombre o la contraseña"}]);
     }else{
         // Datos correctos
+        let token = req.headers.authorization.split(' ')[1];
         crear_emp.crear_empresa(token, emp_nombre, emp_pwd, contrasena_autogenerada).then(response => {
             debug.msg(response);
             //  Si todo esta correcto el usuario accedera
             if(response){headers(res).status(200)
                 // El resultado final se pone en send después de enviar todas las cabeceras.
-                .json([{"Empresa_creada": true}])
+                .json(JSON.stringify([{response}]))
             }}
         )
         .catch(err => {
