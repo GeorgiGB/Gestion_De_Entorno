@@ -1,39 +1,72 @@
--- FUNCTION: public.login(character varying, character varying)
+-- Al final del todo hay una llamada a la función de ejemplo
 
--- DROP FUNCTION IF EXISTS public.login(character varying, character varying);
+-- FUNCTION: public.login(json)
+
+-- DROP FUNCTION IF EXISTS public.login(json);
 
 CREATE OR REPLACE FUNCTION public.login(
-	cun character varying,
-	cup character varying,
-	OUT bok boolean,
-	OUT iusu_cod integer,
-	OUT icoderror integer,
-	OUT cerror character varying)
-    RETURNS record
+	jleer json,
+	OUT jresultado json)
+    RETURNS json
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
-DECLARE nombre character varying;
+DECLARE
+	rRegistro record;
+	cUsu_nombre character varying;
+	cUsu_pwd character varying;
+	
+	bOk boolean;
+	iUsu_cod integer;
+	cError character varying;
+	iCoderror integer;
 
 BEGIN
+	-- tabla temporal para leer el json enviado por el servidor
+	CREATE TEMP TABLE x(
+		usu_nombre character varying,
+		usu_pwd character varying
+	);
 	
-	bok := false;
-	iusu_cod := -1;
-	icoderror := 0;
-	cerror := '';
+	bOk := false;
+	iUsu_cod := -1;
+	cError := '';
+	iCoderror := 0;
+	
+	-- Pasamos al json a la tabla temporal
+	FOR rRegistro IN (select * from json_populate_record(null::x, jleer))
+	
+	LOOP
+	END LOOP;
+	
 
-	SELECT usu_cod into iusu_cod from usuarios where usu_nombre = cun and usu_pwd = cup;
-   
 	IF FOUND THEN
-		bok := true;
+		-- consultamos si existe el usuario con la contraseña
+		SELECT usu_cod into iUsu_cod
+			from usuarios 
+			where usu_nombre = rRegistro.usu_nombre
+				and usu_pwd = rRegistro.usu_pwd;
+		IF FOUND THEN
+			bOk := true;
+		ELSE
+			iUsu_cod := -1;
+		END IF;
+		jresultado :='[{"bOk":"'|| bOk
+					  ||'", "usu_cod":"'|| iUsu_cod ||'"}]';
 	END IF;
+	
+	
 
 	EXCEPTION WHEN OTHERS THEN
-		icoderror := -1;
-		cerror := SQLERRM;
+		iCoderror := -1;
+		jresultado :='[{"bOk":"'|| bOk
+					  ||'", "cod_error":"'|| iCoderror 
+					  ||'", "msg_error":"'|| SQLERRM ||'"}]';
 		END;
 $BODY$;
 
-ALTER FUNCTION public.login(character varying, character varying)
+ALTER FUNCTION public.login(json)
     OWNER TO postgres;
+
+select * from public.login('{"usu_nombre": "Joselito", "usu_pwd": "7887186b33749971de515859532def15f4b210eb"}')
