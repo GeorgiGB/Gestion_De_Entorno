@@ -13,7 +13,7 @@ async function login(json){
     debug.msg(JSON.stringify(json))
         // peticion del servidor
         // verificar si el usuario existe y proseguir con la operacion
-       let reslogin = await conexion.query("SELECT * FROM login('"+JSON.stringify( json)+"')");
+       let reslogin = await conexion.query("SELECT * FROM login('"+JSON.stringify(json)+"')");
         //resultado de la operacion
         let fila = reslogin.rows[0].jresultado[0];
         
@@ -22,7 +22,8 @@ async function login(json){
             //  insertar token en base de usuarios
             let token = getToken(json.usu_pwd);
             //  Hacemos la petición a la base de datos
-            let instoken = await conexion.query("SELECT * FROM insertartoken('"+token+"','"+fila.usu_cod+"')");
+            let instoken = await conexion.query("SELECT * FROM insertartoken('"+JSON.stringify(token)+"')");
+            debug.msg(JSON.stringify(token));
             //  Insertamos el token en fila si todo ha ido correcto
             fila.bOk = instoken.rows[0].bok;
             //  Entonces crearemos un campo para recibir la respuesta
