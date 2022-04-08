@@ -59,7 +59,7 @@ class _filtros_usuarioState extends State<filtros_usuario> {
           ),
           DropdownButton<Filtro>(
             isExpanded: true,
-            value: filtroActivo, //ute_filtro,
+            value: filtroActivo?? _users.first,
             icon: const Icon(Icons.arrow_downward),
             iconSize: 24,
             elevation: 16,
@@ -169,20 +169,19 @@ class _filtros_usuarioState extends State<filtros_usuario> {
     // inicializamos el valor del filtro con el índice de posición
     // elnombre de la traducción
     // y el nombre del filtro que le pasamos a la BBDD
-    filtros.add(
-        Filtro(filtros.length, TiposFiltros.centroPadre, "ute_centro_padre"));
-    filtros.add(Filtro(filtros.length, TiposFiltros.centro, "ute_centro"));
-    filtros.add(Filtro(filtros.length, TiposFiltros.pdv, "ute_pdv"));
+    filtros.add(Filtro(filtros.length, TiposFiltros.filtros, ""));
     filtros
-        .add(Filtro(filtros.length, TiposFiltros.jefeDeArea, "ute_jefe_area"));
-    filtros.add(Filtro(filtros.length, TiposFiltros.ruta, "ute_ruta"));
-    filtros.add(Filtro(filtros.length, TiposFiltros.empresa, "ute_empresa"));
+        .add(Filtro(filtros.length, TiposFiltros.centroPadre, "centro_padre"));
+    filtros.add(Filtro(filtros.length, TiposFiltros.centro, "centro"));
+    filtros.add(Filtro(filtros.length, TiposFiltros.pdv, "pdv"));
+    filtros.add(Filtro(filtros.length, TiposFiltros.jefeDeArea, "jefe_area"));
+    filtros.add(Filtro(filtros.length, TiposFiltros.ruta, "ruta"));
 
     return filtros;
   }
 }
 
-enum TiposFiltros { empresa, centro, centroPadre, pdv, jefeDeArea, ruta }
+enum TiposFiltros { filtros, centro, centroPadre, pdv, jefeDeArea, ruta }
 
 class Filtro {
   static late AppLocalizations traducciones;
@@ -190,8 +189,8 @@ class Filtro {
   static String _getTrd(TiposFiltros tf) {
     String trd = "";
     switch (tf) {
-      case TiposFiltros.empresa:
-        trd = traducciones.empresa;
+      case TiposFiltros.filtros:
+        trd = traducciones.filtros;
         break;
       case TiposFiltros.centro:
         trd = traducciones.centro;

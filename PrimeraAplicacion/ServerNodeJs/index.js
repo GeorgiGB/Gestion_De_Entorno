@@ -97,15 +97,9 @@ app.post('/login', (req, res)=>{
                 //  El resultado final se pone en send después de enviar todas las cabeceras.
         }else{
             if(response.icoderror < 0){
-                headers(res).status(500).json([{
-                    "bok":response.bOk,
-                    "cod_error":response.cod_error,
-                    "msg_error":response.msg_error}]);
+                headers(res).status(500).json(response);
             }else{
-                headers(res).status(404).json([{
-                "bok":response.bok,
-                "cod_error":response.icoderror,
-                "msg_error": "Usuario o contraseña no válidos"}]);
+                headers(res).status(404).json(response);
             //  El resultado final se pone en send después de enviar todas las cabeceras.  
             }
             
