@@ -15,11 +15,10 @@ async function login(json){
         // verificar si el usuario existe y proseguir con la operacion
        let reslogin = await conexion.query("SELECT * FROM login('"+JSON.stringify( json)+"')");
         //resultado de la operacion
-        //debug.msg(reslogin.rows[0]);
         let fila = reslogin.rows[0].jresultado[0];
-        debug.msg(json.usu_pwd)
+        
         if(fila.bOk){
-            let usu_cod = fila.iusu_cod;
+            
             //  insertar token en base de usuarios
             let token = getToken(json.usu_pwd);
             //  Hacemos la petición a la base de datos
