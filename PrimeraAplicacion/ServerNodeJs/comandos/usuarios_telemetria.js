@@ -4,17 +4,14 @@ const conexion = require('../config/db.config')
 //  función asincrona que permite la creacion de un usuario de telemetria
 async function crear_usuarios_telemetria(
   token,ute_nombre,
-  ute_pwd,ute_autogenerada, 
+  ute_pwd,ute_autogenerada,
   ute_empresa,ute_filtro,
   filtro_cod){
   
   // Petición al servidor (corregir)
   let res = await conexion.query
-  (`INSERT INTO usuarios_telemetria ([ute_nombre,ute_pwd,ute_empresa, ute_filtro]) VALUES ($1,$2,$3,$4)`,
-[token, ute_nombre, ute_pwd, ute_autogenerada, ute_empresa, ute_filtro, filtro_cod]);
+  ("SELECT * FROM crearusuariostelemetria('"+token+"','"+ute_nombre+"','"+ute_pwd+"','"+ute_autogenerada+"','"+ute_empresa+"','"+ute_filtro+"','"+filtro_cod+"');")
 
-  //("SELECT * FROM crearusuariostelemetria('"+ute_nombre+"','"+ute_pwd+"',
-                                          //'"+ute_empresa+"','"+ute_filtro+"',)")
 
   //  Resultado de toda la operación
   console.log(res)
