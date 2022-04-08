@@ -1,11 +1,11 @@
 -- FUNCTION: public.login(json)
 
-DROP FUNCTION IF EXISTS public.login(json);
+-- DROP FUNCTION IF EXISTS public.login(jsonb);
 
 CREATE OR REPLACE FUNCTION public.login(
-	jleer json,
-	OUT jresultado json)
-    RETURNS json
+	jleer jsonb,
+	OUT jresultado jsonb)
+    RETURNS jsonb
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
@@ -32,14 +32,8 @@ BEGIN
 	cError := '';
 	iCoderror := 0;
 	
-	-- Pasamos al json a la tabla temporal
-	FOR rRegistro IN (SELECT * from json_populate_record(null::json_data, jleer))
-	
-	LOOP
-	END LOOP;
-	
 	SELECT usu_cod INTO iUsu_cod
-		FROM usuarios AS u, json_populate_record(null::json_data, jleer) AS j
+		FROM usuarios AS u, jsonb_populate_record(null::json_data, jleer) AS j
 		WHERE u.usu_nombre = j.usu_nombre AND u.usu_pwd = j.usu_pwd;
 
 	IF FOUND THEN
@@ -60,7 +54,7 @@ BEGIN
 		END;
 $BODY$;
 
-ALTER FUNCTION public.login(json)
+ALTER FUNCTION public.login(jsonb)
     OWNER TO postgres;
 
 select * from public.login('{"usu_nombre": "Joselito", "usu_pwd": "7887186b33749971de515859532def15f4b210eb"}')
