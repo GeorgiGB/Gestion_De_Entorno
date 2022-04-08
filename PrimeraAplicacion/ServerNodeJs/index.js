@@ -46,6 +46,7 @@ const authenticateJWT = (req, res, next) => {
     if (authHeader) {
         //  recogemos el jwt
         const token = authHeader.split(' ')[1];
+        debug.msg('token: '+token);
         //  usando el verify accederemos al token y la llaveSecreta
         jwt.verify(token, verificarJWT.llaveSecreta, (err, user) => {
             debug.msg("Entro JWT: "+err);
@@ -88,43 +89,32 @@ const headers = require('./comandos/cabecera');
 
 //  Iniciar sesion con el usuario
 app.post('/login', (req, res)=>{
-    
-    let usu_nombre = req.body.usu_nombre;
-    let usu_pwd = req.body.usu_pwd;
-    
-    if(!usu_nombre || !usu_pwd){
-        headers(res).status(401)
-        //.header("Content-Type", "application/json; charset=utf-8")
-        .send([{"msg_error":"No se ha introducido el nombre o la contraseña"}])
-    }else{
-        verificar.login(usu_nombre, usu_pwd).then(response => {
-            //debug.msg(response);
+        verificar.login(req.body).then(response => {
 
-            if(response.bok){
-                //  Si todo se ha rellenado correctamente
-                    headers(res).status(200).json([{"token":response.token, "usu_cod": response.iusu_cod}])
-                    //  El resultado final se pone en send después de enviar todas las cabeceras.
+        if(response.bOk){
+            //  Si todo se ha rellenado correctamente
+                headers(res).status(200).json(response)
+                //  El resultado final se pone en send después de enviar todas las cabeceras.
+        }else{
+            if(response.icoderror < 0){
+                headers(res).status(500).json([{
+                    "bok":response.bOk,
+                    "cod_error":response.cod_error,
+                    "msg_error":response.msg_error}]);
             }else{
-                if(response.icoderror < 0){
-                    headers(res).status(500).json([{
-                        "bok":response.bok,
-                        "cod_error":response.icoderror,
-                        "msg_error":response.cerror}]);
-                }else{
-                    headers(res).status(404).json([{
-                    "bok":response.bok,
-                    "cod_error":response.icoderror,
-                    "msg_error": "Usuario o contraseña no válidos"}]);
-                //  El resultado final se pone en send después de enviar todas las cabeceras.  
-                }
-                
+                headers(res).status(404).json([{
+                "bok":response.bok,
+                "cod_error":response.icoderror,
+                "msg_error": "Usuario o contraseña no válidos"}]);
+            //  El resultado final se pone en send después de enviar todas las cabeceras.  
             }
+            
+        }
+    })
+    .catch(err => {
+        debug.msg(err)
+        headers(res).status(500).json([{"msg_error": "Error de servidor"}]);
         })
-        .catch(err => {
-            debug.msg(err)
-            headers(res).status(500).json([{"msg_error": "Error de servidor"}]);
-            })
-    }
 });
 
 
