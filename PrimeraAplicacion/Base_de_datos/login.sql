@@ -1,6 +1,6 @@
 -- FUNCTION: public.login(json)
 
--- DROP FUNCTION IF EXISTS public.login(json);
+DROP FUNCTION IF EXISTS public.login(json);
 
 CREATE OR REPLACE FUNCTION public.login(
 	jleer json,
@@ -33,26 +33,22 @@ BEGIN
 	iCoderror := 0;
 	
 	-- Pasamos al json a la tabla temporal
-	FOR rRegistro IN (select * from json_populate_record(null::json_data, jleer))
+	FOR rRegistro IN (SELECT * from json_populate_record(null::json_data, jleer))
 	
 	LOOP
 	END LOOP;
 	
+	SELECT usu_cod INTO iUsu_cod
+		FROM usuarios AS u, json_populate_record(null::json_data, jleer) AS j
+		WHERE u.usu_nombre = j.usu_nombre AND u.usu_pwd = j.usu_pwd;
 
 	IF FOUND THEN
-		-- consultamos si existe el usuario con la contraseña
-		SELECT usu_cod into iUsu_cod
-			from usuarios 
-			where usu_nombre = rRegistro.usu_nombre
-				and usu_pwd = rRegistro.usu_pwd;
-		IF FOUND THEN
-			bOk := true;
-		ELSE
-			iUsu_cod := -1;
-		END IF;
-		jresultado :='[{"bOk":"'|| bOk
-					  ||'", "usu_cod":"'|| iUsu_cod ||'"}]';
+		bOk := true;
+	ELSE
+		iUsu_cod := -1;
 	END IF;
+	jresultado :='[{"bOk":"'|| bOk
+				  ||'", "usu_cod":"'|| iUsu_cod ||'"}]';
 	
 	
 
@@ -66,3 +62,5 @@ $BODY$;
 
 ALTER FUNCTION public.login(json)
     OWNER TO postgres;
+
+select * from public.login('{"usu_nombre": "Joselito", "usu_pwd": "7887186b33749971de515859532def15f4b210eb"}')
