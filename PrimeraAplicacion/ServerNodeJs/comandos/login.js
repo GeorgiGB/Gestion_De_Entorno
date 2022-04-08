@@ -8,25 +8,26 @@ const jwt = require('jsonwebtoken');
 const verificarJWT = require('../middleware/verificarJWT');
 
 // Funcion que hara la conexion con la base de datos y mirara si esta el usuario creado con su token
-async function login(usu_nombre, usu_pwd){
-        debug.msg("Entrando a login")
+async function login(json){
+    debug.msg("Entrando a login ")
+    debug.msg(JSON.stringify(json))
         // peticion del servidor
         // verificar si el usuario existe y proseguir con la operacion
-       let reslogin = await conexion.query("SELECT * FROM login('"+usu_nombre+"','"+usu_pwd+"')");
+       let reslogin = await conexion.query("SELECT * FROM login('"+JSON.stringify( json)+"')");
         //resultado de la operacion
         //debug.msg(reslogin.rows[0]);
-        let fila = reslogin.rows[0];
-
-        if(fila.bok){
+        let fila = reslogin.rows[0].jresultado[0];
+        debug.msg(json.usu_pwd)
+        if(fila.bOk){
             let usu_cod = fila.iusu_cod;
             //  insertar token en base de usuarios
-            let token = getToken(usu_pwd);
+            let token = getToken(json.usu_pwd);
             //  Hacemos la petición a la base de datos
-            let instoken = await conexion.query("SELECT * FROM insertartoken('"+token+"','"+usu_cod+"')");
+            let instoken = await conexion.query("SELECT * FROM insertartoken('"+token+"','"+fila.usu_cod+"')");
             //  Insertamos el token en fila si todo ha ido correcto
-            fila.bok = instoken.rows[0].bok;
+            fila.bOk = instoken.rows[0].bok;
             //  Entonces crearemos un campo para recibir la respuesta
-            if(fila.bok){
+            if(fila.bOk){
                 fila.token = token;
             }
         }
