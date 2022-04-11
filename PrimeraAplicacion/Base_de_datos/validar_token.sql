@@ -20,7 +20,7 @@ DECLARE
 BEGIN
 	-- Inicializamos los parametros
 	
-	bOk := false;
+	bok := false;
 	iUsu_cod := -1;
 	cError := '';
 	iCoderror := 0;
