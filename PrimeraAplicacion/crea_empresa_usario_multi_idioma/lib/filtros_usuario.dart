@@ -10,14 +10,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class filtros_usuario extends StatefulWidget {
   const filtros_usuario(
       {Key? key,
-      required this.token,
-      required this.usa_nombre,
-      required this.usa_pwd,
+      required this.ust_token,
+      required this.ute_nombre,
+      required this.ute_pwd,
       required this.ute_pwd_auto})
       : super(key: key);
-  final String token;
-  final String usa_nombre;
-  final String usa_pwd;
+  final String ust_token;
+  final String ute_nombre;
+  final String ute_pwd;
   final bool ute_pwd_auto;
   @override
   State<filtros_usuario> createState() => _filtros_usuarioState();
@@ -116,12 +116,12 @@ class _filtros_usuarioState extends State<filtros_usuario> {
           // Cabecera para enviar JSON con una autorizacion token
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': widget.token
+            'Authorization': widget.ust_token
           },
           // Adjuntamos al body los datos en formato JSON
           body: jsonEncode(<String, String>{
-            'usa_nombre': widget.usa_nombre.toString(),
-            'usa_pwd': widget.usa_pwd.toString(),
+            'usa_nombre': widget.ute_nombre.toString(),
+            'usa_pwd': widget.ute_pwd.toString(),
             'usa_pwd_auto': widget.ute_pwd_auto.toString(),
             'ute_filtro': filtroActivo!.filtro_bbdd,
             'ute_cod_filtro': _codigo_filtro.text

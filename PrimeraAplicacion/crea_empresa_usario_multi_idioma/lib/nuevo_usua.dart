@@ -1,3 +1,4 @@
+import 'package:crea_empresa_usario/drop_down/empresa.dart';
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
 import 'filtros_usuario.dart';
@@ -8,8 +9,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
 class nuevoUsuario extends StatefulWidget {
-  const nuevoUsuario({Key? key, required this.token}) : super(key: key);
-  final String token;
+  const nuevoUsuario({Key? key, required this.ust_token}) : super(key: key);
+  final String ust_token;
 
   @override
   State<nuevoUsuario> createState() => _nuevoUsuarioState();
@@ -38,6 +39,7 @@ class _nuevoUsuarioState extends State<nuevoUsuario> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          DropDownEmpresa().getListEmpresasa(),
           Text(
             traducciones.nombreDelUsuario,
           ),
@@ -149,9 +151,9 @@ class _nuevoUsuarioState extends State<nuevoUsuario> {
             context,
             MaterialPageRoute(
                 builder: (context) => filtros_usuario(
-                    token: widget.token,
-                    usa_nombre: _ute_nombre.text,
-                    usa_pwd: _ute_pwd.text,
+                    ust_token: widget.ust_token,
+                    ute_nombre: _ute_nombre.text,
+                    ute_pwd: _ute_pwd.text,
                     ute_pwd_auto: _ute_pwd_auto)));
       }
     } else {
