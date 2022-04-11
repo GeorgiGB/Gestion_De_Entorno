@@ -1,11 +1,12 @@
--- FUNCTION: public.validar_token(character varying, integer)
+-- FUNCTION: public.validar_token(jsonb)
 
 -- DROP FUNCTION IF EXISTS public.validar_token(jsonb);
 
 CREATE OR REPLACE FUNCTION public.validar_token(
 	jleer jsonb,
-	OUT bok boolean)
-	RETURNS bool
+	OUT bok boolean,
+	OUT cerror character varying)
+    RETURNS record
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
@@ -20,9 +21,9 @@ DECLARE
 BEGIN
 	-- Inicializamos los parametros
 	
-	bOk := false;
+	bok := false;
 	iUsu_cod := -1;
-	cError := '';
+	cerror := '';
 	iCoderror := 0;
 	
 	--	Creacion de una tabla temporal para manipular los datos en ella
@@ -41,7 +42,7 @@ BEGIN
 	
 	EXCEPTION WHEN OTHERS THEN
 		iCoderror := -1;
-		cError := SQLERRM;
+		cerror := SQLERRM;
 		END;
 $BODY$;
 
