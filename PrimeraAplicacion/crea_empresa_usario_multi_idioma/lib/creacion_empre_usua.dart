@@ -68,7 +68,7 @@ class _creacion_empre_usuaState extends State<creacion_empre_usua> {
         context,
         MaterialPageRoute(
           builder: (context) => nuevoUsuario(
-            token: widget.token,
+            ust_token: widget.token,
           ),
         ),
       );
