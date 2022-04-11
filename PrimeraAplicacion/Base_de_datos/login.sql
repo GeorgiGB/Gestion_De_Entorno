@@ -1,3 +1,6 @@
+-- ejemplo consulta
+-- select * from public.login('{"usu_nombre":"Joselito", "usu_pwd":"7887186b33749971de515859532def15f4b210eb"}')
+
 -- FUNCTION: public.login(json)
 
 -- DROP FUNCTION IF EXISTS public.login(jsonb);

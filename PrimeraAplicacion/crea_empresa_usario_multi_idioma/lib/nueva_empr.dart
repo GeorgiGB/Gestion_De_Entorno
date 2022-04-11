@@ -156,6 +156,7 @@ class _nueva_emprState extends State<nueva_empr> {
           // Añadir el nombre de la empresa y su contraseña
           globales.debug(_emp_nombre.text);
           globales.debug(_emp_pwd.text);
+          globales.debug(widget.token);
 
           // Lanzamos la peticion Post al servidor
           var response = await http.post(
@@ -163,7 +164,7 @@ class _nueva_emprState extends State<nueva_empr> {
             // Cabecera para enviar JSON con una autorizacion token
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
-              'Authorization': widget.token
+              'Authorization': 'Bearer ' + widget.token
             },
             // Adjuntamos al body los datos en formato JSON
             body: jsonEncode(<String, String>{
@@ -176,10 +177,11 @@ class _nueva_emprState extends State<nueva_empr> {
           // Adjuntar el token en la peticion.
           int status = response.statusCode;
 
+          List<dynamic> lista = json.decode(response.body);
           if (status == 200) {
-            List<dynamic> lista = json.decode(response.body);
-            globales.debug(
-                'Empresa_creada:' + lista[0]["Empresa_creada"].toString());
+            globales.debug('Empresa_creada:' + lista[0]["msg"].toString());
+          } else if (status == 403) {
+            globales.muestraDialogo(context, lista[0]["msg_error"]);
           } else if (status == 500) {
             globales.muestraDialogo(context, response.body);
           } else {

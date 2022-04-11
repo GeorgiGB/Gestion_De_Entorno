@@ -12,7 +12,7 @@ class creacion_empre_usua extends StatefulWidget {
       {Key? key, required this.token, required this.usu_cod})
       : super(key: key);
   final String token;
-  final int usu_cod;
+  final String usu_cod;
   @override
   State<creacion_empre_usua> createState() => _creacion_empre_usuaState();
 }
@@ -21,7 +21,7 @@ class _creacion_empre_usuaState extends State<creacion_empre_usua> {
   late AppLocalizations traducciones;
   @override
   Widget build(BuildContext context) {
-    globales.debug("usu_cod: "+widget.usu_cod.toString());
+    globales.debug("usu_cod: " + widget.usu_cod.toString());
     traducciones = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(

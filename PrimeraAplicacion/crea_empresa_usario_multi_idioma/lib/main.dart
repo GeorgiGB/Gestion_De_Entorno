@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'filtros_usuario.dart';
 import 'globales.dart' as globales;
 import 'creacion_empre_usua.dart';
 
@@ -89,6 +90,7 @@ class _MyAppState extends State<MyApp> {
       ),
 
       home: Login(),
+      // home: filtros_usuario(token:"", usa_nombre: "", usa_pwd: "", ute_pwd_auto:true), //Login(),
     );
   }
 }
@@ -247,15 +249,16 @@ class _LoginState extends State<Login> {
 
   _cargaCreaEmprUsuario(http.Response response) {
     // La petición tiene éxito. Obtenemos los resultados
-    // a partir de la lista de elementos contenida en el body
-    List<dynamic> lista = json.decode(response.body);
+    // a partir del json Mapa de elementos contenidos en el body
+    Map lista = json.decode(response.body);
+
     // Pasamos a la pantalla creación empresa usuario
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => creacion_empre_usua(
-          token: lista[0]['token'].toString(),
-          usu_cod: lista[0]['usu_cod'],
+          token: lista['token'].toString(),
+          usu_cod: lista['usu_cod'],
         ),
       ),
     );
