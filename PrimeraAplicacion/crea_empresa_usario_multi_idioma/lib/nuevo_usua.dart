@@ -1,4 +1,9 @@
-import 'package:crea_empresa_usario/drop_down/empresa.dart';
+//import 'package:crea_empresa_usario/drop_down/empresa.dart';
+
+import 'package:crea_empresa_usario/widgets/dropdownfield.dart';
+
+import 'package:crea_empresa_usario/drop_down/empresa_future.dart' as ef;
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
 import 'filtros_usuario.dart';
@@ -30,8 +35,8 @@ class _nuevoUsuarioState extends State<nuevoUsuario> {
   @override
   Widget build(BuildContext context) {
     // obtenListaEmpresas(widget.ust_token);
-    fetchPhotos(
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k');
+    //fetchPhotos(
+    //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k');
 
     traducciones = AppLocalizations.of(context)!;
 
@@ -43,7 +48,23 @@ class _nuevoUsuarioState extends State<nuevoUsuario> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          DropDownEmpresa().getListEmpresasa(token: widget.ust_token),
+          FutureBuilder<List<ef.EmpresCod>>(
+            future: ef.fetchEmpresas(http.Client(),
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k'),
+            builder: (context, datos) {
+              if (datos.hasError) {
+                return const Center(
+                  child: Text('An error has occurred!'),
+                );
+              } else if (datos.hasData) {
+                return ListaEmpresas(empresas: datos.data!);
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
           Text(
             traducciones.nombreDelUsuario,
           ),
@@ -167,4 +188,40 @@ class _nuevoUsuarioState extends State<nuevoUsuario> {
     // si la respuesta es correcta ya podemos cargar los filtros
     // si no lanzaremos un aviso
   }
+}
+
+class ListaEmpresas extends StatelessWidget {
+  ListaEmpresas({Key? key, required this.empresas}) : super(key: key);
+
+  final List<ef.EmpresCod> empresas;
+
+  final citiesSelected = TextEditingController();
+  late ef.EmpresCod selectCity;
+  @override
+  Widget build(BuildContext context) {
+    return DropDownField(
+      controller: citiesSelected,
+      hintText: "Select any City",
+      enabled: true,
+      itemsVisibleInDropdown: 5,
+      items: empresas,
+      onValueChanged: (value) {
+        selectCity = value as ef.EmpresCod;
+        print(selectCity.emp_nombre);
+      },
+    );
+  }
+
+  /*@override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+      ),
+      itemCount: empresas.length,
+      itemBuilder: (context, index) {
+        return empresas[index].widget;
+      },
+    );
+  }*/
 }

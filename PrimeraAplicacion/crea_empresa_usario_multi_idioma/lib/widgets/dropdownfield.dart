@@ -6,6 +6,8 @@ library dropdownfield;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../drop_down/empresa_future.dart';
+
 ///DropDownField has customized autocomplete text field functionality
 ///
 ///Parameters
@@ -43,8 +45,20 @@ import 'package:flutter/services.dart';
 ///
 ///itemsVisibleInDropdown - int - Number of suggestions to be shown by default in the Dropdown after which the list scrolls. Defaults to 3
 
-// añadido nullSafety
 
+// Para utilizar este widget los items que se passen tienen que implementar esta interfície
+abstract class DropDownIntericie {
+  // El texto que se va a poner en TextFormField
+  String string();
+
+  // Sobrescribimos para poder comparar un string con el objeto
+  bool operator ==(dynamic other);
+
+  // Obtenemos el Widget para presentar en el LisTile
+  Widget get widget;
+}
+
+// añadido nullSafety
 class DropDownField extends FormField<String> {
   final dynamic value;
   final Widget? icon;
@@ -55,10 +69,10 @@ class DropDownField extends FormField<String> {
   final TextStyle textStyle;
   final bool required;
   final bool enabled;
-  final List<dynamic> items;
+  final List<DropDownIntericie> items; //List<dynamic> items;
   final List<TextInputFormatter>? inputFormatters;
   final FormFieldSetter<dynamic>? setter;
-  final ValueChanged<dynamic>? onValueChanged;
+  final ValueChanged<DropDownIntericie>? onValueChanged;
   final bool strict;
   final int itemsVisibleInDropdown;
 
@@ -222,7 +236,7 @@ class DropDownFieldState extends FormFieldState<String> {
   TextEditingController get _effectiveController =>
       widget.controller; //?? _controller;
 
-  List<dynamic> get _items => widget.items;
+  List<DropDownIntericie> get _items => widget.items;
 
   @override
   void initState() {
@@ -304,11 +318,11 @@ class DropDownFieldState extends FormFieldState<String> {
     });
   }
 
-  List<ListTile> _getChildren(List<dynamic> items) {
+  List<ListTile> _getChildren(List<DropDownIntericie> items) {
     List<ListTile> childItems = [];
     for (var item in items) {
       if (_searchText.isNotEmpty) {
-        if (item.toUpperCase().contains(_searchText.toUpperCase())) {
+        if (item.string().toUpperCase().contains(_searchText.toUpperCase())) {
           childItems.add(_getListTile(item));
         }
       } else {
@@ -319,20 +333,18 @@ class DropDownFieldState extends FormFieldState<String> {
     return childItems;
   }
 
-  ListTile _getListTile(String text) {
+  ListTile _getListTile(DropDownIntericie ddi) {
     return ListTile(
       dense: true,
-      title: Text(
-        text,
-      ),
+      title: ddi.widget,
       onTap: () {
         print("Tap");
         setState(() {
-          _effectiveController.text = text;
+          _effectiveController.text = ddi.string();
           _handleControllerChanged();
           _showdropdown = false;
           _isSearching = false;
-          if (widget.onValueChanged != null) widget.onValueChanged ?? (text);
+          if (widget.onValueChanged != null) widget.onValueChanged!(ddi);
         });
       },
     );

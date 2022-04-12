@@ -1,26 +1,25 @@
-import 'package:crea_empresa_usario/globales.dart' as globales;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
+import '../globales.dart' as globales;
 import '../widgets/dropdownfield.dart';
 
-Future<List<EmpresCod>> fetchPhotos(String token) async {
+Future<List<EmpresCod>> fetchEmpresas(http.Client client, String token) async {
   String url = globales.servidor + '/listado_empresas';
-  final response = await http.post(
+  final response = await client.post(
     Uri.parse(url),
     // Cabecera para enviar JSON
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
     // Adjuntamos al body los datos en formato JSON
-    body: jsonEncode(<String, String>{'emp_busca': 'a', 'ust_token': token}),
+    body: jsonEncode(<String, String>{'emp_busca': '', 'ust_token': token}),
   );
 
-  /*final response =
-      await http.get(Uri.parse('https://jsonplaceholder.typicode.com/photos'));*/
+  globales.debug("hola");
 
   // Use the compute function to run parsePhotos in a separate isolate.
   return compute(parsePhotos, response.body);
@@ -34,7 +33,7 @@ List<EmpresCod> parsePhotos(String responseBody) {
   return parsed.map<EmpresCod>((json) => EmpresCod.fromJson(json)).toList();
 }
 
-class EmpresCod {
+class EmpresCod implements DropDownIntericie {
   final int emp_cod;
   final String emp_nombre;
 
@@ -50,8 +49,24 @@ class EmpresCod {
       emp_nombre: json['emp_nombre'] as String,
     );
   }
+
+  Widget get widget => Text(emp_nombre);
+
+  @override
+  String string() {
+    return emp_nombre;
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return other is String && emp_nombre.contains(other) ||
+        other is EmpresCod &&
+            other.emp_cod == emp_cod &&
+            other.emp_nombre == emp_nombre;
+  }
 }
 
+/*
 class DropDownEmpresa {
   final List<String> entries = <String>['A', 'B', 'C'];
   final List<int> colorCodes = <int>[600, 500, 100];
@@ -111,7 +126,7 @@ class DropDownEmpresa {
     );*/
   }
 }
-
+*/
 String selectCity = "";
 final citiesSelected = TextEditingController();
 
