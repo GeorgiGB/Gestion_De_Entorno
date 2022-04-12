@@ -16,6 +16,9 @@ const crear_emp = require('./comandos/empresas');
 //La conexion con el servidor de usuarios
 const crear_ute = require('./comandos/usuarios_telemetria');
 
+//La conexion con el servidor obtener listado de empresas
+const obtener = require('./comandos/obtener');
+
 const debug = require('./comandos/globales');
 
 // Estas credenciales llevan implicitos el usuario y la contraseña
@@ -29,9 +32,9 @@ const jwt = require('jsonwebtoken');
 // Creación ficticia de usuarios
 const users = [
     {
-    usuario: administrador
+        usuario: administrador
     }
-    ];
+];
 
 //  ---------------------------------------------------------
 
@@ -46,13 +49,14 @@ const authenticateJWT = (req, res, next) => {
     if (authHeader) {
         //  recogemos el jwt
         const token = authHeader.split(' ')[1];
-        debug.msg('token: '+token);
+        debug.msg('token: ' + token);
         //  usando el verify accederemos al token y la llaveSecreta
         jwt.verify(token, verificarJWT.llaveSecreta, (err, user) => {
-            debug.msg("Entro JWT: "+err);
+            debug.msg("Entro JWT: " + err);
             if (err) {
                 return headers(res).status(403).json([{
-                    "msg_error":"No tienes permisos"}]);
+                    "msg_error": "No tienes permisos"
+                }]);
             }
 
             req.user = user;
@@ -61,7 +65,8 @@ const authenticateJWT = (req, res, next) => {
     } else {
         debug.msg("VOY A DAR ERROR DE TOKEN")
         headers(res).status(401).json([{
-            "msg_error": "Token invalido"}]);
+            "msg_error": "Token invalido"
+        }]);
     }
 };
 
@@ -86,28 +91,29 @@ app.listen(8080);
 debug.msg("Servidor ok");
 
 const headers = require('./comandos/cabecera');
+const { msg } = require('./comandos/globales');
 
 //  Iniciar sesion con el usuario
-app.post('/login', (req, res)=>{
-        verificar.login(req.body).then(response => {
+app.post('/login', (req, res) => {
+    verificar.login(req.body).then(response => {
 
-        if(response.bOk){
+        if (response.bOk) {
             //  Si todo se ha rellenado correctamente
-                headers(res).status(200).json(response)
-                //  El resultado final se pone en send después de enviar todas las cabeceras.
-        }else{
-            if(response.icoderror < 0){
+            headers(res).status(200).json(response)
+            //  El resultado final se pone en send después de enviar todas las cabeceras.
+        } else {
+            if (response.icoderror < 0) {
                 headers(res).status(500).json(response);
-            }else{
+            } else {
                 headers(res).status(404).json(response);
-            //  El resultado final se pone en send después de enviar todas las cabeceras.  
+                //  El resultado final se pone en send después de enviar todas las cabeceras.  
             }
-            
+
         }
     })
-    .catch(err => {
-        debug.msg(err)
-        headers(res).status(500).json([{"msg_error": "Error de servidor"}]);
+        .catch(err => {
+            debug.msg(err)
+            headers(res).status(500).json([{ "msg_error": "Error de servidor" }]);
         })
 });
 
@@ -115,40 +121,42 @@ app.post('/login', (req, res)=>{
 //  Con un post mandaremos al servidor la petición de la creación de una empresa
 //  Ahora con la creación del middleware tenemos que introducir el authenticateJWT
 //  
-app.post('/crear_empresa', authenticateJWT,(req,res)=>{
+app.post('/crear_empresa', authenticateJWT, (req, res) => {
     debug.msg(req.body);
-    
+
     // Requerimientos para la creación de una empresa el nombre y la contraseña
     const emp_nombre = req.body.emp_nombre;
     const emp_pwd = req.body.emp_pwd;
     // campo el cual nos indicara si la contraseña a sido solicitada por el servidor
     const contrasena_autogenerada = req.body.contrasena_autogenerada;
-    
+
     // si alguno de los campos esta vacio, este mandara un error y no creara nada
     if (!emp_nombre || !emp_pwd && !contrasena_autogenerada) {
         console.log(emp_nombre, emp_pwd);
-        headers(res).status(401).json([{"msg_error":"No se ha introducido el nombre o la contraseña"}]);
-    }else{
+        headers(res).status(401).json([{ "msg_error": "No se ha introducido el nombre o la contraseña" }]);
+    } else {
         // Datos correctos
         let token = req.headers.authorization.split(' ')[1];
         crear_emp.crear_empresa(token, emp_nombre, emp_pwd, contrasena_autogenerada).then(response => {
             //debug.msg(response);
             //  Si todo esta correcto el usuario accedera
-            if(response){headers(res).status(200)
-                // El resultado final se pone en send después de enviar todas las cabeceras.
-                .json(([{"msg": "empresa creada correctamente"}]))
-            }}
+            if (response) {
+                headers(res).status(200)
+                    // El resultado final se pone en send después de enviar todas las cabeceras.
+                    .json(([{ "msg": "empresa creada correctamente" }]))
+            }
+        }
         )
-        .catch(err => {
-            headers(res).status(500).json("Error de servidor.");
-        });
+            .catch(err => {
+                headers(res).status(500).json("Error de servidor.");
+            });
     }
-    
+
 });
 
 //  Con un post mandaremos la información necesaria para la creación de un usuario de telemetria
 //  Crear usuarios de telemetria
-app.post('/crear_usuarios_telemetria',authenticateJWT, (req, res)=>{
+app.post('/crear_usuarios_telemetria', authenticateJWT, (req, res) => {
     console.log(JSON.stringify(req.body));
     // Requisitos para la inserción de nuevo usuario
     const ute_nombre = req.body.usa_nombre;
@@ -157,23 +165,46 @@ app.post('/crear_usuarios_telemetria',authenticateJWT, (req, res)=>{
     const filtro_cod = req.body.filtro_cod;
     //  Campo el cual nos indicara si la contraseña a sido solicitada por el servidor
     const ute_contra_auto = req.body.contrasena_autogenerada;
-    
+
     //console.log(req.body);
     //  Si alguno de los dos campos o los dos estan vacios este no mandara nada al servidor
     if (!ute_nombre || !ute_pwd) {
         headers(res).status(401).json("No se ha introducido el nombre o la contraseña");
-    }else{
+    } else {
         // Datos correctos
-        crear_ute.crear_usuarios_telemetria(ute_nombre, ute_pwd,ute_contra_auto, ute_filtro, filtro_cod).then(
+        crear_ute.crear_usuarios_telemetria(ute_nombre, ute_pwd, ute_contra_auto, ute_filtro, filtro_cod).then(
             () => headers(res).status(200)
                 // El resultado final se pone en send después de enviar todas las cabeceras.
-                .json([{"Usuario_creado": true, "usa_cod": "codigo_devuelto"}])
+                .json([{ "Usuario_creado": true, "usa_cod": "codigo_devuelto" }])
         )
-        .catch(err => {
-            headers(res).status(500).json("Error de servidor.");
-        });
+            .catch(err => {
+                headers(res).status(500).json("Error de servidor.");
+            });
     }
-    
+
 });
 
-    
+
+//  Iniciar sesion con el usuario
+app.post('/listado_empresas', (req, res) => {
+    obtener.listado_empresas(req.body).then(response => {
+        if (response[0].bOk) {
+            //  Si todo se ha rellenado correctamente
+            //  El resultado final se pone en send después de enviar todas las cabeceras.
+            headers(res).status(200).json(response)
+        } else {
+            if (response[0].cod_error < 0) {
+                headers(res).status(500).json(response);
+            } else if (response[0].cod_error == 401) {
+                headers(res).status(401).json(response);
+            } else {
+                // Error desconocido
+                headers(res).status(500).json(response);
+            }
+
+        }
+    }).catch(err => {
+        debug.msg(err)
+        headers(res).status(500).json([{ "msg_error": "Error de servidor" }]);
+    })
+});
