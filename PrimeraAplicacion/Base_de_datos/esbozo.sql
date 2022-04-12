@@ -1,8 +1,8 @@
--- FUNCTION: public.crearusuariostelemetria(jsonb)
+-- FUNCTION: public.crear_usuarios_telemetria(jsonb)
 
-DROP FUNCTION IF EXISTS public.crearusuariostelemetria(jsonb);
+DROP FUNCTION IF EXISTS public.crear_usuarios_telemetria(jsonb);
 
-CREATE OR REPLACE FUNCTION public.crearusuariostelemetria(
+CREATE OR REPLACE FUNCTION public.crear_usuarios_telemetria(
 jleer jsonb,
 OUT jresultado jsonb)
     RETURNS jsonb
@@ -104,10 +104,10 @@ jresultado :='[{"bOk":"'|| bOk
 END;
 $BODY$;
 
-ALTER FUNCTION public.crearusuariostelemetria(jsonb)
+ALTER FUNCTION public.crear_usuarios_telemetria(jsonb)
     OWNER TO postgres;
 
 
-select * from crearusuariostelemetria('{"ust_token": "7887186b33749971de515859532def15f4b210eb", "ute_emp_cod": "60", "ute_nombre": "Jo", "ute_pwd": "45678","bauto_pwd": "false", "ute_filtro": "ute_pdv", "ute_cod_filtro": "21"}');
+select * from crear_usuarios_telemetria('{"ust_token": "7887186b33749971de515859532def15f4b210eb", "ute_emp_cod": "60", "ute_nombre": "Jo", "ute_pwd": "45678","bauto_pwd": "false", "ute_filtro": "ute_pdv", "ute_cod_filtro": "21"}');
 select * from usuarios_telemetria
 	
