@@ -1,12 +1,67 @@
+import 'package:crea_empresa_usario/globales.dart' as globales;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 import '../widgets/dropdownfield.dart';
+
+Future<List<EmpresCod>> fetchPhotos(String token) async {
+  String url = globales.servidor + '/listado_empresas';
+  final response = await http.post(
+    Uri.parse(url),
+    // Cabecera para enviar JSON
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    // Adjuntamos al body los datos en formato JSON
+    body: jsonEncode(<String, String>{'emp_busca': 'a', 'ust_token': token}),
+  );
+
+  /*final response =
+      await http.get(Uri.parse('https://jsonplaceholder.typicode.com/photos'));*/
+
+  // Use the compute function to run parsePhotos in a separate isolate.
+  return compute(parsePhotos, response.body);
+}
+
+// A function that converts a response body into a List<Photo>.
+List<EmpresCod> parsePhotos(String responseBody) {
+  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+  parsed.removeAt(0);
+  globales.debug(parsed);
+  return parsed.map<EmpresCod>((json) => EmpresCod.fromJson(json)).toList();
+}
+
+class EmpresCod {
+  final int emp_cod;
+  final String emp_nombre;
+
+  const EmpresCod({
+    required this.emp_cod,
+    required this.emp_nombre,
+  });
+
+  factory EmpresCod.fromJson(Map<String, dynamic> json) {
+    globales.debug("------------a");
+    return EmpresCod(
+      emp_cod: json['emp_cod'] as int,
+      emp_nombre: json['emp_nombre'] as String,
+    );
+  }
+}
 
 class DropDownEmpresa {
   final List<String> entries = <String>['A', 'B', 'C'];
   final List<int> colorCodes = <int>[600, 500, 100];
 
-  Widget getListEmpresasa() {
+  Widget getListEmpresasa({required String token}) {
+    globales.debug('llamadon al servidor por lo tanto un future');
+    return Column();
+  }
+
+  Widget getListEmpresas({required List<String> items}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -26,7 +81,7 @@ class DropDownEmpresa {
           hintText: "Select any City",
           enabled: true,
           itemsVisibleInDropdown: 5,
-          items: cities,
+          items: items,
           onValueChanged: (value) {
             selectCity = value;
           },
@@ -60,16 +115,14 @@ class DropDownEmpresa {
 String selectCity = "";
 final citiesSelected = TextEditingController();
 
-// creating a list of strings
-
-List<String> cities = [
-  "Mumbai",
-  "Kolkatta",
-  "kurat",
-  "LA",
-  "Whasington",
-  "New Jersey",
-  "Allahabad",
-  "Jalandar",
-  "Vassi"
-];
+ /*DropDownEmpresa().getListEmpresas(items: <String>[
+            "Saludo",
+            "Kolkatta",
+            "kurat",
+            "LA",
+            "Whasington",
+            "New Jersey",
+            "Allahabad",
+            "Jalandar",
+            "Vassi"
+          ]),*/

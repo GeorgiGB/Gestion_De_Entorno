@@ -29,6 +29,10 @@ class _nuevoUsuarioState extends State<nuevoUsuario> {
 
   @override
   Widget build(BuildContext context) {
+    // obtenListaEmpresas(widget.ust_token);
+    fetchPhotos(
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k');
+
     traducciones = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -39,7 +43,7 @@ class _nuevoUsuarioState extends State<nuevoUsuario> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          DropDownEmpresa().getListEmpresasa(),
+          DropDownEmpresa().getListEmpresasa(token: widget.ust_token),
           Text(
             traducciones.nombreDelUsuario,
           ),
