@@ -2,7 +2,7 @@
 
 -- DROP FUNCTION IF EXISTS public.crearempresa(jsonb);
 
-CREATE OR REPLACE FUNCTION public.crearempresa(
+CREATE OR REPLACE FUNCTION public.crear_empresa(
 	jleer jsonb,
 	OUT jresultado jsonb)
     RETURNS jsonb
@@ -78,7 +78,12 @@ $BODY$;
 ALTER FUNCTION public.crearempresa(jsonb)
 	OWNER TO postgres;
 	
--- select * from public.crearempresa('{"emp_nombre": "funcioncrearempresa","emp_pwd":"4321","auto_pwd":"true", "ust_token":"7887186b33749971de515859532def15f4b210eb"}')
+/* select * from public.crearempresa('{
+"emp_nombre": "funcioncrearempresa",
+"emp_pwd":"4321",
+"auto_pwd":"true", 
+"ust_token":"7887186b33749971de515859532def15f4b210eb"}')
 
+*/
 
 
