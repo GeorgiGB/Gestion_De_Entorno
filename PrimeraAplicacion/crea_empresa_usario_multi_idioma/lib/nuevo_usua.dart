@@ -49,8 +49,8 @@ class _nuevoUsuarioState extends State<nuevoUsuario> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           FutureBuilder<List<ef.EmpresCod>>(
-            future: ef.fetchEmpresas(http.Client(),
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k'),
+            future: ef.fetchEmpresas(http.Client(), widget.ust_token),
+            //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k'),
             builder: (context, datos) {
               if (datos.hasError) {
                 return const Center(

@@ -28,8 +28,9 @@ Future<List<EmpresCod>> fetchEmpresas(http.Client client, String token) async {
 // A function that converts a response body into a List<Photo>.
 List<EmpresCod> parsePhotos(String responseBody) {
   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-  parsed.removeAt(0);
+  //·TODO· Lanzar aviso
   globales.debug(parsed);
+  parsed.removeAt(0);
   return parsed.map<EmpresCod>((json) => EmpresCod.fromJson(json)).toList();
 }
 
