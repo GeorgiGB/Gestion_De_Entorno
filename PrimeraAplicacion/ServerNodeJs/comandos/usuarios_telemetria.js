@@ -3,14 +3,11 @@ const conexion = require('../config/db.config')
 //  Estos usuarios son los que crea el usuario principal
 //  función asincrona que permite la creacion de un usuario de telemetria
 async function crear_usuarios_telemetria(
-  token,ute_nombre,
-  ute_pwd,ute_autogenerada,
-  ute_empresa,ute_filtro,
-  filtro_cod){
+  json){
   
   // Petición al servidor (corregir)
   let res = await conexion.query
-  ("SELECT * FROM crearusuariostelemetria('"+token+"','"+ute_nombre+"','"+ute_pwd+"','"+ute_autogenerada+"','"+ute_empresa+"','"+ute_filtro+"','"+filtro_cod+"');")
+  ("SELECT * FROM crear_usuarios_telemetria('"+json+"');")
 
 
   //  Resultado de toda la operación
