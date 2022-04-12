@@ -1,3 +1,7 @@
+-- FUNCTION: public.crearusuariostelemetria(jsonb)
+
+-- DROP FUNCTION IF EXISTS public.crearusuariostelemetria(jsonb);
+
 CREATE OR REPLACE FUNCTION public.crearusuariostelemetria(
 	jleer jsonb,
 	OUT jresultado jsonb)
@@ -47,10 +51,12 @@ BEGIN
 		END IF;
 		
 		--	CREACION DE USUARIOS DE TELEMETRIA
-		INSERT INTO usuarios_telemetria (ute_nombre, ute_pwd, iute_filtro, iute_cod_filtro) 
+		INSERT INTO usuarios_telemetria (ute_nombre, ute_pwd, ute_emp,
+										 	ute_centro_padre, ute_centro,
+										 		ute_pdv, ute_jefe_area, ute_ruta) 
 				VALUES (rRegistro.cute_nombre, rRegistro.cute_pwd, rRegistro.iute_emp,
-						rRegistro.iute_centro_padre, rRegistro.iute_centro, rRegistro.iute_pdv,
-						rRegistro.iute_jefe_area, rRegistro.iute_ruta);
+							rRegistro.iute_centro_padre, rRegistro.iute_centro, rRegistro.iute_pdv,
+								rRegistro.iute_jefe_area, rRegistro.iute_ruta);
 	
 		IF FOUND THEN
 			bOk := true;
