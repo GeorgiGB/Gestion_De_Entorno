@@ -43,6 +43,7 @@
   
   "nombreDeLaEmpresa": "Nom de l'entreprise :",
   "nombreDelUsuario": "Nom de l'utilisateur:",
+  "noSeEncuentraEmpresasDadeAlta": "Aucune entreprise n'a été trouvée dans la base de données.\nEnregistrez d'abord une nouvelle entreprise.",
   "nuevaEmpresa": "Nouvelle entreprise",
   "nuevoUsuario": "UNouveau utilisateur",
   "numeroDeCodigo": "Numéro de code:",
@@ -54,6 +55,7 @@
 
   "ruta": "Route",
 
+  "selecionaEmpresa": "Sélectionner le entreprise",
   "selecionaLenguage": "Choisir la langue",
   "seleccionaFiltro": "Sélectionner le filtre: ",
   "servidorNoDisponible": "Serveur non disponible",

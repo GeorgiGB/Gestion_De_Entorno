@@ -44,6 +44,7 @@
 
     "nombreDeLaEmpresa": "Company name:",
     "nombreDelUsuario": "User name:",
+    "noSeEncuentraEmpresasDadeAlta": "No companies are found in the DB.\nFirst, register a new company.",
     "nuevaEmpresa": "New company",
     "nuevoUsuario": "New user",
     "numeroDeCodigo": "Code number:",
@@ -56,6 +57,7 @@
     "ruta": "Route",
 
 
+    "selecionaEmpresa": "Select company",
     "selecionaLenguage": "Select Language",
     "seleccionaFiltro": "Select filter: ",
     "servidorNoDisponible": "Server not available",

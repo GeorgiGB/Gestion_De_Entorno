@@ -188,6 +188,7 @@ app.post('/crear_usuarios_telemetria', authenticateJWT, (req, res) => {
 //  Iniciar sesion con el usuario
 app.post('/listado_empresas', (req, res) => {
     obtener.listado_empresas(req.body).then(response => {
+        debug.msg(response)
         if (response[0].bOk) {
             //  Si todo se ha rellenado correctamente
             //  El resultado final se pone en send después de enviar todas las cabeceras.

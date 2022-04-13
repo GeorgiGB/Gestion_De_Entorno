@@ -2,7 +2,7 @@
 
 import 'package:crea_empresa_usario/widgets/dropdownfield.dart';
 
-import 'package:crea_empresa_usario/drop_down/empresa_future.dart' as ef;
+import 'package:crea_empresa_usario/listado_empresas/empresa_future.dart' as ef;
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
@@ -18,10 +18,10 @@ class nuevoUsuario extends StatefulWidget {
   final String ust_token;
 
   @override
-  State<nuevoUsuario> createState() => _nuevoUsuarioState();
+  State<nuevoUsuario> createState() => nuevoUsuarioState();
 }
 
-class _nuevoUsuarioState extends State<nuevoUsuario> {
+class nuevoUsuarioState extends State<nuevoUsuario> {
   final TextEditingController _ute_nombre = TextEditingController();
   final TextEditingController _ute_pwd = TextEditingController();
   final FocusNode _auto_contrasenaFocus = FocusNode();
@@ -31,14 +31,21 @@ class _nuevoUsuarioState extends State<nuevoUsuario> {
   bool _ute_pwd_auto = true;
   bool esperandoNuevoUsuario = false;
   bool enviar = false;
+  late Visibility _mostrar;
+  Visibility get mostraFormulario => _mostrar;
+
+  /*void initState() {
+    super.initState();
+    // Mostramos un mensaje al finalizar la carga
+    // El mostra el mensaje dependerà de la función
+    WidgetsBinding.instance?.addPostFrameCallback((_) => ef.dos(context));
+  }*/
 
   @override
   Widget build(BuildContext context) {
-    // obtenListaEmpresas(widget.ust_token);
-    //fetchPhotos(
-    //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k');
-
     traducciones = AppLocalizations.of(context)!;
+
+    _mostrar = getControlesVsibles();
 
     return Scaffold(
       appBar: AppBar(
@@ -48,23 +55,83 @@ class _nuevoUsuarioState extends State<nuevoUsuario> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          FutureBuilder<List<ef.EmpresCod>>(
-            future: ef.fetchEmpresas(http.Client(), widget.ust_token),
-            //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k'),
-            builder: (context, datos) {
-              if (datos.hasError) {
-                return const Center(
-                  child: Text('An error has occurred!'),
-                );
-              } else if (datos.hasData) {
-                return ListaEmpresas(empresas: datos.data!);
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
+          // FutureBuilder<List<EmpresCod>>
+          // para seleccionar empresa y asociar el nuevo usuario
+          ef.dropDownEmpresas(widget, this, context),
+          mostraFormulario,
+        ],
+      )),
+    );
+  }
+
+  // Si el checkbox esta activo y el campo contraseña tiene datos
+  // Se encargara de limpiar el campo contraseña
+
+  autoCheckBox(bool value) {
+    if (value) {
+      _ute_pwd.clear();
+    }
+    setState(() {
+      _ute_pwd_auto = value;
+    });
+  }
+
+  avisoContraManual(bool hasFocus) {
+    // Si la casilla esta marcada no permitira la escritura en el campo de la contraseña
+    // Y mostrara un aviso
+    if (hasFocus && _ute_pwd_auto) {
+      FocusScope.of(context).requestFocus(_auto_contrasenaFocus);
+      globales.muestraDialogo(context, traducciones.introContraDesmarcaCasilla);
+    }
+  }
+
+  Future<void>? _crearUsuario() async {
+    /* 
+    Tenemos dos tipos de condiciones ya que se puede acceder de dos formas
+    1. Rellenando el campo de nombre y contraseña.
+    2. Rellenando el campo de nombre y pulsando el boton de autogenerado.
+    
+    Por lo tanto tenemos que comprobar si el botón no esta marcado y
+    hemos introducido una contraseña. Y al revés, si hemos introducido un nombre 
+    y hemos marcado el botón de autogenerado.
+    */
+    if ((_ute_nombre.text.isNotEmpty && _ute_pwd.text.isNotEmpty) ||
+        (_ute_nombre.text.isNotEmpty && _ute_pwd_auto)) {
+      if (esperandoNuevoUsuario) {
+        globales.muestraToast(context, traducciones.esperandoAlServidor);
+      } else {
+        globales.muestraToast(context, traducciones.comprobandoDatos);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => filtros_usuario(
+                    ust_token: widget.ust_token,
+                    ute_nombre: _ute_nombre.text,
+                    ute_pwd: _ute_pwd.text,
+                    ute_pwd_auto: _ute_pwd_auto)));
+      }
+    } else {
+      globales.muestraDialogo(context, traducciones.primerRellenaCampos);
+    }
+    // TO-DO
+    // si la respuesta es correcta ya podemos cargar los filtros
+    // si no lanzaremos un aviso
+  }
+
+  controlesVisibilidad(bool visible) {
+    setState(() {
+      _visible = visible;
+    });
+  }
+
+  bool _visible = true;
+  Visibility getControlesVsibles() {
+    return Visibility(
+      visible: _visible,
+      // replacement: , widget para volver atrasPonemos
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
           Text(
             traducciones.nombreDelUsuario,
           ),
@@ -131,97 +198,7 @@ class _nuevoUsuarioState extends State<nuevoUsuario> {
             },
           ),
         ],
-      )),
-    );
-  }
-
-  // Si el checkbox esta activo y el campo contraseña tiene datos
-  // Se encargara de limpiar el campo contraseña
-
-  autoCheckBox(bool value) {
-    if (value) {
-      _ute_pwd.clear();
-    }
-    setState(() {
-      _ute_pwd_auto = value;
-    });
-  }
-
-  avisoContraManual(bool hasFocus) {
-    // Si la casilla esta marcada no permitira la escritura en el campo de la contraseña
-    // Y mostrara un aviso
-    if (hasFocus && _ute_pwd_auto) {
-      FocusScope.of(context).requestFocus(_auto_contrasenaFocus);
-      globales.muestraDialogo(context, traducciones.introContraDesmarcaCasilla);
-    }
-  }
-
-  Future<void>? _crearUsuario() async {
-    /* 
-    Tenemos dos tipos de condiciones ya que se puede acceder de dos formas
-    1. Rellenando el campo de nombre y contraseña.
-    2. Rellenando el campo de nombre y pulsando el boton de autogenerado.
-    
-    Por lo tanto tenemos que comprobar si el botón no esta marcado y
-    hemos introducido una contraseña. Y al revés, si hemos introducido un nombre 
-    y hemos marcado el botón de autogenerado.
-    */
-    if ((_ute_nombre.text.isNotEmpty && _ute_pwd.text.isNotEmpty) ||
-        (_ute_nombre.text.isNotEmpty && _ute_pwd_auto)) {
-      if (esperandoNuevoUsuario) {
-        globales.muestraToast(context, traducciones.esperandoAlServidor);
-      } else {
-        globales.muestraToast(context, traducciones.comprobandoDatos);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => filtros_usuario(
-                    ust_token: widget.ust_token,
-                    ute_nombre: _ute_nombre.text,
-                    ute_pwd: _ute_pwd.text,
-                    ute_pwd_auto: _ute_pwd_auto)));
-      }
-    } else {
-      globales.muestraDialogo(context, traducciones.primerRellenaCampos);
-    }
-    // TO-DO
-    // si la respuesta es correcta ya podemos cargar los filtros
-    // si no lanzaremos un aviso
-  }
-}
-
-class ListaEmpresas extends StatelessWidget {
-  ListaEmpresas({Key? key, required this.empresas}) : super(key: key);
-
-  final List<ef.EmpresCod> empresas;
-
-  final citiesSelected = TextEditingController();
-  late ef.EmpresCod selectCity;
-  @override
-  Widget build(BuildContext context) {
-    return DropDownField(
-      controller: citiesSelected,
-      hintText: "Select any City",
-      enabled: true,
-      itemsVisibleInDropdown: 5,
-      items: empresas,
-      onValueChanged: (value) {
-        selectCity = value as ef.EmpresCod;
-        print(selectCity.emp_nombre);
-      },
-    );
-  }
-
-  /*@override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
       ),
-      itemCount: empresas.length,
-      itemBuilder: (context, index) {
-        return empresas[index].widget;
-      },
     );
-  }*/
+  }
 }

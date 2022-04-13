@@ -43,6 +43,7 @@
 
     "nombreDeLaEmpresa": "Nombre de la empresa:",
     "nombreDelUsuario": "Nombre del usuario:",
+    "noSeEncuentraEmpresasDadeAlta": "No se encuentran empresas en la BBDD.\nPrimero da de alta una nueva empresa.",
     "nuevaEmpresa": "Empresa nueva",
     "nuevoUsuario": "Usuario nuevo",
     "numeroDeCodigo": "Número código:",
@@ -54,6 +55,7 @@
 
     "ruta": "Ruta",
 
+    "selecionaEmpresa": "Selecciona empresa",
     "selecionaLenguage": "Selecciona Lenguaje",
     "seleccionaFiltro": "Selecciona filtro: ",
     "servidorNoDisponible": "Servidor no disponible",

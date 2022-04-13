@@ -98,7 +98,7 @@ class _MyAppState extends State<MyApp> {
           ute_pwd: "",
           ute_pwd_auto: true), //Login(),
       */
-        home: const nuevoUsuario(
+        home: nuevoUsuario(
             ust_token:
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k"));
   }

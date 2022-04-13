@@ -13,8 +13,6 @@ class LanguageDropDown {
       hint: Text(AppLocalizations.of(context)!.selecionaLenguage),
       onChanged: (LanguageData? language) {
         changeLanguage(context, language!.lenguajeCodigo);
-        /*Locale? lc =  _locale(language?.languageCode);
-        MyApp.setLocale(context, null);*/
       },
       items: LanguageData.languageList()
           .map<DropdownMenuItem<LanguageData>>(

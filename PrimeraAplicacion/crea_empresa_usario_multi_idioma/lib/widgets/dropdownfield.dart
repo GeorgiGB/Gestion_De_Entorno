@@ -6,7 +6,7 @@ library dropdownfield;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../drop_down/empresa_future.dart';
+import '../listado_empresas/empresa_future.dart';
 
 ///DropDownField has customized autocomplete text field functionality
 ///
@@ -28,8 +28,8 @@ import '../drop_down/empresa_future.dart';
 ///
 ///enabled - bool - False will disable the field. You can unset this to use the Dropdown field as a read only form field. Default is true
 ///
-///items - List<dynamic> - List of items to be shown as suggestions in the Dropdown. Typically a list of String values.
-///You can supply a static list of values or pass in a dynamic list using a FutureBuilder
+///items - List<DropDownIntericie> - List of items to be shown as suggestions in the Dropdown. Typically a list of String values.
+///You can supply a static list of values or pass in a DropDownIntericie list using a FutureBuilder
 ///
 ///textStyle - TextStyle - Optional styling for text shown in the Dropdown. Default is bold, black colored font of size 14.0
 ///
@@ -44,7 +44,6 @@ import '../drop_down/empresa_future.dart';
 ///False will let user type in new values as well. Default is true
 ///
 ///itemsVisibleInDropdown - int - Number of suggestions to be shown by default in the Dropdown after which the list scrolls. Defaults to 3
-
 
 // Para utilizar este widget los items que se passen tienen que implementar esta interfície
 abstract class DropDownIntericie {
@@ -69,7 +68,7 @@ class DropDownField extends FormField<String> {
   final TextStyle textStyle;
   final bool required;
   final bool enabled;
-  final List<DropDownIntericie> items; //List<dynamic> items;
+  final List<DropDownIntericie> items;
   final List<TextInputFormatter>? inputFormatters;
   final FormFieldSetter<dynamic>? setter;
   final ValueChanged<DropDownIntericie>? onValueChanged;
@@ -82,33 +81,33 @@ class DropDownField extends FormField<String> {
   /// initialize its [TextEditingController.text] with [initialValue].
   final TextEditingController controller;
 
-  // Para enviar el foco en el momento de pulsar en limpiar
-  // y al desplegar la lista.
-  // también utilizado para cerrar la lista en el momento de perder el foco
-  static final _focusNode = FocusNode();
+  // Para enviar el foco en el momento de pulsar limpiar y al desplegar la lista.
+  // También utilizado para cerrar la lista en el momento de perder el foco
+  final FocusNode focusNode;
 
-  DropDownField(
-      {Key? key,
-      required this.controller,
-      this.value,
-      this.required = false,
-      this.icon,
-      this.hintText,
-      this.hintStyle = const TextStyle(
-          fontWeight: FontWeight.normal, color: Colors.grey, fontSize: 18.0),
-      this.labelText,
-      this.labelStyle = const TextStyle(
-          fontWeight: FontWeight.normal, color: Colors.grey, fontSize: 18.0),
-      this.inputFormatters,
-      required this.items,
-      this.textStyle = const TextStyle(
-          fontWeight: FontWeight.bold, color: Colors.black, fontSize: 14.0),
-      this.setter,
-      this.onValueChanged,
-      this.itemsVisibleInDropdown = 3,
-      this.enabled = true,
-      this.strict = true})
-      : super(
+  DropDownField({
+    Key? key,
+    required this.controller,
+    required this.focusNode,
+    required this.items,
+    this.value,
+    this.required = false,
+    this.icon,
+    this.hintText,
+    this.hintStyle = const TextStyle(
+        fontWeight: FontWeight.normal, color: Colors.grey, fontSize: 18.0),
+    this.labelText,
+    this.labelStyle = const TextStyle(
+        fontWeight: FontWeight.normal, color: Colors.grey, fontSize: 18.0),
+    this.inputFormatters,
+    this.textStyle = const TextStyle(
+        fontWeight: FontWeight.bold, color: Colors.black, fontSize: 14.0),
+    this.setter,
+    this.onValueChanged,
+    this.itemsVisibleInDropdown = 3,
+    this.enabled = true,
+    this.strict = true,
+  }) : super(
           key: key,
           autovalidateMode: AutovalidateMode.disabled,
           initialValue: controller
@@ -152,7 +151,7 @@ class DropDownField extends FormField<String> {
                           style: textStyle,
                           textAlign: TextAlign.start,
                           autofocus: false,
-                          focusNode: _focusNode,
+                          focusNode: focusNode,
                           obscureText: false,
                           maxLengthEnforcement: MaxLengthEnforcement.enforced,
                           maxLines: 1,
@@ -250,11 +249,11 @@ class DropDownFieldState extends FormFieldState<String> {
 
     _searchText = _effectiveController.text;
 
-    DropDownField._focusNode.addListener(() async {
-      if (!DropDownField._focusNode.hasFocus) {
+    widget.focusNode.addListener(() async {
+      if (!widget.focusNode.hasFocus) {
         // Esperamos 250 ms i si no ha recuperado el foco Ocultamos el List View
         await Future.delayed(const Duration(milliseconds: 250));
-        if (!DropDownField._focusNode.hasFocus) {
+        if (!widget.focusNode.hasFocus) {
           ocultaDropDown();
         }
       }
@@ -274,7 +273,7 @@ class DropDownFieldState extends FormFieldState<String> {
       _showdropdown = !_showdropdown;
       if (_showdropdown) {
         // ponemos el foco en TextFormField
-        DropDownField._focusNode.requestFocus();
+        widget.focusNode.requestFocus();
       }
     });
   }
@@ -282,7 +281,7 @@ class DropDownFieldState extends FormFieldState<String> {
   void clearValue() {
     setState(() {
       _effectiveController.text = '';
-      DropDownField._focusNode.requestFocus();
+      widget.focusNode.requestFocus();
     });
   }
 

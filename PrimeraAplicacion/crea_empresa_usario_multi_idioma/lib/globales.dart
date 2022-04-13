@@ -44,10 +44,23 @@ Future<void> muestraDialogo(BuildContext context, String msg,
       });
 }
 
+Future<void> muestraDialogoDespuesDe(
+    BuildContext context, String msg, int despuesDe_milis) async {
+  await Future.delayed(Duration(milliseconds: despuesDe_milis));
+  muestraDialogo(context, msg);
+}
+
 muestraToast(BuildContext context, String msg) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(msg),
     backgroundColor: Colors.green,
     duration: Duration(seconds: 2),
   ));
+}
+
+// Pasamos una cadena a boolean
+extension BoolParsing on String {
+  bool parseBool() {
+    return this.toLowerCase() == 'true';
+  }
 }
