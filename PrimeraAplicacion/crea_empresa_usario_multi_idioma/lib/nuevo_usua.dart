@@ -118,13 +118,16 @@ class nuevoUsuarioState extends State<nuevoUsuario> {
     // si no lanzaremos un aviso
   }
 
-  controlesVisibilidad(bool visible) {
-    setState(() {
-      _visible = visible;
-    });
+  controlesVisibilidad(bool visible) async {
+    await Future.delayed(Duration(milliseconds: 1));
+    if (!_visible) {
+      setState(() {
+        _visible = visible;
+      });
+    }
   }
 
-  bool _visible = true;
+  bool _visible = false;
   Visibility getControlesVsibles() {
     return Visibility(
       visible: _visible,

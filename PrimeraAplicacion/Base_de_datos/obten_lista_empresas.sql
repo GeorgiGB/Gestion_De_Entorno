@@ -18,7 +18,7 @@ DECLARE
 	iCoderror integer;
 
 BEGIN
-	
+	jresultado :='[]';
 	bOk := false;
 	cError := '';
 	iCoderror := 0;
@@ -42,13 +42,11 @@ BEGIN
 		-- y lo guardamos en formato JSON en jresultado
 		SELECT json_agg(empr) INTO jresultado from public.empresas empr WHERE emp_nombre ILIKE rRegistro.emp_busca || '%';
 
-		IF FOUND THEN
-			bOk := true;
-			-- añdimos la variable bOk al JSON jresultado
-			select ('{"bOk":"'||bOk||'"}')::jsonb || jresultado ::jsonb into jresultado;
-		ELSE
-
-		END IF;
+		-- añdimos la variable bOk al JSON jresultado
+		-- importante añadir Coalesce(jresultado, '{}') porque jresultado puede ser null
+		select ('{"bOk":"'||bOk||'"}')::jsonb || Coalesce(jresultado, '[]') ::jsonb into jresultado;
+	ELSE
+		select ('{"bOk":"false", "cod_error":"401"}')::jsonb || jresultado ::jsonb into jresultado;
 	END IF;
 	
 	
@@ -64,4 +62,4 @@ $BODY$;
 ALTER FUNCTION public.obten_lista_empresas(jsonb)
     OWNER TO postgres;
 	
-select * from public.obten_lista_empresas('{"emp_busca": "p", "ust_token":"7887186b33749971de515859532def15f4b210eb"}')
+-- select * from public.obten_lista_empresas('{"emp_busca": "p", "ust_token":"7887186b33749971de515859532def15f4b210eb"}')

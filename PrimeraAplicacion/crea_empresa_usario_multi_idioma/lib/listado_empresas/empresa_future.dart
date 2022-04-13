@@ -12,6 +12,74 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../globales.dart' as globales;
 import '../widgets/dropdownfield.dart';
 
+// Una vez se muestran los campos de formulario esta función no se volverá a ejecutar.
+FutureBuilder<List<EmpresCod>> dropDownEmpresas(
+    nuevoUsuario widget, nuevoUsuarioState ns, BuildContext cntxt) {
+  late String msg_err;
+
+  return FutureBuilder<List<EmpresCod>>(
+    future: ns.mostraFormulario.visible
+        ? null
+        : buscaEmpresas(http.Client(), widget.ust_token, cntxt).onError(
+            (error, stackTrace) {
+              if (error is ExceptionServidor) {
+                if (error.codError == 401) {
+                  msg_err = AppLocalizations.of(_context!)!.codErrorLogin401;
+                } else {
+                  msg_err = AppLocalizations.of(_context!)!.errNoEspecificado +
+                      ': ' +
+                      error.codError.toString();
+                }
+              } else {
+                msg_err = AppLocalizations.of(cntxt)!.servidorNoDisponible;
+              }
+              throw error!;
+            },
+          ),
+    builder: (context, datos) {
+      if (datos.hasError) {
+        globales.muestraDialogoDespuesDe(context, msg_err, 120);
+        return Center(
+          child: Text(msg_err),
+        );
+      } else if (datos.hasData) {
+        // Tenemos datos?
+        if (datos.data!.isEmpty) {
+          // No hay empresas en los datos recibidos por el servidor
+          String msg =
+              AppLocalizations.of(context)!.noSeEncuentraEmpresasDadeAlta;
+          return Center(
+            child: Text(
+              msg,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+                  fontSize: 14.0),
+            ),
+          );
+        } else {
+          // Ja podemos mostrar los campos de formulario
+          ns.controlesVisibilidad(true);
+
+          // Ahora creamos el dropDown de Empresas
+          return ListaEmpresas(empresas: datos.data!);
+        }
+      } else {
+        // Esperando datos del servidor
+        return Center(
+          child: Column(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 15),
+              Text(AppLocalizations.of(context)!.esperandoAlServidor),
+            ],
+          ),
+        );
+      }
+    },
+  );
+}
+
 BuildContext? _context;
 
 Future<List<EmpresCod>> buscaEmpresas(
@@ -24,90 +92,37 @@ Future<List<EmpresCod>> buscaEmpresas(
       'Content-Type': 'application/json; charset=UTF-8',
     },
     // Adjuntamos al body los datos en formato JSON
-    body: jsonEncode(<String, String>{'emp_busca': '', 'ust_token': token}),
+    body: jsonEncode(<String, String>{'emp_busca': 'xxx', 'ust_token': token}),
   );
 
   _context = context;
-  // Use the compute function to run parsePhotos in a separate isolate.
-  return compute(parseEmpresas, response.body);
+  // Use the compute function to run _parseEmpresas in a separate isolate.
+  return compute(_parseEmpresas, response.body);
 }
 
-// A function that converts a response body into a List<Photo>.
-List<EmpresCod> parseEmpresas(String responseBody) {
+class ExceptionServidor implements Exception {
+  int codError;
+
+  ExceptionServidor(this.codError);
+}
+
+// A function that converts a response body into a List<EmpresCod>.
+List<EmpresCod> _parseEmpresas(String responseBody) {
   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
 
-  if (!parsed[0]['bOk'].toString().parseBool()) {
-    String msg = '';
-    int cod_error = int.parse(parsed[0]['cod_error']);
-    if (cod_error == 401) {
-      msg = AppLocalizations.of(_context!)!.codErrorLogin401;
-    } else {
-      msg = AppLocalizations.of(_context!)!.errNoEspecificado +
-          ': ' +
-          parsed[0]['cod_error'];
-    }
-    globales.muestraDialogo(_context!, msg);
+  // ha ido correcto?
+  if (parsed[0]['bOk'].toString().parseBool()) {
+    // Eliminamos el primer elemento que contiene la información de si todo es correcto
+    parsed.removeAt(0);
+    return parsed.map<EmpresCod>((json) => EmpresCod.fromJson(json)).toList();
+  } else {
+    int codError = int.parse(parsed[0]['cod_error']);
+    print("lanzo error");
+    throw ExceptionServidor(codError);
+    /*globales.muestraDialogo(_context!, msg);
     _context = null;
-    return [];
+    return [];*/
   }
-
-  // Eliminamos el primer elemento que contiene la información de si todo es correcto
-  parsed.removeAt(0);
-
-  List<EmpresCod> lista =
-      parsed.map<EmpresCod>((json) => EmpresCod.fromJson(json)).toList();
-  lista = [];
-  throw Exception('Some arbitrary error');
-  //return lista;
-}
-
-dos(nuevoUsuarioState ns) {
-  //await Future.delayed(Duration(milliseconds: 250));
-  ns.controlesVisibilidad(false);
-  print("ocultando");
-}
-
-FutureBuilder<List<EmpresCod>> dropDownEmpresas(
-    nuevoUsuario widget, nuevoUsuarioState ns, BuildContext cntxt) {
-  var ok = true;
-  return FutureBuilder<List<EmpresCod>>(
-    future: !ns.mostraFormulario.visible
-        ? null
-        : buscaEmpresas(http.Client(), widget.ust_token, cntxt).onError((error, stackTrace) {
-            // Ocultamos el widget mostraFormulario
-            if (ns.mostraFormulario.visible) dos(ns);
-            return <EmpresCod> [];
-          }),
-    builder: (context, datos) {
-      if (datos.hasError) {
-        return Center(
-          child: Text(AppLocalizations.of(context)!.servidorNoDisponible),
-        );
-      } else if (datos.hasData) {
-        if (datos.data!.isNotEmpty) {
-          // mostramos empresas
-          return ListaEmpresas(empresas: datos.data!);
-        } else {
-          // no se han encontrado empresas
-          String msg =
-              AppLocalizations.of(context)!.noSeEncuentraEmpresasDadeAlta;
-          return Center(
-            child: Text(
-              msg,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                  fontSize: 14.0),
-            ),
-          );
-        }
-      } else {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-    },
-  );
 }
 
 class EmpresCod implements DropDownIntericie {
