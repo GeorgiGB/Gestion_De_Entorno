@@ -41,7 +41,7 @@ BEGIN
 		-- Buscamos la s empresas que tienen una coincidencia con emp_busca al inicio de su nombre
 		-- y lo guardamos en formato JSON en jresultado
 		SELECT json_agg(empr) INTO jresultado from public.empresas empr WHERE emp_nombre ILIKE rRegistro.emp_busca || '%';
-
+		-- Si el select este vació jresultado tiene valor NULL
 		-- añdimos la variable bOk al JSON jresultado
 		-- importante añadir Coalesce(jresultado, '{}') porque jresultado puede ser null
 		select ('{"bOk":"'||bOk||'"}')::jsonb || Coalesce(jresultado, '[]') ::jsonb into jresultado;
