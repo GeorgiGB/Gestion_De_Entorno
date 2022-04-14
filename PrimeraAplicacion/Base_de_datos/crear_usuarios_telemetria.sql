@@ -41,7 +41,7 @@ AS $BODY$
             
             -- Realizamos el INSERT en usuarios_telemetria desde los valores de la tabla del JSON jleer
 			-- de forma que si algún campo de los que se encuentra
-			-- en el CASE WHEN coincide con el fitro contENDio en j.ute_filtro
+			-- en el CASE WHEN coincide con el fitro contenido en j.ute_filtro
             -- se le assignará el valor contenido en j.ute_cod_filtro
 			INSERT INTO usuarios_telemetria
 				(ute_emp_cod, ute_nombre, ute_pwd,
@@ -95,6 +95,7 @@ $BODY$;
 ALTER FUNCTION public.crear_usuarios_telemetria(jsonb)
     OWNER TO postgres;
 	
--- Para hacer un insert HAY QUE CAMBIAR EL NOMBRE DEute_nombre
+-- Para hacer un insert hay que poner un ute_emp_cod que exista en la tabla empresas
+-- Si exite en la tabla un nombre con el mismo ust_emp_cod HAY QUE CAMBIAR EL NOMBRE DE "ute_nombre"
 -- select * from crear_usuarios_telemetria('{"ust_token": "7887186b33749971de515859532def15f4b210eb", "ute_emp_cod": "60","ute_nombre": "Jo78", "ute_pwd": "45678", "auto_pwd": "true", "ute_filtro": "ute_pdv", "ute_cod_filtro": "21"}');
 -- select * from usuarios_telemetria
