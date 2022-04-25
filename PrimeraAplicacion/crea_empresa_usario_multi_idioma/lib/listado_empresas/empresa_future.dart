@@ -54,18 +54,18 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
         // en caso de error
         if (msgErr.isNotEmpty)
           globales.muestraDialogoDespuesDe(context, msgErr, 60);
-        return BlueBox(
+        return AvisoAccion(
           aviso: msgErr,
           msg: AppLocalizations.of(cntxt)!.recarga,
           icon: const Icon(Icons.refresh_rounded),
           // Recargamos la página de NuevoUsuario
-          accion: () => {ns.reload()},
+          accion: () => {ns.recarga()},
         );
       } else if (datos.hasData) {
         // Tenemos datos?
         if (datos.data!.isEmpty) {
           // No hay empresas en los datos recibidos por el servidor
-          return BlueBox(
+          return AvisoAccion(
             aviso: AppLocalizations.of(cntxt)!.noSeEncuentraEmpresasDadeAlta,
             msg: AppLocalizations.of(cntxt)!.anyadeEmpresa,
             icon: const Icon(Icons.add_business_rounded),
@@ -103,8 +103,8 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
   );
 }
 
-class BlueBox extends StatelessWidget {
-  BlueBox(
+class AvisoAccion extends StatelessWidget {
+  AvisoAccion(
       {Key? key,
       required this.aviso,
       required this.msg,

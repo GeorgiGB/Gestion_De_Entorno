@@ -80,9 +80,10 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
     });
   }
 
-  reload() {
+  // Recargamos la página desde el estado de inicial
+  recarga() {
     setState(() {
-      
+      _visible = false;
     });
   }
 
