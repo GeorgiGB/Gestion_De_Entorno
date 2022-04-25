@@ -1,3 +1,5 @@
+import 'package:crea_empresa_usario/excepciones_personalizadas/excepciones.dart';
+import 'package:crea_empresa_usario/nueva_empr.dart';
 import 'package:crea_empresa_usario/nuevo_usua.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,58 +12,79 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
 import '../globales.dart' as globales;
+import '../globales.dart';
 import '../widgets/dropdownfield.dart';
 
+// Función utilizada para obtener la lista de empresas del servidor
+// En caso de no haber empresas dadas de alta  muestra un mensaje y la opción
+// de ir a dar de alta una empresa o volver atrás
+// Si falla la conexión muestra un mensaje y un botón para volver atrás
 // Una vez se muestran los campos de formulario esta función no se volverá a ejecutar.
 FutureBuilder<List<EmpresCod>> dropDownEmpresas(
-    nuevoUsuario widget, nuevoUsuarioState ns, BuildContext cntxt) {
-  late String msg_err;
+    String queBusco, NuevoUsuarioState ns) {
+  late String msgErr = '';
+  BuildContext cntxt = ns.context;
+  NuevoUsuario widget = ns.widget;
 
   return FutureBuilder<List<EmpresCod>>(
-    future: ns.mostraFormulario.visible
+    future: ns.muestraFormulario.visible
         ? null
-        : buscaEmpresas(http.Client(), widget.ust_token, cntxt).onError(
+        : buscaEmpresas(queBusco, http.Client(), widget.ust_token, cntxt)
+            // En caso de error en el servidor capturamos el mensaje pertinente.
+            .onError(
             (error, stackTrace) {
               if (error is ExceptionServidor) {
                 if (error.codError == 401) {
-                  msg_err = AppLocalizations.of(_context!)!.codErrorLogin401;
+                  msgErr = AppLocalizations.of(cntxt)!.codErrorLogin401;
                 } else {
-                  msg_err = AppLocalizations.of(_context!)!.errNoEspecificado +
+                  msgErr = AppLocalizations.of(cntxt)!.errNoEspecificado +
                       ': ' +
                       error.codError.toString();
                 }
               } else {
-                msg_err = AppLocalizations.of(cntxt)!.servidorNoDisponible;
+                msgErr = AppLocalizations.of(cntxt)!.servidorNoDisponible;
               }
               throw error!;
             },
           ),
+    // Este future en función del error de la conexión o del servidor realiza
+    // varios intentos antes de llamar a este método anónimo y crear los widgets a mostrar
     builder: (context, datos) {
       if (datos.hasError) {
-        globales.muestraDialogoDespuesDe(context, msg_err, 120);
-        return Center(
-          child: Text(msg_err),
+        // en caso de error
+        if (msgErr.isNotEmpty)
+          globales.muestraDialogoDespuesDe(context, msgErr, 60);
+        return BlueBox(
+          aviso: msgErr,
+          msg: AppLocalizations.of(cntxt)!.recarga,
+          icon: const Icon(Icons.refresh_rounded),
+          // Recargamos la página de NuevoUsuario
+          accion: () => {ns.reload()},
         );
       } else if (datos.hasData) {
         // Tenemos datos?
         if (datos.data!.isEmpty) {
           // No hay empresas en los datos recibidos por el servidor
-          String msg =
-              AppLocalizations.of(context)!.noSeEncuentraEmpresasDadeAlta;
-          return Center(
-            child: Text(
-              msg,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                  fontSize: 14.0),
-            ),
+          return BlueBox(
+            aviso: AppLocalizations.of(cntxt)!.noSeEncuentraEmpresasDadeAlta,
+            msg: AppLocalizations.of(cntxt)!.anyadeEmpresa,
+            icon: const Icon(Icons.add_business_rounded),
+            accion: () => {
+              // Cargamos la página de NuevaEmpresa
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NuevaEmpresa(token: widget.ust_token),
+                ),
+              )
+            },
           );
         } else {
-          // Ja podemos mostrar los campos de formulario
+          // Tenemos datos y
+          // ya podemos mostrar los campos de formulario
           ns.controlesVisibilidad(true);
 
-          // Ahora creamos el dropDown de Empresas
+          // y ahora creamos el dropDown de Empresas
           return ListaEmpresas(empresas: datos.data!);
         }
       } else {
@@ -80,10 +103,87 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
   );
 }
 
-BuildContext? _context;
+class BlueBox extends StatelessWidget {
+  BlueBox(
+      {Key? key,
+      required this.aviso,
+      required this.msg,
+      required this.icon,
+      required this.accion})
+      : super(key: key);
+  final String aviso;
+  final String msg;
+  final Icon icon;
+  final Function accion;
 
-Future<List<EmpresCod>> buscaEmpresas(
-    http.Client client, String token, BuildContext context) async {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.warning_amber_rounded,
+                color: Colors.red,
+              ),
+              Text(
+                aviso,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                    fontSize: 14.0),
+              ),
+            ],
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: getWidgets(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> getWidgets(BuildContext context) {
+    List<Widget> widgets = [];
+
+    // widget atrás en navegación
+    if (Navigator.canPop(context)) {
+      widgets.add(
+        TextButton.icon(
+          // TODO traducir Atrás
+          label: Text('Atrás'),
+          icon: const BackButtonIcon(),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      );
+    }
+
+    // Widget accion
+    widgets.add(
+      TextButton.icon(
+        label: Text(msg),
+        icon: icon,
+        onPressed: () {
+          accion();
+        },
+      ),
+    );
+
+    return widgets;
+  }
+}
+
+Future<List<EmpresCod>> buscaEmpresas(String queBusco, http.Client client,
+    String token, BuildContext context) async {
+  // ejemplo tomado y modificado de:
+  // https://docs.flutter.dev/cookbook/networking/background-parsing#4-move-this-work-to-a-separate-isolate
+
   String url = globales.servidor + '/listado_empresas';
   final response = await client.post(
     Uri.parse(url),
@@ -92,21 +192,17 @@ Future<List<EmpresCod>> buscaEmpresas(
       'Content-Type': 'application/json; charset=UTF-8',
     },
     // Adjuntamos al body los datos en formato JSON
-    body: jsonEncode(<String, String>{'emp_busca': 'xxx', 'ust_token': token}),
+    // que queremos buscar
+    body:
+        jsonEncode(<String, String>{'emp_busca': queBusco, 'ust_token': token}),
   );
 
-  _context = context;
-  // Use the compute function to run _parseEmpresas in a separate isolate.
+  // Utilizamos la función compute para ejecutar _parseEmpresas en un segundo plano.
   return compute(_parseEmpresas, response.body);
 }
 
-class ExceptionServidor implements Exception {
-  int codError;
-
-  ExceptionServidor(this.codError);
-}
-
-// A function that converts a response body into a List<EmpresCod>.
+// Funcion utilizada para convertir el cuerpo de la resuesta enviada
+// por el servidor en una List<EmpresCod>.
 List<EmpresCod> _parseEmpresas(String responseBody) {
   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
 
@@ -114,49 +210,51 @@ List<EmpresCod> _parseEmpresas(String responseBody) {
   if (parsed[0]['bOk'].toString().parseBool()) {
     // Eliminamos el primer elemento que contiene la información de si todo es correcto
     parsed.removeAt(0);
-    return parsed.map<EmpresCod>((json) => EmpresCod.fromJson(json)).toList();
+    return <EmpresCod>[];
+    //parsed.map<EmpresCod>((json) => EmpresCod.fromJson(json)).toList();
   } else {
+    // lanzamos excepción de servidor
     int codError = int.parse(parsed[0]['cod_error']);
-    print("lanzo error");
     throw ExceptionServidor(codError);
-    /*globales.muestraDialogo(_context!, msg);
-    _context = null;
-    return [];*/
   }
 }
 
+// Clase que utilizamos para crear cada elemento de la lista de Empresas
 class EmpresCod implements DropDownIntericie {
-  final int emp_cod;
-  final String emp_nombre;
+  final int empCod;
+  final String empNombre;
 
   const EmpresCod({
-    required this.emp_cod,
-    required this.emp_nombre,
+    required this.empCod,
+    required this.empNombre,
   });
 
   factory EmpresCod.fromJson(Map<String, dynamic> json) {
     return EmpresCod(
-      emp_cod: json['emp_cod'] as int,
-      emp_nombre: json['emp_nombre'] as String,
+      empCod: json['emp_cod'] as int,
+      empNombre: json['emp_nombre'] as String,
     );
   }
 
   Widget
       get widget => //Text(emp_nombre); // Es pot mostrar qualsevol tipus de widget
-          Row(children: [Text(emp_cod.toString()), Text(' - ' + emp_nombre)]);
+          Row(children: [Text(empCod.toString()), Text(' - ' + empNombre)]);
 
   @override
   String string() {
-    return emp_nombre;
+    return empNombre;
   }
 
   @override
   bool operator ==(dynamic other) {
-    return other is String && emp_nombre.contains(other) ||
+    return other is String && empNombre.contains(other) ||
         other is EmpresCod &&
-            other.emp_cod == emp_cod &&
-            other.emp_nombre == emp_nombre;
+            other.empCod == empCod &&
+            other.empNombre == empNombre;
   }
+
+  @override
+  int get hashCode => hashValues(empCod, empNombre);
 }
 
 class ListaEmpresas extends StatelessWidget {
@@ -164,20 +262,21 @@ class ListaEmpresas extends StatelessWidget {
 
   final List<EmpresCod> empresas;
 
-  final citiesSelected = TextEditingController();
-  late EmpresCod selectCity;
+  final controladorEmpresa = TextEditingController();
+  late EmpresCod empresaSeleccionada;
+
   @override
   Widget build(BuildContext context) {
     return DropDownField(
-      controller: citiesSelected,
+      controller: controladorEmpresa,
       focusNode: FocusNode(),
       hintText: AppLocalizations.of(context)!.selecionaEmpresa,
       enabled: true,
       itemsVisibleInDropdown: 5,
       items: empresas,
       onValueChanged: (value) {
-        selectCity = value as EmpresCod;
-        print(selectCity.emp_nombre);
+        empresaSeleccionada = value as EmpresCod;
+        debug(empresaSeleccionada.empNombre);
       },
     );
   }

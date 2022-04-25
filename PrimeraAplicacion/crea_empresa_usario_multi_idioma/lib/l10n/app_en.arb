@@ -5,6 +5,7 @@
 
     
     "acceso": "Login",
+    "anyadeEmpresa": "Add company",
     "aviso": "Warning",
 
     "cargando": "Loading",
@@ -21,6 +22,7 @@
     "dimeElCodigoDeFiltro": "Filter code:",
 
     "empresa": "Company",
+    "empresaNueva": "New company",
     "empresaCreadaCorrectamente": "Company set up ok",
     "errNoEspecificado": "Unspecified error: ",
     "escogeOpcionParaCrear": "Choose option to create.",
@@ -42,10 +44,11 @@
 
     "jefeDeArea": "Area manager",
 
+    "nohayEmpresasenlaBBDD": "There are no companies in the database",
     "nombreDeLaEmpresa": "Company name:",
     "nombreDelUsuario": "User name:",
     "noSeEncuentraEmpresasDadeAlta": "No companies are found in the DB.\nFirst, register a new company.",
-    "nuevaEmpresa": "New company",
+    "nuevaEmpresa": "Company new",
     "nuevoUsuario": "New user",
     "numeroDeCodigo": "Code number:",
 
@@ -53,7 +56,8 @@
     
     "pdv": "POS",
     "primerRellenaCampos": "First complete the fields",
-
+    
+    "recarga": "Recharge",
     "ruta": "Route",
 
 

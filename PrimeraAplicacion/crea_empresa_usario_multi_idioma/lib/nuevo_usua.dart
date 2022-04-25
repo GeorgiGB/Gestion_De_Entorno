@@ -1,27 +1,23 @@
 //import 'package:crea_empresa_usario/drop_down/empresa.dart';
 
-import 'package:crea_empresa_usario/widgets/dropdownfield.dart';
-
 import 'package:crea_empresa_usario/listado_empresas/empresa_future.dart' as ef;
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
 import 'filtros_usuario.dart';
-import 'main.dart';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
-class nuevoUsuario extends StatefulWidget {
-  const nuevoUsuario({Key? key, required this.ust_token}) : super(key: key);
+class NuevoUsuario extends StatefulWidget {
+  const NuevoUsuario({Key? key, required this.ust_token}) : super(key: key);
   final String ust_token;
 
   @override
-  State<nuevoUsuario> createState() => nuevoUsuarioState();
+  State<NuevoUsuario> createState() => NuevoUsuarioState();
 }
 
-class nuevoUsuarioState extends State<nuevoUsuario> {
+class NuevoUsuarioState extends State<NuevoUsuario> {
   final TextEditingController _ute_nombre = TextEditingController();
   final TextEditingController _ute_pwd = TextEditingController();
   final FocusNode _auto_contrasenaFocus = FocusNode();
@@ -31,8 +27,14 @@ class nuevoUsuarioState extends State<nuevoUsuario> {
   bool _ute_pwd_auto = true;
   bool esperandoNuevoUsuario = false;
   bool enviar = false;
+
+  // Este es un widget que controla la visibilidad el cual tiene asociodos
+  // los widgets de formulario para dar de alta a un usuario nuevo
   late Visibility _mostrar;
-  Visibility get mostraFormulario => _mostrar;
+  Visibility get muestraFormulario => _mostrar;
+
+  // variable que hará que se muestren o no los campos de formulario
+  bool _visible = false;
 
   /*void initState() {
     super.initState();
@@ -55,10 +57,13 @@ class nuevoUsuarioState extends State<nuevoUsuario> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          // FutureBuilder<List<EmpresCod>>
-          // para seleccionar empresa y asociar el nuevo usuario
-          ef.dropDownEmpresas(widget, this, context),
-          mostraFormulario,
+          // Para poder mostrar el formulario tienen que haber empresas dadas
+          // de alta y así poder seleccionar una empresa y asociarla al nuevo usuario
+          ef.dropDownEmpresas('', this),
+          // la función está preparada para pasar un string que buscará en el servidor
+
+          // Widget que contiene los controles de formulario
+          muestraFormulario,
         ],
       )),
     );
@@ -66,7 +71,6 @@ class nuevoUsuarioState extends State<nuevoUsuario> {
 
   // Si el checkbox esta activo y el campo contraseña tiene datos
   // Se encargara de limpiar el campo contraseña
-
   autoCheckBox(bool value) {
     if (value) {
       _ute_pwd.clear();
@@ -76,16 +80,23 @@ class nuevoUsuarioState extends State<nuevoUsuario> {
     });
   }
 
+  reload() {
+    setState(() {
+      
+    });
+  }
+
   avisoContraManual(bool hasFocus) {
-    // Si la casilla esta marcada no permitira la escritura en el campo de la contraseña
-    // Y mostrara un aviso
+    // Si la casilla de contraseña auto generada está marcada no permitirá
+    // la escritura en el campo de la contraseña y mostrará un aviso.
     if (hasFocus && _ute_pwd_auto) {
       FocusScope.of(context).requestFocus(_auto_contrasenaFocus);
       globales.muestraDialogo(context, traducciones.introContraDesmarcaCasilla);
     }
   }
 
-  Future<void>? _crearUsuario() async {
+  // Future
+  Future<void>? _cargaFiltrosUsuario() async {
     /* 
     Tenemos dos tipos de condiciones ya que se puede acceder de dos formas
     1. Rellenando el campo de nombre y contraseña.
@@ -97,28 +108,35 @@ class nuevoUsuarioState extends State<nuevoUsuario> {
     */
     if ((_ute_nombre.text.isNotEmpty && _ute_pwd.text.isNotEmpty) ||
         (_ute_nombre.text.isNotEmpty && _ute_pwd_auto)) {
+      // Este if no hace falta simplemente pasamos los datos a filtros
+      // usuarios
       if (esperandoNuevoUsuario) {
         globales.muestraToast(context, traducciones.esperandoAlServidor);
       } else {
         globales.muestraToast(context, traducciones.comprobandoDatos);
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => filtros_usuario(
-                    ust_token: widget.ust_token,
-                    ute_nombre: _ute_nombre.text,
-                    ute_pwd: _ute_pwd.text,
-                    ute_pwd_auto: _ute_pwd_auto)));
+          context,
+          MaterialPageRoute(
+            builder: (context) => filtros_usuario(
+                ust_token: widget.ust_token,
+                ute_nombre: _ute_nombre.text,
+                ute_pwd: _ute_pwd.text,
+                ute_pwd_auto: _ute_pwd_auto),
+          ),
+        );
       }
     } else {
+      // Mostramos avisos
       globales.muestraDialogo(context, traducciones.primerRellenaCampos);
     }
-    // TO-DO
+    // TODO
     // si la respuesta es correcta ya podemos cargar los filtros
     // si no lanzaremos un aviso
   }
 
   controlesVisibilidad(bool visible) async {
+    // para que tenga efecto debemos crea un future
+    // de forma que el hilo principal haga su camino
     await Future.delayed(Duration(milliseconds: 1));
     if (!_visible) {
       setState(() {
@@ -127,11 +145,10 @@ class nuevoUsuarioState extends State<nuevoUsuario> {
     }
   }
 
-  bool _visible = false;
   Visibility getControlesVsibles() {
     return Visibility(
       visible: _visible,
-      // replacement: , widget para volver atrasPonemos
+      // replacement: , widget para volver atrás Ponemos
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -143,7 +160,7 @@ class nuevoUsuarioState extends State<nuevoUsuario> {
                 InputDecoration(hintText: traducciones.introduceElNombre),
             controller: _ute_nombre,
             onFieldSubmitted: (String value) {
-              // datos(completos)
+              // Al pulsar intro pon el foco en el checkbox de contraseña auto generada
               FocusScope.of(context).requestFocus(_auto_contrasenaFocus);
             },
           ),
@@ -159,15 +176,16 @@ class nuevoUsuarioState extends State<nuevoUsuario> {
                       child: Text(traducciones.generaContrasena),
                     ),
                     Expanded(
-                      //
+                      // checkbox de contraseña auto generada
                       child: Checkbox(
-                          // Mientras este activo
-                          // No permitira al usuario escribir una contraseña
-                          value: _ute_pwd_auto,
-                          focusNode: _auto_contrasenaFocus,
-                          onChanged: (bool? value) {
-                            autoCheckBox(value!);
-                          }),
+                        // Mientras este activo
+                        // No permitirá al usuario escribir una contraseña
+                        value: _ute_pwd_auto,
+                        focusNode: _auto_contrasenaFocus,
+                        onChanged: (bool? value) {
+                          autoCheckBox(value!);
+                        },
+                      ),
                     )
                   ],
                 ),
@@ -177,6 +195,7 @@ class nuevoUsuarioState extends State<nuevoUsuario> {
                   onFocusChange: (hasFocus) {
                     avisoContraManual(hasFocus);
                   },
+                  // Campo contraseña
                   child: TextFormField(
                     decoration: InputDecoration(
                         hintText: traducciones.introduceLaContrasena),
@@ -185,9 +204,10 @@ class nuevoUsuarioState extends State<nuevoUsuario> {
                     enableSuggestions: false,
                     autocorrect: false,
 
-                    // LLamamos a la función de creacion de usuario que nos permitira avanzar a la siguiente página
+                    // LLamamos a la función de para cargar los filtros de usuario
+                    // que nos permitira avanzar a la siguiente página
                     onFieldSubmitted: (String value) {
-                      _crearUsuario();
+                      _cargaFiltrosUsuario();
                     },
                   ),
                 ),
@@ -197,7 +217,9 @@ class nuevoUsuarioState extends State<nuevoUsuario> {
           ElevatedButton(
             child: Text(traducciones.siguiente),
             onPressed: () {
-              _crearUsuario();
+              // LLamamos a la función de para cargar los filtros de usuario
+              // que nos permitira avanzar a la siguiente página
+              _cargaFiltrosUsuario();
             },
           ),
         ],

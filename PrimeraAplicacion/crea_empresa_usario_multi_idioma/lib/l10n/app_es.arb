@@ -5,6 +5,7 @@
     },
   
     "acceso": "Acceso",
+    "anyadeEmpresa": "Añade empresa",
     "aviso": "Aviso",
 
     "cargando": "Cargando",
@@ -21,6 +22,7 @@
 
     "empresa": "Empresa",
     "empresaCreadaCorrectamente": "Empresa creada correctamente",
+    "empresaNueva": "Empresa nueva",
     "errNoEspecificado": "Error no especificado: ",
     "escogeOpcionParaCrear": "Escoge opción para crear.",
     "esperandoAlServidor": "Esperando al servidor",
@@ -41,10 +43,11 @@
 
     "jefeDeArea": "Jefe de Área",
 
+    "nohayEmpresasenlaBBDD": "No hay empresas en la BBDD",
     "nombreDeLaEmpresa": "Nombre de la empresa:",
     "nombreDelUsuario": "Nombre del usuario:",
     "noSeEncuentraEmpresasDadeAlta": "No se encuentran empresas en la BBDD.\nPrimero da de alta una nueva empresa.",
-    "nuevaEmpresa": "Empresa nueva",
+    "nuevaEmpresa": "Nueva empresa",
     "nuevoUsuario": "Usuario nuevo",
     "numeroDeCodigo": "Número código:",
 
@@ -53,6 +56,7 @@
     "pdv": "PDV",
     "primerRellenaCampos": "Primero rellena los campos",
 
+    "recarga": "Recarga",
     "ruta": "Ruta",
 
     "selecionaEmpresa": "Selecciona empresa",

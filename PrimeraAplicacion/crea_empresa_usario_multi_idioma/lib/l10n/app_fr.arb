@@ -5,6 +5,7 @@
 
 
   "acceso": "Accès",
+  "anyadeEmpresa": "Ajouter une compagnie",
   "aviso": "Avis",
 
   "cargando": "Chargement",
@@ -20,6 +21,7 @@
   "dimeElCodigoDeFiltro": "Dites-moi le code du filtre :",
 
   "empresa": "Compagnie",
+  "empresaNueva": "Entreprise nouvelle",
   "empresaCreadaCorrectamente": "L'entreprise a été correctement créée",
   "errNoEspecificado": "Erreur non spécifiée : ",
   "escogeOpcionParaCrear": "Choisissez l'option à créer.",
@@ -41,11 +43,12 @@
 
   "jefeDeArea": "Chef de zone",
   
+  "nohayEmpresasenlaBBDD": "Il n'y a pas d'entreprises dans la base de données",
   "nombreDeLaEmpresa": "Nom de l'entreprise :",
   "nombreDelUsuario": "Nom de l'utilisateur:",
   "noSeEncuentraEmpresasDadeAlta": "Aucune entreprise n'a été trouvée dans la base de données.\nEnregistrez d'abord une nouvelle entreprise.",
   "nuevaEmpresa": "Nouvelle entreprise",
-  "nuevoUsuario": "UNouveau utilisateur",
+  "nuevoUsuario": "Nouveau utilisateur",
   "numeroDeCodigo": "Numéro de code:",
 
   "ok": "Ok",

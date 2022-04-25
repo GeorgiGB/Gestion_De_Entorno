@@ -8,14 +8,14 @@ import 'main.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
-class nueva_empr extends StatefulWidget {
-  const nueva_empr({Key? key, required this.token}) : super(key: key);
+class NuevaEmpresa extends StatefulWidget {
+  const NuevaEmpresa({Key? key, required this.token}) : super(key: key);
   final String token;
   @override
-  State<nueva_empr> createState() => _nueva_emprState();
+  State<NuevaEmpresa> createState() => _NuevaEmpresaState();
 }
 
-class _nueva_emprState extends State<nueva_empr> {
+class _NuevaEmpresaState extends State<NuevaEmpresa> {
   final TextEditingController _emp_nombre = TextEditingController();
   final TextEditingController _emp_pwd = TextEditingController();
   final FocusNode _auto_contrasenaFocus = FocusNode();
@@ -33,7 +33,7 @@ class _nueva_emprState extends State<nueva_empr> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(traducciones.nuevaEmpresa),
+        title: Text(traducciones.empresaNueva),
       ),
       body: Center(
           child: Column(

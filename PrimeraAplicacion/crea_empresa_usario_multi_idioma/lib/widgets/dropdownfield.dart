@@ -132,7 +132,6 @@ class DropDownField extends FormField<String> {
 
             return Focus(
               onFocusChange: (hasFocus) {
-                print("foco: " + hasFocus.toString());
                 if (hasFocus) {
                   //ddfState.ocultaDropDown();
                 }
@@ -158,6 +157,7 @@ class DropDownField extends FormField<String> {
                           validator: (String? newValue) {
                             if (required) {
                               if (newValue == null || newValue.isEmpty) {
+                                // TODO: realizar traducción
                                 return 'This field cannot be empty!';
                               }
                             }
@@ -167,6 +167,7 @@ class DropDownField extends FormField<String> {
                             if (strict &&
                                 newValue!.isNotEmpty &&
                                 !items.contains(newValue)) {
+                              // TODO: realizar traducción
                               return 'Invalid value in this field!';
                             }
 
@@ -182,7 +183,6 @@ class DropDownField extends FormField<String> {
                         // limpiamos el texto del TextFormField
                         onPressed: () {
                           if (!enabled) return;
-                          print("jo");
                           ddfState.clearValue();
                         },
                       )
@@ -337,7 +337,6 @@ class DropDownFieldState extends FormFieldState<String> {
       dense: true,
       title: ddi.widget,
       onTap: () {
-        print("Tap");
         setState(() {
           _effectiveController.text = ddi.string();
           _handleControllerChanged();

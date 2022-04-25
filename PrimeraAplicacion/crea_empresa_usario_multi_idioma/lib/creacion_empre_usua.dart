@@ -59,7 +59,7 @@ class _creacion_empre_usuaState extends State<creacion_empre_usua> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => nueva_empr(
+              builder: (context) => NuevaEmpresa(
                     token: widget.token,
                   )));
     } else if (op == 1) {
@@ -67,7 +67,7 @@ class _creacion_empre_usuaState extends State<creacion_empre_usua> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => nuevoUsuario(
+          builder: (context) => NuevoUsuario(
             ust_token: widget.token,
           ),
         ),
