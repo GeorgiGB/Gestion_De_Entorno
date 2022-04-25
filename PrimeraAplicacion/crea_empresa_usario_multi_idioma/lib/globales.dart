@@ -28,18 +28,20 @@ Future<void> muestraDialogo(BuildContext context, String msg,
   return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-              titulo.isEmpty ? AppLocalizations.of(context)!.aviso : titulo),
-          content: Text(msg),
-          actions: <Widget>[
-            TextButton(
-              child: Text(AppLocalizations.of(context)!.ok),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
+        return SingleChildScrollView( //Previene BOTTOM OVERFLOWED
+          child: AlertDialog(
+            title: Text(
+                titulo.isEmpty ? AppLocalizations.of(context)!.aviso : titulo),
+            content: Text(msg),
+            actions: <Widget>[
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.ok),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
         );
       });
 }

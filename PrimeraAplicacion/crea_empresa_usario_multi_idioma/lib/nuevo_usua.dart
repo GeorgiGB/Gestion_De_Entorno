@@ -53,19 +53,27 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
       appBar: AppBar(
         title: Text(traducciones.nuevoUsuario),
       ),
-      body: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          // Para poder mostrar el formulario tienen que haber empresas dadas
-          // de alta y así poder seleccionar una empresa y asociarla al nuevo usuario
-          ef.dropDownEmpresas('', this),
-          // la función está preparada para pasar un string que buscará en el servidor
-
-          // Widget que contiene los controles de formulario
-          muestraFormulario,
-        ],
-      )),
+      extendBody: true,
+      body: SingleChildScrollView(
+        //Previene BOTTOM OVERFLOWED
+        padding: EdgeInsets.all(20),
+        //child: Container(
+        //constraints: BoxConstraints(minHeight: 400, minWidth: 0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            // Para poder mostrar el formulario tienen que haber empresas dadas
+            // de alta y así poder seleccionar una empresa y asociarla al nuevo usuario
+            ef.dropDownEmpresas('', this),
+            // la función está preparada para pasar un string que buscará en el servidor
+            SizedBox(height: 30),
+            // Widget que contiene los controles de formulario
+            muestraFormulario,
+          ],
+        ),
+        //),
+      ),
     );
   }
 
@@ -107,6 +115,8 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
     hemos introducido una contraseña. Y al revés, si hemos introducido un nombre 
     y hemos marcado el botón de autogenerado.
     */
+    // TODO controlar que se ha selelcionado la empresa
+    // TODO se ha de pasar el código de empresa
     if ((_ute_nombre.text.isNotEmpty && _ute_pwd.text.isNotEmpty) ||
         (_ute_nombre.text.isNotEmpty && _ute_pwd_auto)) {
       // Este if no hace falta simplemente pasamos los datos a filtros
@@ -149,7 +159,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
   Visibility getControlesVsibles() {
     return Visibility(
       visible: _visible,
-      // replacement: , widget para volver atrás Ponemos
+      replacement: const SizedBox(height: 30),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -165,6 +175,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
               FocusScope.of(context).requestFocus(_auto_contrasenaFocus);
             },
           ),
+          SizedBox(height: 30),
           Text(
             traducciones.contrasena,
           ),
@@ -215,6 +226,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
               ),
             ],
           ),
+          SizedBox(height: 30),
           ElevatedButton(
             child: Text(traducciones.siguiente),
             onPressed: () {

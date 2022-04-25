@@ -53,7 +53,9 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
       if (datos.hasError) {
         // en caso de error
         if (msgErr.isNotEmpty)
-          globales.muestraDialogoDespuesDe(context, msgErr, 60);
+          // tenemos que darle un retraso ya que mostrar el diálogo
+          // Mientras se está
+          globales.muestraDialogoDespuesDe(context, msgErr, 0);
         return AvisoAccion(
           aviso: msgErr,
           msg: AppLocalizations.of(cntxt)!.recarga,
@@ -109,12 +111,12 @@ class AvisoAccion extends StatelessWidget {
       required this.aviso,
       required this.msg,
       required this.icon,
-      required this.accion})
+      this.accion})
       : super(key: key);
   final String aviso;
   final String msg;
   final Icon icon;
-  final Function accion;
+  final Function? accion;
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +156,6 @@ class AvisoAccion extends StatelessWidget {
     if (Navigator.canPop(context)) {
       widgets.add(
         TextButton.icon(
-          // TODO traducir Atrás
           label: Text(AppLocalizations.of(context)!.atras),
           icon: const BackButtonIcon(),
           onPressed: () {
@@ -170,7 +171,7 @@ class AvisoAccion extends StatelessWidget {
         label: Text(msg),
         icon: icon,
         onPressed: () {
-          accion();
+          if (accion != null) accion!();
         },
       ),
     );
@@ -210,8 +211,9 @@ List<EmpresCod> _parseEmpresas(String responseBody) {
   if (parsed[0]['bOk'].toString().parseBool()) {
     // Eliminamos el primer elemento que contiene la información de si todo es correcto
     parsed.removeAt(0);
-    return <EmpresCod>[];
-    //parsed.map<EmpresCod>((json) => EmpresCod.fromJson(json)).toList();
+    return parsed
+        .map<EmpresCod>((json) => EmpresCod.fromJson(json))
+        .toList(); // <EmpresCod>[];
   } else {
     // lanzamos excepción de servidor
     int codError = int.parse(parsed[0]['cod_error']);
@@ -267,6 +269,7 @@ class ListaEmpresas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO poner etiqueta Empresa encima del DropDownField
     return DropDownField(
       controller: controladorEmpresa,
       focusNode: FocusNode(),
