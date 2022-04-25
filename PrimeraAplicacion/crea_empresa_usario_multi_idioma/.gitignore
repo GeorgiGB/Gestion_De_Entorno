@@ -1,6 +1,3 @@
-# Aquí se encuentran las traducciones estos archivos se han de incluir
-!.dart_tool/flutter_gen/gen_l10n
-
 # Miscellaneous
 *.class
 *.log
@@ -33,6 +30,9 @@
 .pub-cache/
 .pub/
 /build/
+
+# Aquí se encuentran las traducciones estos archivos se han de incluir
+!.dart_tool/flutter_gen/gen_l10n
 
 # Web related
 lib/generated_plugin_registrant.dart
