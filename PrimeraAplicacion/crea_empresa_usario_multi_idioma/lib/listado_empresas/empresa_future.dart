@@ -155,7 +155,7 @@ class AvisoAccion extends StatelessWidget {
       widgets.add(
         TextButton.icon(
           // TODO traducir Atrás
-          label: Text('Atrás'),
+          label: Text(AppLocalizations.of(context)!.atras),
           icon: const BackButtonIcon(),
           onPressed: () {
             Navigator.pop(context);
