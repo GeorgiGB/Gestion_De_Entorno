@@ -1,5 +1,5 @@
 module.exports = {
-    //  TO-DO
+    //  TODO
     //  Modificar!!!!!
     llaveSecreta: "laParaulaSecretaDelServidor"
 }
