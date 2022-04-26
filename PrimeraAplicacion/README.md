@@ -1,4 +1,4 @@
 "# TFG-DAM" 
 
 
-Proyecto final de curso de gestion y creacion de usuarios y empresas
+Proyecto final de curso de gestión y creación de usuarios y empresas
