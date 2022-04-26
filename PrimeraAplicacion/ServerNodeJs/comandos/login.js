@@ -1,7 +1,5 @@
 const conexion = require('../config/db.config')
 const debug = require('./globales')
-// Constante utilizada para generar el token con JWT
-const tokenSecret = ('./comandos/verificarJWT');
 
 // Generar tokens con formato JWT
 const jwt = require('jsonwebtoken');
