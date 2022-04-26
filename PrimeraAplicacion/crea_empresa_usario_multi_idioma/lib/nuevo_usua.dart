@@ -24,10 +24,11 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
 
   late AppLocalizations traducciones;
 
-  bool _contraVisible = false;
   bool _ute_pwd_auto = true;
   bool esperandoNuevoUsuario = false;
   bool enviar = false;
+  //  para mostrar/ocultar la contraseña
+  bool _contraVisible = false;
 
   // Este es un widget que controla la visibilidad el cual tiene asociodos
   // los widgets de formulario para dar de alta a un usuario nuevo
@@ -176,10 +177,9 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           TextFormField(
-            decoration:
-                InputDecoration(
-                      labelText: traducciones.nombreDelUsuario,
-                      hintText: traducciones.introduceElNombre),
+            decoration: InputDecoration(
+                labelText: traducciones.nombreDelUsuario,
+                hintText: traducciones.introduceElNombre),
             controller: _ute_nombre,
             onFieldSubmitted: (String value) {
               // Al pulsar intro pon el foco en el checkbox de contraseña auto generada
@@ -216,6 +216,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
                     decoration: InputDecoration(
                       labelText: traducciones.contrasena,
                       hintText: traducciones.introduceLaContrasena,
+                      // Icono  para mostrar/ocultar la contraseña
                       suffixIcon: IconButton(
                         icon: Icon(
                           // Based on passwordVisible state choose the icon
@@ -233,7 +234,8 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
                       ),
                     ),
                     controller: _ute_pwd,
-                    obscureText: true,
+                    // para mostrar/ocultar la contraseña
+                    obscureText: !_contraVisible,
                     enableSuggestions: false,
                     autocorrect: false,
 
