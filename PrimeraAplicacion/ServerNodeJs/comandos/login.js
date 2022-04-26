@@ -22,7 +22,7 @@ async function login(json){
             //  insertar token en base de usuarios
             let token = getToken(json.usu_pwd);
             //  Hacemos la petición a la base de datos
-            let instoken = await conexion.query("SELECT * FROM insertartoken('"+JSON.stringify(token)+"')");
+            let instoken = await conexion.query("SELECT * FROM insertar_token('"+JSON.stringify(token)+"')");
             debug.msg(JSON.stringify(token));
             //  Insertamos el token en fila si todo ha ido correcto
             fila.bOk = instoken.rows[0].bok;
