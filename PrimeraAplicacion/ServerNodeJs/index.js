@@ -26,7 +26,7 @@ const debug = require('./comandos/globales');
 const administrador = 'admin';
 
 let app = express();
-app.set('accesTokenSecret', verificarJWT.llaveSecreta)
+app.set('accesTokenSecret', verificar.llaveSecreta)
 var corsOptions = {
     origin: '*',
     optionsSuccessStatus: 200, // For legacy browser support
