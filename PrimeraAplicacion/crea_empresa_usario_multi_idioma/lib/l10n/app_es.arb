@@ -16,6 +16,8 @@
     "centroPadre": "Centro Padre",
     "comprobandoDatos": "Comprobando datos",
     "contrasena": "Contraseña",
+
+    "contrasenaAutogenerada": "Contraseña autogenerada",
     "crea": "Crea: ",
     "crear": "Crear",
 
@@ -27,6 +29,7 @@
     "errNoEspecificado": "Error no especificado: ",
     "escogeOpcionParaCrear": "Escoge opción para crear.",
     "esperandoAlServidor": "Esperando al servidor",
+    "esperandoRespuestaServidor": "Esperando Respuesta del servidor",
     "etiqSeleccionaLenguage": "Español",
 
     "filtros": "Filtros",
@@ -63,6 +66,7 @@
     "selecionaEmpresa": "Selecciona empresa",
     "selecionaLenguage": "Selecciona Lenguaje",
     "seleccionaFiltro": "Selecciona filtro: ",
+    "seleccionaFiltroUsuario": "Selecciona filtro usuario",
     "servidorNoDisponible": "Servidor no disponible",
     "siguiente": "Siguiente",
 

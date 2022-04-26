@@ -16,6 +16,7 @@
   "centroPadre": "Centre de Base",
   "comprobandoDatos": "Vérification des données",
   "contrasena": "Mot de passe",
+  "contrasenaAutogenerada": "Générez un mot de passe",
   "crea": "Crée :",
   "crear": "Créer :",
   
@@ -27,6 +28,7 @@
   "errNoEspecificado": "Erreur non spécifiée : ",
   "escogeOpcionParaCrear": "Choisissez l'option à créer.",
   "esperandoAlServidor": "En attendant le serveur",
+  "esperandoRespuestaServidor": "En attente de la réponse du serveur.",
   "etiqSeleccionaLenguage": "Français",
 
   "filtros": "Filter",
@@ -63,6 +65,7 @@
   "selecionaEmpresa": "Sélectionner le entreprise",
   "selecionaLenguage": "Choisir la langue",
   "seleccionaFiltro": "Sélectionner le filtre: ",
+  "seleccionaFiltroUsuario": "Sélectionner le filtre utilisateur",
   "servidorNoDisponible": "Serveur non disponible",
   "siguiente": "Suivant",
 

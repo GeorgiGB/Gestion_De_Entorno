@@ -66,41 +66,46 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        // Establecemos la configuración regional del widget raíz
-        //que afecta todos los descendientes
-        locale: _locale,
+      debugShowCheckedModeBanner: false,
+      // Establecemos la configuración regional del widget raíz
+      //que afecta todos los descendientes
+      locale: _locale,
 
-        // indicamos las diferentes localizaciónes disponibles
-        // se encuentran en: 'package:flutter_gen/gen_l10n/app_localizations.dart'
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
+      // indicamos las diferentes localizaciónes disponibles
+      // se encuentran en: 'package:flutter_gen/gen_l10n/app_localizations.dart'
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
 
-        // hasta aquí 'package:flutter_gen/gen_l10n/app_localizations.dart'
+      // hasta aquí 'package:flutter_gen/gen_l10n/app_localizations.dart'
 
-        // Si queremos que el título de la aplicación realice el cambio
-        // de idioma, la aplicación del nombre la debemos realizar
-        // en este momento ya que si lo hacemos a traves de
-        // title: AppLocalizations.of(context)!.appName,
-        // genera un error porque el objeto AppLocalizations devuelto es nulo
-        onGenerateTitle: (BuildContext context) =>
-            AppLocalizations.of(context)!.nombreApp,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+      // Si queremos que el título de la aplicación realice el cambio
+      // de idioma, la aplicación del nombre la debemos realizar
+      // en este momento ya que si lo hacemos a traves de
+      // title: AppLocalizations.of(context)!.appName,
+      // genera un error porque el objeto AppLocalizations devuelto es nulo
+      onGenerateTitle: (BuildContext context) =>
+          AppLocalizations.of(context)!.nombreApp,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
 
-        // home: Login(),
-        /*
+      // home: Login(),
+      /**/  
+        home: const NuevoUsuario(
+            ust_token:
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k"),
+  /*
+
       home: const filtros_usuario(
           ust_token:
               "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k",
-          ute_nombre: "",
+          empCod: '60 - funcioncrearempresa1',
+          ute_emp_cod: 60,
+          ute_nombre: "qqqqq",
           ute_pwd: "",
-          ute_pwd_auto: true), //Login(),
-      */
-        home: const NuevoUsuario(
-            ust_token:
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k"));
+          auto_pwd: false),
+          */
+    );
   }
 }
 

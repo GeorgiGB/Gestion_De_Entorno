@@ -64,8 +64,8 @@ class DropDownField extends FormField<String> {
   final String? hintText;
   final TextStyle? hintStyle;
   final String? labelText;
-  final TextStyle labelStyle;
-  final TextStyle textStyle;
+  final TextStyle? labelStyle;
+  final TextStyle? textStyle;
   final bool required;
   final bool enabled;
   final List<DropDownIntericie> items;
@@ -85,29 +85,30 @@ class DropDownField extends FormField<String> {
   // También utilizado para cerrar la lista en el momento de perder el foco
   final FocusNode focusNode;
 
-  DropDownField({
-    Key? key,
-    required this.controller,
-    required this.focusNode,
-    required this.items,
-    this.value,
-    this.required = false,
-    this.icon,
-    this.hintText,
-    this.hintStyle = const TextStyle(
-        fontWeight: FontWeight.normal, color: Colors.grey, fontSize: 18.0),
-    this.labelText,
-    this.labelStyle = const TextStyle(
-        fontWeight: FontWeight.normal, color: Colors.grey, fontSize: 18.0),
-    this.inputFormatters,
-    this.textStyle = const TextStyle(
-        fontWeight: FontWeight.bold, color: Colors.black, fontSize: 14.0),
-    this.setter,
-    this.onValueChanged,
-    this.itemsVisibleInDropdown = 3,
-    this.enabled = true,
-    this.strict = true,
-  }) : super(
+  DropDownField(
+      {Key? key,
+      required this.controller,
+      required this.focusNode,
+      required this.items,
+      this.value,
+      this.required = false,
+      this.icon,
+      this.hintText,
+      this.hintStyle = null,
+      //const TextStyle(fontWeight: FontWeight.normal, color: Colors.grey, fontSize: 18.0),
+      this.labelText,
+      this.labelStyle = null,
+      //const TextStyle(fontWeight: FontWeight.normal, color: Colors.grey, fontSize: 18.0),
+      this.inputFormatters,
+      this.textStyle = null,
+      // const TextStyle( fontWeight: FontWeight.bold, color: Colors.black, fontSize: 14.0),
+      this.setter,
+      this.onValueChanged,
+      this.itemsVisibleInDropdown = 3,
+      this.enabled = true,
+      this.strict = true,
+      bool filled = false})
+      : super(
           key: key,
           autovalidateMode: AutovalidateMode.disabled,
           initialValue: controller
@@ -117,7 +118,7 @@ class DropDownField extends FormField<String> {
             final DropDownFieldState ddfState = field as DropDownFieldState;
             final InputDecoration effectiveDecoration = InputDecoration(
                 border: InputBorder.none,
-                filled: true,
+                filled: filled,
                 icon: icon,
                 suffixIcon: IconButton(
                     icon: const Icon(Icons.arrow_drop_down,
@@ -125,10 +126,10 @@ class DropDownField extends FormField<String> {
                     onPressed: () {
                       ddfState.toggleDropDownVisibility();
                     }),
-                hintStyle: hintStyle,
-                labelStyle: labelStyle,
                 hintText: hintText,
-                labelText: labelText);
+                hintStyle: null, //hintStyle,
+                labelText: labelText,
+                labelStyle: null);
 
             return Focus(
               onFocusChange: (hasFocus) {
@@ -147,7 +148,7 @@ class DropDownField extends FormField<String> {
                           controller: ddfState._effectiveController,
                           decoration: effectiveDecoration.copyWith(
                               errorText: field.errorText),
-                          style: textStyle,
+                          style: null, //textStyle,
                           textAlign: TextAlign.start,
                           autofocus: false,
                           focusNode: focusNode,
@@ -206,7 +207,7 @@ class DropDownField extends FormField<String> {
         : Container(
             alignment: Alignment.topCenter,
             height: itemsVisibleInDropdown *
-                48.0, //limit to default 3 items in dropdownlist view and then remaining scrolls
+                28, //limit to default 3 items in dropdownlist view and then remaining scrolls
             width: MediaQuery.of(ddfState.context).size.width,
             child: ListView(
               cacheExtent: 0.0,

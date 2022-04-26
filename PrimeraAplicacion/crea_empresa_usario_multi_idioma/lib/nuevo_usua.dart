@@ -24,6 +24,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
 
   late AppLocalizations traducciones;
 
+  bool _contraVisible = false;
   bool _ute_pwd_auto = true;
   bool esperandoNuevoUsuario = false;
   bool enviar = false;
@@ -42,6 +43,12 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
     // El mostra el mensaje dependerà de la función
     WidgetsBinding.instance?.addPostFrameCallback((_) => ef.dos(context));
   }*/
+
+  @override
+  void initState() {
+    _contraVisible = false;
+    _ute_pwd_auto = true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,27 +122,32 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
     hemos introducido una contraseña. Y al revés, si hemos introducido un nombre 
     y hemos marcado el botón de autogenerado.
     */
-    // TODO controlar que se ha selelcionado la empresa
-    // TODO se ha de pasar el código de empresa
-    if ((_ute_nombre.text.isNotEmpty && _ute_pwd.text.isNotEmpty) ||
-        (_ute_nombre.text.isNotEmpty && _ute_pwd_auto)) {
+
+    // obtenemos la empresa seleccionada
+    ef.EmpresCod? empCod = ef.empreCod;
+
+    if (_ute_nombre.text.isNotEmpty &&
+        (_ute_pwd.text.isNotEmpty || _ute_pwd_auto) &&
+        empCod != null) {
       // Este if no hace falta simplemente pasamos los datos a filtros
       // usuarios
-      if (esperandoNuevoUsuario) {
+      /*if (esperandoNuevoUsuario) {
         globales.muestraToast(context, traducciones.esperandoAlServidor);
-      } else {
-        globales.muestraToast(context, traducciones.comprobandoDatos);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => filtros_usuario(
-                ust_token: widget.ust_token,
-                ute_nombre: _ute_nombre.text,
-                ute_pwd: _ute_pwd.text,
-                ute_pwd_auto: _ute_pwd_auto),
-          ),
-        );
-      }
+      } else {*/
+      //globales.muestraToast(context, traducciones.comprobandoDatos);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => filtros_usuario(
+              ust_token: widget.ust_token,
+              empCod: empCod.toString(),
+              ute_emp_cod: empCod.empCod,
+              ute_nombre: _ute_nombre.text,
+              ute_pwd: _ute_pwd.text,
+              auto_pwd: _ute_pwd_auto),
+        ),
+      );
+      //}
     } else {
       // Mostramos avisos
       globales.muestraDialogo(context, traducciones.primerRellenaCampos);
@@ -163,12 +175,11 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(
-            traducciones.nombreDelUsuario,
-          ),
           TextFormField(
             decoration:
-                InputDecoration(hintText: traducciones.introduceElNombre),
+                InputDecoration(
+                      labelText: traducciones.nombreDelUsuario,
+                      hintText: traducciones.introduceElNombre),
             controller: _ute_nombre,
             onFieldSubmitted: (String value) {
               // Al pulsar intro pon el foco en el checkbox de contraseña auto generada
@@ -176,32 +187,25 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
             },
           ),
           SizedBox(height: 30),
-          Text(
-            traducciones.contrasena,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Text(traducciones.contrasenaAutogenerada),
+              // checkbox de contraseña auto generada
+              Checkbox(
+                // Mientras este activo
+                // No permitirá al usuario escribir una contraseña
+                value: _ute_pwd_auto,
+                focusNode: _auto_contrasenaFocus,
+                onChanged: (bool? value) {
+                  autoCheckBox(value!);
+                },
+              )
+            ],
           ),
           Row(
-            children: <Widget>[
-              Expanded(
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(traducciones.generaContrasena),
-                    ),
-                    Expanded(
-                      // checkbox de contraseña auto generada
-                      child: Checkbox(
-                        // Mientras este activo
-                        // No permitirá al usuario escribir una contraseña
-                        value: _ute_pwd_auto,
-                        focusNode: _auto_contrasenaFocus,
-                        onChanged: (bool? value) {
-                          autoCheckBox(value!);
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              ),
+            children: [
               Expanded(
                 child: Focus(
                   onFocusChange: (hasFocus) {
@@ -210,7 +214,24 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
                   // Campo contraseña
                   child: TextFormField(
                     decoration: InputDecoration(
-                        hintText: traducciones.introduceLaContrasena),
+                      labelText: traducciones.contrasena,
+                      hintText: traducciones.introduceLaContrasena,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          // Based on passwordVisible state choose the icon
+                          _contraVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                        onPressed: () {
+                          // Update the state i.e. toogle the state of passwordVisible variable
+                          setState(() {
+                            _contraVisible = !_contraVisible;
+                          });
+                        },
+                      ),
+                    ),
                     controller: _ute_pwd,
                     obscureText: true,
                     enableSuggestions: false,

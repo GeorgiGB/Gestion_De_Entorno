@@ -15,6 +15,9 @@ import '../globales.dart' as globales;
 import '../globales.dart';
 import '../widgets/dropdownfield.dart';
 
+// Qué empresa ha sido seleccionada?
+EmpresCod? get empreCod => ListaEmpresas._empresaSeleccionada;
+
 // Función utilizada para obtener la lista de empresas del servidor
 // En caso de no haber empresas dadas de alta  muestra un mensaje y la opción
 // de ir a dar de alta una empresa o volver atrás
@@ -52,12 +55,15 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
     builder: (context, datos) {
       if (datos.hasError) {
         // en caso de error
-        if (msgErr.isNotEmpty)
+        if (msgErr.isNotEmpty) {
           // tenemos que darle un retraso ya que mostrar el diálogo
-          // Mientras se está
+          // mientras se está construyendo provoca un error
           globales.muestraDialogoDespuesDe(context, msgErr, 0);
+        }
         return AvisoAccion(
-          aviso: msgErr,
+          aviso: msgErr.isEmpty
+              ? AppLocalizations.of(cntxt)!.esperandoRespuestaServidor
+              : msgErr,
           msg: AppLocalizations.of(cntxt)!.recarga,
           icon: const Icon(Icons.refresh_rounded),
           // Recargamos la página de NuevoUsuario
@@ -105,13 +111,15 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
   );
 }
 
+// Widget utilizado para mostrar avisos y generar acciones
+// Tiene un widget que se muestra si hay posibilidad de ir atrás en la navegación
 class AvisoAccion extends StatelessWidget {
   AvisoAccion(
       {Key? key,
-      required this.aviso,
-      required this.msg,
-      required this.icon,
-      this.accion})
+      required this.aviso, // mensaje de aviso
+      required this.msg, // mensaje a mostrar en la acción a realizar
+      required this.icon, // icono  a mostrar en la acción a realizar
+      this.accion}) // accion a realizar
       : super(key: key);
   final String aviso;
   final String msg;
@@ -123,6 +131,7 @@ class AvisoAccion extends StatelessWidget {
     return Center(
       child: Column(
         children: [
+          // Muestro Icono + aviso
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -139,6 +148,7 @@ class AvisoAccion extends StatelessWidget {
               ),
             ],
           ),
+          // Genero los widgets con la accion pasada
           Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,9 +221,8 @@ List<EmpresCod> _parseEmpresas(String responseBody) {
   if (parsed[0]['bOk'].toString().parseBool()) {
     // Eliminamos el primer elemento que contiene la información de si todo es correcto
     parsed.removeAt(0);
-    return parsed
-        .map<EmpresCod>((json) => EmpresCod.fromJson(json))
-        .toList(); // <EmpresCod>[];
+    return parsed.map<EmpresCod>((json) => EmpresCod.fromJson(json)).toList();
+    // <EmpresCod>[];
   } else {
     // lanzamos excepción de servidor
     int codError = int.parse(parsed[0]['cod_error']);
@@ -244,12 +253,17 @@ class EmpresCod implements DropDownIntericie {
 
   @override
   String string() {
-    return empNombre;
+    return empCod.toString() + " - " + empNombre;
+  }
+
+  @override
+  String toString() {
+    return empCod.toString() + " - " + empNombre;
   }
 
   @override
   bool operator ==(dynamic other) {
-    return other is String && empNombre.contains(other) ||
+    return other is String && toString().contains(other) ||
         other is EmpresCod &&
             other.empCod == empCod &&
             other.empNombre == empNombre;
@@ -265,7 +279,7 @@ class ListaEmpresas extends StatelessWidget {
   final List<EmpresCod> empresas;
 
   final controladorEmpresa = TextEditingController();
-  late EmpresCod empresaSeleccionada;
+  static EmpresCod? _empresaSeleccionada;
 
   @override
   Widget build(BuildContext context) {
@@ -274,12 +288,13 @@ class ListaEmpresas extends StatelessWidget {
       controller: controladorEmpresa,
       focusNode: FocusNode(),
       hintText: AppLocalizations.of(context)!.selecionaEmpresa,
+      labelText: "Empresa",
       enabled: true,
       itemsVisibleInDropdown: 5,
       items: empresas,
       onValueChanged: (value) {
-        empresaSeleccionada = value as EmpresCod;
-        debug(empresaSeleccionada.empNombre);
+        _empresaSeleccionada = value as EmpresCod;
+        debug(_empresaSeleccionada?.empNombre);
       },
     );
   }

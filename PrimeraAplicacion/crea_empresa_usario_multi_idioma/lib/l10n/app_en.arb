@@ -16,6 +16,7 @@
     "centroPadre": "Parent centre",
     "comprobandoDatos": "Checking data",
     "contrasena": "Password",
+    "contrasenaAutogenerada": "Auto-generated password",
     "crea": "Create: ",
     "crear": "Create",
 
@@ -28,7 +29,8 @@
     "errNoEspecificado": "Unspecified error: ",
     "escogeOpcionParaCrear": "Choose option to create.",
     "esperandoAlServidor": "Waiting for server",
-    "etiqSeleccionaLenguage": "Español",
+    "esperandoRespuestaServidor": "Waiting for server response.",
+    "etiqSeleccionaLenguage": "English",
     
     "filtros": "Filters",
     "filtrosDeUsuario": "User filters",
@@ -65,6 +67,7 @@
     "selecionaEmpresa": "Select company",
     "selecionaLenguage": "Select Language",
     "seleccionaFiltro": "Select filter: ",
+    "seleccionaFiltroUsuario": "Select user filter",
     "servidorNoDisponible": "Server not available",
     "siguiente": "Next",
 

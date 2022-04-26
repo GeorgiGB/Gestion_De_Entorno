@@ -19,6 +19,12 @@ debug(Object? msg) {
   }
 }
 
+TextStyle get estiloNegrita_16 =>
+    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0);
+
+TextStyle get estiloNegritaRoja_16 =>
+    const TextStyle(fontWeight: FontWeight.bold, color: Colors.red, fontSize: 16.0);
+
 Locale dimeLocal(BuildContext context) {
   return Localizations.localeOf(context);
 }
@@ -28,7 +34,8 @@ Future<void> muestraDialogo(BuildContext context, String msg,
   return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return SingleChildScrollView( //Previene BOTTOM OVERFLOWED
+        return SingleChildScrollView(
+          //Previene BOTTOM OVERFLOWED
           child: AlertDialog(
             title: Text(
                 titulo.isEmpty ? AppLocalizations.of(context)!.aviso : titulo),
