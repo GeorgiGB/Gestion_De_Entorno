@@ -39,9 +39,10 @@ BEGIN
 	IF NOT FOUND THEN
 		bok := false;
 	else
-	UPDATE usuarios_token
-		SET ust_token = ust_token + 1
-			WHERE ut.ust_activo;
+	UPDATE usuarios_token ut
+		SET ust_usos = ust_usos + 1
+			FROM jsonb_populate_record(null::json_validar_token, jleer) t2
+				WHERE ut.ust_token = t2.ust_token;
 	END IF;
 	
 	EXCEPTION WHEN OTHERS THEN
