@@ -63,7 +63,6 @@ app.post('/login', (req, res) => {
         }
     })
         .catch(err => {
-            //! debug.msg(err)
             headers(res).status(500).json(response);
         })
 });
@@ -97,19 +96,10 @@ app.post('/crear_empresa', (req, res) => {
 */
 
 app.post('/crear_usuarios_telemetria', (req, res) => {
-<<<<<<< HEAD
-    //debug.msg(req.body);
-    crear_ute.crear_usuarios_telemetria(req.body).then(response =>{
-        debug.msg(response)
-        if(response[0].bOk){
-            headers(res).status(200).json(response)
-        }else{
-=======
     crear_ute.crear_usuarios_telemetria(req.body).then(response => {
         if (response[0].bOk) {
             headers(res).status(200).json(response)
         } else {
->>>>>>> 2e59a8f4ed4ca724dd423aef7d758e6eeb4ad08c
             if (response[0].cod_error < 0) {
                 headers(res).status(500).json(response);
             } else if (response[0].cod_error == 401) {
@@ -131,7 +121,6 @@ app.post('/crear_usuarios_telemetria', (req, res) => {
 */
 app.post('/listado_empresas', (req, res) => {
     obtener.listado_empresas(req.body).then(response => {
-        //! debug.msg(response)
         if (response[0].bOk) {
             headers(res).status(200).json(response)
         } else {
@@ -146,7 +135,6 @@ app.post('/listado_empresas', (req, res) => {
 
         }
     }).catch(err => {
-        //! debug.msg(err)
         headers(res).status(500).json(response);
     })
 });
