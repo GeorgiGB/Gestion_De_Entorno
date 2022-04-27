@@ -199,6 +199,8 @@ class _filtros_usuarioState extends State<filtros_usuario> {
                   context,
                   traducciones.elUsuarioHaSidoDadoDeAlta(widget.ute_nombre),
                   traducciones.usuarioAnyadido);
+              // TODO mostrar toast
+              // TODO cambiar a la página
             } else {
               int cod_error = int.parse(parsed[0]['cod_error']);
               if (cod_error == -2) {

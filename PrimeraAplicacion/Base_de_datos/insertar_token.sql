@@ -1,8 +1,8 @@
--- FUNCTION: public.insertartoken(jsonb)
+-- FUNCTION: public.insertar_token(jsonb)
 
--- DROP FUNCTION IF EXISTS public.insertartoken(jsonb);
+-- DROP FUNCTION IF EXISTS public.insertar_token(jsonb);
 
-CREATE OR REPLACE FUNCTION public.insertartoken(
+CREATE OR REPLACE FUNCTION public.insertar_token(
 	jleer jsonb,
 	OUT jresultado jsonb)
     RETURNS jsonb
@@ -11,44 +11,45 @@ CREATE OR REPLACE FUNCTION public.insertartoken(
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
 DECLARE
-	rRegistro record;
-	ctoken character varying;
 	
 	bOk boolean;
-	iUsu_cod integer;
-	cError character varying;
+	cToken character varying;
 	iCoderror integer;
 	
 BEGIN
 --	Creacion de una tabla temporal para manipular los datos en ella
-	CREATE TEMP TABLE IF NOT EXISTS json_data(
-		ust_token character varying,
-		ust_usuario integer,
-		ust_activo boolean
+	CREATE TEMP TABLE IF NOT EXISTS json_insert_token(
+		token character varying,
+		usu_cod integer
 	);
 
 	bOk := false;
-	iUsu_cod := -1;
-	cError := '';
+	cToken := '';
 	iCoderror := 0;
 	
-	FOR rRegistro IN (SELECT * FROM jsonb_populate_record(null::json_data, jleer))
-	
-	LOOP
-	END LOOP;
-	
-	IF FOUND THEN
-		--	Si encuentra el registro entonces insertaremos el token a su respectiva tabla
-		INSERT INTO usuarios_token (ust_usuario, ust_token, ust_activo)
-			VALUES (rRegistro.ust_usuario, rRegistro.ust_token, true);
-		IF FOUND then
+		-- Primero miramos si el usuario tiene un token activo
+		SELECT ust_token INTO cToken
+			FROM usuarios_token,
+			jsonb_populate_record(null::json_insert_token, jleer) as rg
+			WHERE ust_usuario = rg.usu_cod
+			AND ust_activo LIMIT 1;
+			
+		IF FOUND THEN
+			-- Existe token activo
 			bok := true;
 		ELSE
-			iUsu_cod := -1;
+			-- Si encuentra el registro entonces insertaremos el token a su respectiva tabla
+			INSERT INTO usuarios_token (ust_usuario, ust_token, ust_activo)
+				SELECT rg.usu_cod, rg.token, 'true'
+				FROM jsonb_populate_record(null::json_insert_token, jleer) as rg
+				RETURNING ust_token INTO cToken;
+
+			IF FOUND then
+				bok := true;
+			END IF;
 		END IF;
-		jresultado :='[{"bOk":"'|| bOk
-					  ||'", "usu_cod":"'|| iUsu_cod ||'"}]';
-	END IF;
+		
+		jresultado :='[{"bOk":"'||bOk ||'", "token":"'||cToken||'"}]';
    
 	
 	EXCEPTION WHEN OTHERS THEN
@@ -59,5 +60,5 @@ BEGIN
 	  END;
 $BODY$;
 
-ALTER FUNCTION public.insertartoken(jsonb)
+ALTER FUNCTION public.insertar_token(jsonb)
     OWNER TO postgres;

@@ -89,13 +89,13 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
 
-      // home: Login(),
+      home: Login(),
       /*  
         home: const NuevoUsuario(
             ust_token:
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k"),
   */
-
+      /*
       home: const filtros_usuario(
           ust_token:
               "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k",
@@ -104,7 +104,7 @@ class _MyAppState extends State<MyApp> {
           ute_nombre: "oooo",
           ute_pwd: "wwwwwwwwwww",
           auto_pwd: true),
-      /**/
+      */
     );
   }
 }
@@ -131,6 +131,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO poner información en blanco
     // informacion predeterminada que luego se borrara mas adelante
     _usuario.text = "Joselito";
     _pwd.text = "1234";
@@ -210,6 +211,7 @@ class _LoginState extends State<Login> {
       if (pwd.isNotEmpty && nombre.isNotEmpty) {
         contra_encrypted = sha1.convert(utf8.encode(pwd + nombre)).toString();
       }
+      globales.debug(contra_encrypted);
       try {
         // Lanzamos la petición Post al servidor con la URL
         // El resultado será un Future y esperamos la respuesta
@@ -225,6 +227,9 @@ class _LoginState extends State<Login> {
             'usu_pwd': contra_encrypted
           }),
         );
+
+        globales.debug(response.statusCode);
+        globales.debug(response.body);
 
         int status = response.statusCode;
         //Si todo ha salido correcto el programa continuara
@@ -272,7 +277,6 @@ class _LoginState extends State<Login> {
       MaterialPageRoute(
         builder: (context) => creacion_empre_usua(
           token: lista['token'].toString(),
-          usu_cod: lista['usu_cod'],
         ),
       ),
     );
