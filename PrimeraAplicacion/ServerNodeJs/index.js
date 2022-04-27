@@ -54,11 +54,10 @@ debug.msg("Servidor ok");
 */
 app.post('/login', (req, res) => {
     verificar.login(req.body).then(response => {
-
         if (response.bOk) {
             headers(res).status(200).json(response)
         } else {
-            if (response.icoderror < 0) {
+            if (response.cod_error < 0) {
                 headers(res).status(500).json(response);
             } else {
                 headers(res).status(404).json(response);

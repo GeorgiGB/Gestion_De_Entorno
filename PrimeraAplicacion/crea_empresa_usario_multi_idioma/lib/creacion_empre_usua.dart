@@ -8,11 +8,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Constantes donde se guarda el idoma escogido y desde donde actualizamos
 
 class creacion_empre_usua extends StatefulWidget {
-  const creacion_empre_usua(
-      {Key? key, required this.token, required this.usu_cod})
-      : super(key: key);
+  const creacion_empre_usua({Key? key, required this.token}) : super(key: key);
   final String token;
-  final String usu_cod;
   @override
   State<creacion_empre_usua> createState() => _creacion_empre_usuaState();
 }
@@ -21,7 +18,6 @@ class _creacion_empre_usuaState extends State<creacion_empre_usua> {
   late AppLocalizations traducciones;
   @override
   Widget build(BuildContext context) {
-    globales.debug("usu_cod: " + widget.usu_cod.toString());
     traducciones = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(

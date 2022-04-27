@@ -18,15 +18,11 @@ async function login(json_login){
         if(fila.bOk){
             
             //  Insertar token en base de usuarios
-            let token = getToken(json_login.usu_pwd);
+            fila.token = getToken(json_login.usu_pwd);
+            //debug.msg("SELECT * FROM insertar_token('"+JSON.stringify(fila)+"')")
             //  Hacemos la petición a la base de datos
-            let instoken = await conexion.query("SELECT * FROM insertar_token('"+JSON.stringify(token)+"')");
-            //  Insertamos el token en fila si todo ha ido correcto
-            fila.bOk = instoken.rows[0].bok;
-            //  Entonces crearemos un campo para recibir la respuesta
-            if(fila.bOk){
-                fila.token = token;
-            }
+            let instoken = await conexion.query("SELECT * FROM insertar_token('"+JSON.stringify(fila)+"')");
+            fila = instoken.rows[0].jresultado[0]
         }
         return fila;
     }
