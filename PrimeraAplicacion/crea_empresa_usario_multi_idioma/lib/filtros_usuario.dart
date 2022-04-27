@@ -1,3 +1,5 @@
+import 'package:crea_empresa_usario/creacion_empre_usua.dart';
+import 'package:crea_empresa_usario/nuevo_usua.dart';
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
 import 'package:http/http.dart' as http;
@@ -195,12 +197,24 @@ class _filtros_usuarioState extends State<filtros_usuario> {
             final parsed =
                 jsonDecode(response.body).cast<Map<String, dynamic>>();
             if (parsed[0]['bOk'].toString().parseBool()) {
-              globales.muestraDialogo(
-                  context,
-                  traducciones.elUsuarioHaSidoDadoDeAlta(widget.ute_nombre),
-                  traducciones.usuarioAnyadido);
-              // TODO mostrar toast
-              // TODO cambiar a la página
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (context) => creacion_empre_usua(
+                      token: widget.ust_token,
+                    ),
+                  ),
+                  (Route<dynamic> route) => false);
+              globales.muestraToast(context,
+                  traducciones.elUsuarioHaSidoDadoDeAlta(widget.ute_nombre));
+
+              /*globales
+                  .muestraDialogo(
+                      context,
+                      traducciones.elUsuarioHaSidoDadoDeAlta(widget.ute_nombre),
+                      traducciones.usuarioAnyadido)
+                  .then((value) {});
+              // TODO escoger entre mostrar toast o diálogo
+              */
             } else {
               int cod_error = int.parse(parsed[0]['cod_error']);
               if (cod_error == -2) {
