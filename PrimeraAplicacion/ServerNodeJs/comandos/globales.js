@@ -1,13 +1,10 @@
 let _debug = true;
 
-//  Creamos la funcion que permitira hacer comprobaciones al servidor
+//  Función que utilizaremos para mandar mensajes por pantalla y comprobar errores
 function msg(message){
     if(_debug){
         console.log(message)
     }
 }
 
-//  Esto permite que se puedan utilizar los otros modulos
-module.exports = {
-    msg:msg
-}
+module.exports = msg;
