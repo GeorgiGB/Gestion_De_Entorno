@@ -21,6 +21,7 @@ const obtener = require('./comandos/obtener');
 
 const debug = require('./comandos/globales');
 
+const headers = require('./comandos/cabecera');
 // Estas credenciales llevan implicitos el usuario y la contraseña
 // Viene encriptadas en SHA1 de la aplicación cliente
 const administrador = 'admin';
@@ -38,12 +39,11 @@ var corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(express.json())
-
 app.listen(8080);
 
+// -------------------------------------
 debug.msg("Servidor ok");
-
-const headers = require('./comandos/cabecera');
+// -------------------------------------
 
 //  Iniciar sesion con el usuario
 app.post('/login', (req, res) => {
@@ -71,10 +71,11 @@ app.post('/login', (req, res) => {
 
 
 //  Con un post mandaremos al servidor la petición de la creación de una empresa
+//  Crear Empresa
 app.post('/crear_empresa', (req, res) => {
     crear_emp.crear_empresa(req.body).then(response=>{
         if(response[0].bOk){
-            headers(res).status(200).json(([{"msg": "Usuario creado correctamente"}]))
+            headers(res).status(200).json(([{ "msg": "Usuario creado correctamente" }]))
         }else{
             if (response[0].cod_error < 0) {
                 headers(res).status(500).json(response);
@@ -86,17 +87,16 @@ app.post('/crear_empresa', (req, res) => {
             }
         }
     }).catch(err=>{
-        headers(res).status(500).json(([{"msg": "Error de servidor"}]))
+        headers(res).status(500).json(([{ "msg": "Error de servidor" }]))
     });
 });
 
 //  Con un post mandaremos la información necesaria para la creación de un usuario de telemetria
 //  Crear usuarios de telemetria
 app.post('/crear_usuarios_telemetria', (req, res) => {
-    //debug.msg(req.body);
     crear_ute.crear_usuarios_telemetria(req.body).then(response =>{
         if(response[0].bOk){
-            headers(res).status(200).json(([{"msg": "Usuario creado correctamente"}]))
+            headers(res).status(200).json(([{ "msg": "Usuario creado correctamente" }]))
         }else{
             if (response[0].cod_error < 0) {
                 headers(res).status(500).json(response);
@@ -108,17 +108,14 @@ app.post('/crear_usuarios_telemetria', (req, res) => {
             }
         }
     }).catch(err=>{
-        headers(res).status(500).json(([{"msg": "Error de servidor"}]))
+        headers(res).status(500).json(([{ "msg": "Error de servidor" }]))
     });
 });
 
-//  Iniciar sesion con el usuario
 app.post('/listado_empresas', (req, res) => {
     obtener.listado_empresas(req.body).then(response => {
         debug.msg(response)
         if (response[0].bOk) {
-            //  Si todo se ha rellenado correctamente
-            //  El resultado final se pone en send después de enviar todas las cabeceras.
             headers(res).status(200).json(response)
         } else {
             if (response[0].cod_error < 0) {
