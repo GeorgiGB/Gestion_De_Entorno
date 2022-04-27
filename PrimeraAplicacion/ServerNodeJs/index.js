@@ -24,8 +24,10 @@ const cerrar = require('./comandos/cerrar_sesion');
 const debug = require('./comandos/globales');
 
 const headers = require('./comandos/cabecera');
-const response = require('express');
-
+const { response } = require('express');
+// Estas credenciales llevan implicitos el usuario y la contraseña
+// Viene encriptadas en SHA1 de la aplicación cliente
+const administrador = 'admin';
 let app = express();
 app.set('accesTokenSecret', verificar.llaveSecreta)
 
@@ -64,6 +66,7 @@ app.post('/login', (req, res) => {
         }
     })
         .catch(err => {
+            debug.msg(err)
             headers(res).status(500).json(response);
         })
 });
@@ -77,6 +80,7 @@ app.post('/crear_empresa', (req, res) => {
     crear_emp.crear_empresa(req.body).then(response => {
         if (response[0].bOk) {
             headers(res).status(200).json(response)
+            debug.msg("Empresa creada correctamente")
         } else {
             if (response[0].cod_error < 0) {
                 headers(res).status(500).json(response);
@@ -87,6 +91,7 @@ app.post('/crear_empresa', (req, res) => {
             }
         }
     }).catch(err => {
+        debug.msg(err)
         headers(res).status(500).json(response)
     });
 });
@@ -100,6 +105,7 @@ app.post('/crear_usuarios_telemetria', (req, res) => {
     crear_ute.crear_usuarios_telemetria(req.body).then(response => {
         if (response[0].bOk) {
             headers(res).status(200).json(response)
+            debug.msg("Usuario de telemetria creado correctamente")
         } else {
             if (response[0].cod_error < 0) {
                 headers(res).status(500).json(response);
@@ -111,7 +117,7 @@ app.post('/crear_usuarios_telemetria', (req, res) => {
             }
         }
     }).catch(err => {
-        headers(res).status(500).json(response)
+        headers(res).status(500).json(([{"msg": "Error de servidor"}]))
     });
 });
 
@@ -142,20 +148,16 @@ app.post('/listado_empresas', (req, res) => {
 
 app.post('/cerrar_sesion', (req, res) => {
     cerrar.cerrar_sesion(req.body).then(response => {
-        if (response[0].bOk) {
+        //debug.msg(response)
+        if (response) {
             headers(res).status(200).json(response)
+            debug.msg("Token desactivado")
         } else {
-            if (response[0].cod_error < 0) {
+            if (response < 0) {
                 headers(res).status(500).json(response);
-            } else if (response[0].cod_error == 401) {
-                headers(res).status(401).json(response);
-            } else {
-                // Error desconocido
-                headers(res).status(500).json(response);
-            }
-
-        }
+        }}
     }).catch(err => {
+        debug.msg(err)
         headers(res).status(500).json(response);
     })
 });

@@ -5,6 +5,7 @@ async function crear_empresa(json_emp){
   let res = await conexion.query
   ("SELECT * FROM crear_empresa('"+JSON.stringify(json_emp)+"');")                                    
  
+  debug.msg(res.rows[0].jresultado)
  return res.rows[0].jresultado;
 }
 

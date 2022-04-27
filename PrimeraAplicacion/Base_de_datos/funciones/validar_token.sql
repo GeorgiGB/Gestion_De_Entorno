@@ -38,6 +38,10 @@ BEGIN
 	
 	IF NOT FOUND THEN
 		bok := false;
+	else
+	UPDATE usuarios_token
+		SET ust_token = ust_token + 1
+			WHERE ut.ust_activo;
 	END IF;
 	
 	EXCEPTION WHEN OTHERS THEN
