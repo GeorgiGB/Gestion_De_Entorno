@@ -228,6 +228,23 @@ SELECT concat_lower_or_upper(a => 'Hello', b => 'World');
 - [SQL Cheat Sheet](https://www.sqltutorial.org/sql-cheat-sheet/)
 - [Inner Join](https://programacionymas.com/blog/como-funciona-inner-left-right-full-join)
 - [Error Codes](https://www.postgresql.org/docs/current/errcodes-appendix.html)
+- [Boolean Examples](https://www.postgresqltutorial.com/postgresql-tutorial/postgresql-boolean/)
+
+> **Hacer un update para un json de una solo variable**
+
+```sql
+jleer character varying
+
+select jleer::json->>'name_token' into cToken;
+-- Convertimos jleer en un json
+
+UPDATE usuarios_token
+  SET ust_activo = false
+  WHERE usuarios_token.ust_token = cToken AND usuarios_token.ust_activo
+
+  RETURNING usuarios_token.ust_cod into iCoderror;
+
+```
 
 ---
 

@@ -1,43 +1,41 @@
-DROP FUNCTION IF EXISTS public.cerrar_sesion(jsonb);
+-- FUNCTION: public.cerrar_sesion(character varying)
+
+-- DROP FUNCTION IF EXISTS public.cerrar_sesion(character varying);
 
 CREATE OR REPLACE FUNCTION public.cerrar_sesion(
-	jleer jsonb,
-	OUT jresultado jsonb)
-    RETURNS jsonb
+	jleer character varying,
+	OUT icodusu integer,
+	OUT icoderror integer,
+	OUT cerror character varying)
+    RETURNS record
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
 DECLARE
-	bOk boolean;
-	cError character varying;
-	iCoderror integer;
+	cToken character varying;
 BEGIN
 	-- Inicializamos los parametros
 	
-	bOk := false;
-	cError := '';
-	iCoderror := 0;
+	cerror := '';
+	icoderror := 0;
+	cToken := '';
 	
-	--	Creacion de una tabla temporal para manipular los datos en ella
-	CREATE TEMP TABLE IF NOT EXISTS json_estado_token(
-		usu_token character varying
-	);
+	select jleer::json->>'name_token' into cToken;
 
 	UPDATE usuarios_token
-		SET ust_activo = 'false'
-			FROM jsonb_populate_record(null::json_validar_token, jleer) t2
-		WHERE usuarios_token.ust_token = t2.ust_token AND usuarios_token.ust_activo;
-	
-	IF FOUND THEN
-		bOk := true;
-	END IF;
-	
+		SET ust_activo = false
+		WHERE usuarios_token.ust_token = cToken AND usuarios_token.ust_activo
+		
+		RETURNING usuarios_token.ust_cod into icodusu;
+		
+	icodusu := COALESCE(icodusu, -1);
+		
 	EXCEPTION WHEN OTHERS THEN
-		iCoderror := -1;
-		cError := SQLERRM;
+		icoderror := -1;
+		cerror := SQLERRM;
 		END;
 $BODY$;
 
-ALTER FUNCTION public.cerrar_sesion(jsonb)
+ALTER FUNCTION public.cerrar_sesion(character varying)
     OWNER TO postgres;
