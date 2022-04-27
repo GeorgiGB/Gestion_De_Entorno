@@ -7,6 +7,7 @@
     "acceso": "Login",
     "anyadeEmpresa": "Add company",
     "atras": "Back",
+    "autoGenerada": "Auto-generated",
     "aviso": "Warning",
 
     "cargando": "Loading",
@@ -23,13 +24,16 @@
     
     "dimeElCodigoDeFiltro": "Filter code:",
 
+    "elUsuarioHaSidoDadoDeAlta": "The user {usuario} has been added",
+    "elUsuarioYaEstaRegistrado": "The user {usuario} is already registered",
     "empresa": "Company",
     "empresaNueva": "New company",
     "empresaCreadaCorrectamente": "Company set up ok",
-    "errNoEspecificado": "Unspecified error: ",
+    "errNoEspecificado": "Unspecified error{error}",
     "escogeOpcionParaCrear": "Choose option to create.",
     "esperandoAlServidor": "Waiting for server",
     "esperandoRespuestaServidor": "Waiting for server response.",
+    "esteCampoNoPuedeEstarVacio": "This field cannot be empty!",
     "etiqSeleccionaLenguage": "English",
     
     "filtros": "Filters",
@@ -48,6 +52,7 @@
     "jefeDeArea": "Area manager",
 
     "nohayEmpresasenlaBBDD": "There are no companies in the database",
+    "nombre": "Name",
     "nombreDeLaEmpresa": "Company name:",
     "nombreDelUsuario": "User name:",
     "noSeEncuentraEmpresasDadeAlta": "No companies are found in the DB.\nFirst, register a new company.",
@@ -72,7 +77,11 @@
     "siguiente": "Next",
 
     "usuario": "User",
+    "usuarioAnyadido": "User added",
     "usuNoIdentificado": "Unidentified use",
+
+    
+    "valorInvalidoEnEsteCampo":"Invalid value in this field!",
     
     "codErrorLogin401": "Wrong authentication",
     "codErrorLogin404": "User not found",

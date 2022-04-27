@@ -90,21 +90,21 @@ class _MyAppState extends State<MyApp> {
       ),
 
       // home: Login(),
-      /**/  
+      /*  
         home: const NuevoUsuario(
             ust_token:
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k"),
-  /*
+  */
 
       home: const filtros_usuario(
           ust_token:
               "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k",
           empCod: '60 - funcioncrearempresa1',
           ute_emp_cod: 60,
-          ute_nombre: "qqqqq",
-          ute_pwd: "",
-          auto_pwd: false),
-          */
+          ute_nombre: "oooo",
+          ute_pwd: "wwwwwwwwwww",
+          auto_pwd: true),
+      /**/
     );
   }
 }

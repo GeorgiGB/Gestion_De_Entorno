@@ -84,10 +84,23 @@ AS $BODY$
 			-- añadimos la variable bOk al JSON jresultado
 			SELECT ('{"bOk":"' || bOk || '"}')::jsonb || jresultado::jsonb into jresultado;
 
-        EXCEPTION WHEN OTHERS THEN
-            icod_error := -1;
-            cerror := SQLERRM;
-            jresultado := '[{"bOk":"' || bOk || '", "cod_error":"' || icod_error || '", "msg_error":"' || SQLERRM || '"}]';
+		EXCEPTION
+			-- Códigos de error -> https://www.postgresql.org/docs/current/errcodes-appendix.html
+			WHEN OTHERS THEN
+				bOk = false;
+				cError := SQLERRM;
+				CASE
+					 -- el '23505' equivale a unique_violation
+					 -- si ponemos directamente unique_violation en lugar de '23505'
+					 -- da el siguiente error "ERROR:  no existe la columna «unique_violation»"
+					WHEN SQLSTATE = '23505' THEN
+						icod_error := -2;
+					ELSE
+						icod_error := -1;		
+				END CASE;
+				
+				SELECT ('{"bOk":"' || false || '", "cod_error":"' || icod_error || '", "msg_error":"' || cError || '"}')::jsonb
+					|| jresultado::jsonb into jresultado;
         END;
     
 $BODY$;

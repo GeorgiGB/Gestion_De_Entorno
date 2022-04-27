@@ -8,6 +8,7 @@
   "anyadeEmpresa": "Ajouter une compagnie",
   "atras": "Arrière",
   "aviso": "Avis",
+  "autoGenerada": "auto-généré",
 
   "cargando": "Chargement",
   "cargandoEmpresa": "Chargement Compagnie",
@@ -16,19 +17,22 @@
   "centroPadre": "Centre de Base",
   "comprobandoDatos": "Vérification des données",
   "contrasena": "Mot de passe",
-  "contrasenaAutogenerada": "Générez un mot de passe",
+  "contrasenaAutogenerada": "Mot de passe auto-généré",
   "crea": "Crée :",
   "crear": "Créer :",
   
   "dimeElCodigoDeFiltro": "Dites-moi le code du filtre :",
 
+  "elUsuarioHaSidoDadoDeAlta": "L'utilisateur {usuario} a été ajouté",
+  "elUsuarioYaEstaRegistrado": "L'utilisateur {usuario} est déjà enregistré",
   "empresa": "Compagnie",
   "empresaNueva": "Entreprise nouvelle",
   "empresaCreadaCorrectamente": "L'entreprise a été correctement créée",
-  "errNoEspecificado": "Erreur non spécifiée : ",
+  "errNoEspecificado": "Erreur non spécifiée{error}",
   "escogeOpcionParaCrear": "Choisissez l'option à créer.",
   "esperandoAlServidor": "En attendant le serveur",
   "esperandoRespuestaServidor": "En attente de la réponse du serveur.",
+  "esteCampoNoPuedeEstarVacio": "Ce champ ne peut être vide",
   "etiqSeleccionaLenguage": "Français",
 
   "filtros": "Filter",
@@ -47,6 +51,7 @@
   "jefeDeArea": "Chef de zone",
   
   "nohayEmpresasenlaBBDD": "Il n'y a pas d'entreprises dans la base de données",
+  "nombre": "Nom",
   "nombreDeLaEmpresa": "Nom de l'entreprise :",
   "nombreDelUsuario": "Nom de l'utilisateur:",
   "noSeEncuentraEmpresasDadeAlta": "Aucune entreprise n'a été trouvée dans la base de données.\nEnregistrez d'abord une nouvelle entreprise.",
@@ -70,7 +75,11 @@
   "siguiente": "Suivant",
 
   "usuario": "Utilisateur",
+  "usuarioAnyadido": "Utilisateur ajouté",
   "usuNoIdentificado": "Utilisateur non identifié",
+
+  
+  "valorInvalidoEnEsteCampo":"Valeur non valide pour ce champ",
     
   "codErrorLogin401": "Mauvaise authentification",
   "codErrorLogin404": "Utilisateur non trouvé",

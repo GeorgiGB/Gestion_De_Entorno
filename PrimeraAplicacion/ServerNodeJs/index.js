@@ -95,8 +95,9 @@ app.post('/crear_empresa', (req, res) => {
 app.post('/crear_usuarios_telemetria', (req, res) => {
     //debug.msg(req.body);
     crear_ute.crear_usuarios_telemetria(req.body).then(response =>{
+        debug.msg(response)
         if(response[0].bOk){
-            headers(res).status(200).json(([{"msg": "Usuario creado correctamente"}]))
+            headers(res).status(200).json(response)
         }else{
             if (response[0].cod_error < 0) {
                 headers(res).status(500).json(response);
