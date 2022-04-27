@@ -7,4 +7,6 @@ async function listado_empresas(json) {
     return reslogin.rows[0].jresultado;
 }
 
-module.exports = listado_empresas;
+module.exports = {
+    listado_empresas : listado_empresas
+}

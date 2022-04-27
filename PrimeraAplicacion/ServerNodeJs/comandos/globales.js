@@ -7,4 +7,6 @@ function msg(message){
     }
 }
 
-module.exports = msg;
+module.exports = {
+    msg:msg
+}

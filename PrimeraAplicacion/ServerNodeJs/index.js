@@ -19,6 +19,8 @@ const crear_ute = require('./comandos/usuarios_telemetria');
 //  La conexion con el servidor obtener listado de empresas
 const obtener = require('./comandos/obtener');
 
+const cerrar = require('./comandos/cerrar_sesion');
+
 const debug = require('./comandos/globales');
 
 const headers = require('./comandos/cabecera');
@@ -121,6 +123,26 @@ app.post('/crear_usuarios_telemetria', (req, res) => {
 */
 app.post('/listado_empresas', (req, res) => {
     obtener.listado_empresas(req.body).then(response => {
+        if (response[0].bOk) {
+            headers(res).status(200).json(response)
+        } else {
+            if (response[0].cod_error < 0) {
+                headers(res).status(500).json(response);
+            } else if (response[0].cod_error == 401) {
+                headers(res).status(401).json(response);
+            } else {
+                // Error desconocido
+                headers(res).status(500).json(response);
+            }
+
+        }
+    }).catch(err => {
+        headers(res).status(500).json(response);
+    })
+});
+
+app.post('/cerrar_sesion', (req, res) => {
+    cerrar.cerrar_sesion(req.body).then(response => {
         if (response[0].bOk) {
             headers(res).status(200).json(response)
         } else {

@@ -190,9 +190,20 @@ async function add2(x) {
 ---
 
 - [Instalación](https://www.postgresqltutorial.com/postgresql-getting-started/install-postgresql/)
+- [Update Example](https://www.postgresqltutorial.com/postgresql-tutorial/postgresql-update/)
+  
+```sql
+UPDATE table_name
+SET column1 = value1,
+    column2 = value2,
+    ...
+WHERE condition;
+```
+
 - [Funciones](https://www.postgresql.org/docs/current/sql-syntax-calling-funcs.html)
 
 ```sql
+--  Create a function
 CREATE FUNCTION concat_lower_or_upper(a text, b text, uppercase boolean DEFAULT false)
 RETURNS text
 AS
@@ -203,6 +214,15 @@ $$
         END;
 $$
 LANGUAGE SQL IMMUTABLE STRICT;
+```
+
+```sql
+--  Calling a function
+SELECT concat_lower_or_upper(a => 'Hello', b => 'World');
+ concat_lower_or_upper 
+-----------------------
+ hello world
+(1 row)
 ```
 
 - [SQL Cheat Sheet](https://www.sqltutorial.org/sql-cheat-sheet/)
