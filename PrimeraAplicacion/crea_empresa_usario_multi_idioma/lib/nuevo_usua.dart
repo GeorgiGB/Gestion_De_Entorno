@@ -153,9 +153,6 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
       // Mostramos avisos
       globales.muestraDialogo(context, traducciones.primerRellenaCampos);
     }
-    // TODO
-    // si la respuesta es correcta ya podemos cargar los filtros
-    // si no lanzaremos un aviso
   }
 
   controlesVisibilidad(bool visible) async {

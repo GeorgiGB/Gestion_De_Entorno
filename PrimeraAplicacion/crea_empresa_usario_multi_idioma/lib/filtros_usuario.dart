@@ -61,20 +61,29 @@ class _filtros_usuarioState extends State<filtros_usuario> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Row(
-                children: [dobleTexto("Empresa: ", widget.empCod)],
+                children: [
+                  dobleTexto(traducciones.empresa + ": ", widget.empCod)
+                ],
               ),
-              SizedBox(height: 10),
-              Row(children: [dobleTexto("Nombre: ", widget.ute_nombre)]),
               SizedBox(height: 10),
               Row(children: [
-                dobleTexto("Contraseña: ",
-                    (widget.auto_pwd ? "Auto-Generada" : '*********'))
+                dobleTexto(traducciones.nombre + ": ", widget.ute_nombre)
+              ]),
+              SizedBox(height: 10),
+              Row(children: [
+                dobleTexto(traducciones.contrasena + ": ",
+                    (widget.auto_pwd ? traducciones.autoGenerada : '*********'))
               ]),
               SizedBox(height: 30),
-              Text(
-                traducciones.seleccionaFiltro,
-                style: globales.estiloNegrita_16,
+              Row(
+                children: [
+                  Text(
+                    traducciones.seleccionaFiltro,
+                    style: globales.estiloNegrita_16,
+                  ),
+                ],
               ),
+              // Seleccionar tipo de filtro
               DropdownButton<Filtro>(
                 isExpanded: true,
                 value: filtroActivo ?? _users.first,
@@ -98,14 +107,12 @@ class _filtros_usuarioState extends State<filtros_usuario> {
                   );
                 }).toList(),
               ),
+              // Código de filtro
               SizedBox(height: 30),
-              Text(
-                traducciones.dimeElCodigoDeFiltro,
-                style: globales.estiloNegrita_16,
-              ),
               TextFormField(
-                decoration:
-                    InputDecoration(hintText: traducciones.numeroDeCodigo),
+                decoration: InputDecoration(
+                    labelText: traducciones.dimeElCodigoDeFiltro,
+                    hintText: traducciones.numeroDeCodigo),
                 controller: _codigo_filtro,
                 // LLamamos a la datosCompletosr
                 onFieldSubmitted: (String value) {
@@ -156,6 +163,12 @@ class _filtros_usuarioState extends State<filtros_usuario> {
         esperandoFiltrado = true;
 
         try {
+          globales.debug('ute_filtro: ' +
+              filtroActivo!.filtro_bbdd +
+              ', ' +
+              'ute_cod_filtro: ' +
+              _codigo_filtro.text);
+
           var response = await http.post(
             Uri.parse(url),
             // Cabecera para enviar JSON con una autorizacion token
@@ -179,13 +192,24 @@ class _filtros_usuarioState extends State<filtros_usuario> {
           int status = response.statusCode;
 
           if (status == 200) {
-            List<dynamic> lista = json.decode(response.body);
-            var datos = lista[0];
-            //Esto devolveria la correcta creacion del usuario
-            globales
-                .debug('Usuario_creado:' + datos["Usuario_creado"].toString());
-            //Aqui se mostraran los usa_cod creados para la telemetria
-            globales.debug('usa_cod: ' + datos["usa_cod"].toString());
+            final parsed =
+                jsonDecode(response.body).cast<Map<String, dynamic>>();
+            if (parsed[0]['bOk'].toString().parseBool()) {
+              globales.muestraDialogo(
+                  context,
+                  traducciones.elUsuarioHaSidoDadoDeAlta(widget.ute_nombre),
+                  traducciones.usuarioAnyadido);
+            } else {
+              int cod_error = int.parse(parsed[0]['cod_error']);
+              if (cod_error == -2) {
+                globales.muestraDialogo(context,
+                    traducciones.elUsuarioYaEstaRegistrado(widget.ute_nombre));
+              } else {
+                globales.debug(parsed[0]['msg_error']);
+                globales.muestraDialogo(context,
+                    traducciones.errNoEspecificado(parsed[0]['msg_error']));
+              }
+            }
           } else if (status == 500) {
             globales.muestraDialogo(context, response.body);
           } else {
@@ -200,7 +224,7 @@ class _filtros_usuarioState extends State<filtros_usuario> {
           esperandoFiltrado = false;
         }
         return Future.delayed(Duration(seconds: 2), () {
-          //Si pasanmás de 2 segundos
+          //Si pasan más de 2 segundos
           if (esperandoFiltrado) {
             globales.muestraToast(context, traducciones.cargando);
           }
@@ -220,12 +244,13 @@ class _filtros_usuarioState extends State<filtros_usuario> {
     // de esta forma podemos mover un filtro a la posición que queramos
     // que tendrá correcto su índice de posición
     filtros.add(Filtro(filtros.length, TiposFiltros.filtros, ""));
+    filtros.add(
+        Filtro(filtros.length, TiposFiltros.centroPadre, "ute_centro_padre"));
+    filtros.add(Filtro(filtros.length, TiposFiltros.centro, "ute_centro"));
+    filtros.add(Filtro(filtros.length, TiposFiltros.pdv, "ute_pdv"));
     filtros
-        .add(Filtro(filtros.length, TiposFiltros.centroPadre, "centro_padre"));
-    filtros.add(Filtro(filtros.length, TiposFiltros.centro, "centro"));
-    filtros.add(Filtro(filtros.length, TiposFiltros.pdv, "pdv"));
-    filtros.add(Filtro(filtros.length, TiposFiltros.jefeDeArea, "jefe_area"));
-    filtros.add(Filtro(filtros.length, TiposFiltros.ruta, "ruta"));
+        .add(Filtro(filtros.length, TiposFiltros.jefeDeArea, "ute_jefe_area"));
+    filtros.add(Filtro(filtros.length, TiposFiltros.ruta, "ute_ruta"));
 
     return filtros;
   }

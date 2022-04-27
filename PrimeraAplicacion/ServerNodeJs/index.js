@@ -63,7 +63,6 @@ app.post('/login', (req, res) => {
         }
     })
         .catch(err => {
-            //! debug.msg(err)
             headers(res).status(500).json(response);
         })
 });
@@ -122,7 +121,6 @@ app.post('/crear_usuarios_telemetria', (req, res) => {
 */
 app.post('/listado_empresas', (req, res) => {
     obtener.listado_empresas(req.body).then(response => {
-        //! debug.msg(response)
         if (response[0].bOk) {
             headers(res).status(200).json(response)
         } else {
@@ -137,7 +135,6 @@ app.post('/listado_empresas', (req, res) => {
 
         }
     }).catch(err => {
-        //! debug.msg(err)
         headers(res).status(500).json(response);
     })
 });

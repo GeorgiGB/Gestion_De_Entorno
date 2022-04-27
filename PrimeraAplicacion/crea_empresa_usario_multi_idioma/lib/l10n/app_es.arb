@@ -7,6 +7,7 @@
     "acceso": "Acceso",
     "anyadeEmpresa": "Añade empresa",
     "atras": "Atrás",
+    "autoGenerada": "Auto-Generada",
     "aviso": "Aviso",
 
     "cargando": "Cargando",
@@ -21,15 +22,46 @@
     "crea": "Crea: ",
     "crear": "Crear",
 
+
+    "elUsuarioHaSidoDadoDeAlta": "El usuario {usuario} ha sido dado de alta.",
+    "@elUsuarioHaSidoDadoDeAlta": {
+        "description": "Usuario registrado",
+        "placeholders": {
+            "usuario": {
+                "type": "String",
+                "example": " "
+            }
+        }
+    },
     "dimeElCodigoDeFiltro": "Dime el código del filtro:",
 
+    "elUsuarioYaEstaRegistrado": "El usuario {usuario} ya está registrado",
+    "@elUsuarioYaEstaRegistrado": {
+        "description": "Usuario ya está registrado",
+        "placeholders": {
+            "usuario": {
+                "type": "String",
+                "example": " "
+            }
+        }
+    },
     "empresa": "Empresa",
     "empresaCreadaCorrectamente": "Empresa creada correctamente",
     "empresaNueva": "Empresa nueva",
-    "errNoEspecificado": "Error no especificado: ",
+    "errNoEspecificado": "Error no especificado{error}",
+    "@errNoEspecificado": {
+        "description": "Error sin especificar",
+        "placeholders": {
+            "usuario": {
+                "type": "String",
+                "error": " "
+            }
+        }
+    },
     "escogeOpcionParaCrear": "Escoge opción para crear.",
     "esperandoAlServidor": "Esperando al servidor",
     "esperandoRespuestaServidor": "Esperando Respuesta del servidor",
+    "esteCampoNoPuedeEstarVacio": "Este campo no puede estar vacío",
     "etiqSeleccionaLenguage": "Español",
 
     "filtros": "Filtros",
@@ -48,6 +80,7 @@
     "jefeDeArea": "Jefe de Área",
 
     "nohayEmpresasenlaBBDD": "No hay empresas en la BBDD",
+    "nombre": "Nombre",
     "nombreDeLaEmpresa": "Nombre de la empresa:",
     "nombreDelUsuario": "Nombre del usuario:",
     "noSeEncuentraEmpresasDadeAlta": "No se encuentran empresas en la BBDD.\nPrimero da de alta una nueva empresa.",
@@ -71,7 +104,10 @@
     "siguiente": "Siguiente",
 
     "usuario": "Usuario:",
+    "usuarioAnyadido": "Usuario añadido",
     "usuNoIdentificado": "Usuario no identificado",
+
+    "valorInvalidoEnEsteCampo":"Valor no válido en este campo.",
     
     "codErrorLogin401": "Auntentificación errónea",
     "codErrorLogin404": "Usuario no encontrado",

@@ -40,9 +40,8 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
                 if (error.codError == 401) {
                   msgErr = AppLocalizations.of(cntxt)!.codErrorLogin401;
                 } else {
-                  msgErr = AppLocalizations.of(cntxt)!.errNoEspecificado +
-                      ': ' +
-                      error.codError.toString();
+                  msgErr = AppLocalizations.of(cntxt)!
+                      .errNoEspecificado(': ' + error.codError.toString());
                 }
               } else {
                 msgErr = AppLocalizations.of(cntxt)!.servidorNoDisponible;
@@ -285,16 +284,16 @@ class ListaEmpresas extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO poner etiqueta Empresa encima del DropDownField
     return DropDownField(
+      traducciones: AppLocalizations.of(context)!,
       controller: controladorEmpresa,
       focusNode: FocusNode(),
       hintText: AppLocalizations.of(context)!.selecionaEmpresa,
-      labelText: "Empresa",
+      labelText: AppLocalizations.of(context)!.empresa,
       enabled: true,
       itemsVisibleInDropdown: 5,
       items: empresas,
       onValueChanged: (value) {
         _empresaSeleccionada = value as EmpresCod;
-        debug(_empresaSeleccionada?.empNombre);
       },
     );
   }

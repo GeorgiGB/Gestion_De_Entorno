@@ -8,6 +8,10 @@ import 'package:flutter/services.dart';
 
 import '../listado_empresas/empresa_future.dart';
 
+// Imports multi-idioma ---------------------
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// Fin imports multi-idioma ----------------
+
 ///DropDownField has customized autocomplete text field functionality
 ///
 ///Parameters
@@ -74,6 +78,7 @@ class DropDownField extends FormField<String> {
   final ValueChanged<DropDownIntericie>? onValueChanged;
   final bool strict;
   final int itemsVisibleInDropdown;
+  final AppLocalizations traducciones;
 
   /// Controls the text being edited.
   ///
@@ -90,6 +95,7 @@ class DropDownField extends FormField<String> {
       required this.controller,
       required this.focusNode,
       required this.items,
+      required this.traducciones,
       this.value,
       this.required = false,
       this.icon,
@@ -158,8 +164,7 @@ class DropDownField extends FormField<String> {
                           validator: (String? newValue) {
                             if (required) {
                               if (newValue == null || newValue.isEmpty) {
-                                // TODO: realizar traducción
-                                return 'This field cannot be empty!';
+                                return traducciones.esteCampoNoPuedeEstarVacio;
                               }
                             }
 
@@ -168,8 +173,7 @@ class DropDownField extends FormField<String> {
                             if (strict &&
                                 newValue!.isNotEmpty &&
                                 !items.contains(newValue)) {
-                              // TODO: realizar traducción
-                              return 'Invalid value in this field!';
+                              return traducciones.valorInvalidoEnEsteCampo;
                             }
 
                             return null;
