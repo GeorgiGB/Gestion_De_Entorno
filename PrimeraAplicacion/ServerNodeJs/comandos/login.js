@@ -5,23 +5,22 @@ const debug = require('./globales')
 const jwt = require('jsonwebtoken');
 const verificarJWT = require('../middleware/verificarJWT');
 
-// Funcion que hara la conexion con la base de datos y mirara si esta el usuario creado con su token
-async function login(json){
-    debug.msg("Entrando a login ")
-    debug.msg(JSON.stringify(json))
-        // peticion del servidor
-        // verificar si el usuario existe y proseguir con la operacion
-       let reslogin = await conexion.query("SELECT * FROM login('"+JSON.stringify(json)+"')");
-        //resultado de la operacion
+// Funcion asincrona que hara la conexion con la base de datos y mirara si esta el usuario creado con su token
+async function login(json_login){
+        /*
+            Petición del servidor
+            Verificar si el usuario existe y proseguir con la operación
+        */     
+       let reslogin = await conexion.query("SELECT * FROM login('"+JSON.stringify(json_login)+"')");
+       //   Resultado de la operación
         let fila = reslogin.rows[0].jresultado[0];
         
         if(fila.bOk){
             
-            //  insertar token en base de usuarios
-            let token = getToken(json.usu_pwd);
+            //  Insertar token en base de usuarios
+            let token = getToken(json_login.usu_pwd);
             //  Hacemos la petición a la base de datos
             let instoken = await conexion.query("SELECT * FROM insertar_token('"+JSON.stringify(token)+"')");
-            debug.msg(JSON.stringify(token));
             //  Insertamos el token en fila si todo ha ido correcto
             fila.bOk = instoken.rows[0].bok;
             //  Entonces crearemos un campo para recibir la respuesta
@@ -32,7 +31,7 @@ async function login(json){
         return fila;
     }
 
-// Funcion de generacion de tokens
+// Función de generación de tokens
 function getToken(usuario_contra){
     return jwt.sign(
         {username: usuario_contra}, verificarJWT.llaveSecreta);
