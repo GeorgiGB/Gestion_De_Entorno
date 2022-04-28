@@ -11,7 +11,7 @@ CREATE OR REPLACE FUNCTION public.insertar_token(
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
 DECLARE
-	
+
 	bOk boolean;
 	cToken character varying;
 	iCoderror integer;

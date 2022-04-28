@@ -11,10 +11,6 @@ CREATE OR REPLACE FUNCTION public.login(
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
 DECLARE
-	rRegistro record;
-	cUsu_nombre character varying;
-	cUsu_pwd character varying;
-	
 	bOk boolean;
 	iUsu_cod integer;
 	cError character varying;
