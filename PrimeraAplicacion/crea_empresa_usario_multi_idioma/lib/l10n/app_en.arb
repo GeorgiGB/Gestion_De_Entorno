@@ -5,6 +5,7 @@
 
     
     "acceso": "Login",
+    "anyade": "Add",
     "anyadeEmpresa": "Add company",
     "atras": "Back",
     "autoGenerada": "Auto-generated",
@@ -30,7 +31,7 @@
     "empresaNueva": "New company",
     "empresaCreadaCorrectamente": "Company set up ok",
     "errNoEspecificado": "Unspecified error{error}",
-    "escogeOpcionParaCrear": "Choose option to create.",
+    "escogeOpcion": "Choose option",
     "esperandoAlServidor": "Waiting for server",
     "esperandoRespuestaServidor": "Waiting for server response.",
     "esteCampoNoPuedeEstarVacio": "This field cannot be empty!",
@@ -50,6 +51,9 @@
     "introduceLaContrasena": "Introduce your contraseña",
 
     "jefeDeArea": "Area manager",
+
+    "laEmpresaHaSidoDadoDeAlta": "The enterprise {empresa} has been added",
+    "laEmpresaYaEstaregistrada": "The enterprise {empresa} is already registered",
 
     "nohayEmpresasenlaBBDD": "There are no companies in the database",
     "nombre": "Name",
@@ -74,6 +78,7 @@
     "seleccionaFiltro": "Select filter: ",
     "seleccionaFiltroUsuario": "Select user filter",
     "servidorNoDisponible": "Server not available",
+    "sesionActiva": "Active session",
     "siguiente": "Next",
 
     "usuario": "User",
@@ -83,7 +88,7 @@
     
     "valorInvalidoEnEsteCampo":"Invalid value in this field!",
     
-    "codErrorLogin401": "Wrong authentication",
+    "codError401": "Wrong authentication",
     "codErrorLogin404": "User not found",
-    "codErrorLogin500": "Server error"
+    "codError500": "Server error"
 }

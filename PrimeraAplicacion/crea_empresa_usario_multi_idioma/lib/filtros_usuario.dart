@@ -1,5 +1,6 @@
-import 'package:crea_empresa_usario/creacion_empre_usua.dart';
+import 'package:crea_empresa_usario/escoge_opciones.dart';
 import 'package:crea_empresa_usario/nuevo_usua.dart';
+import 'package:crea_empresa_usario/servidor/anyade.dart';
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
 import 'package:http/http.dart' as http;
@@ -9,27 +10,27 @@ import 'dart:convert';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
-class filtros_usuario extends StatefulWidget {
-  const filtros_usuario(
+class FiltrosUsuario extends StatefulWidget {
+  const FiltrosUsuario(
       {Key? key,
-      required this.ust_token,
+      required this.token,
       required this.empCod,
-      required this.ute_emp_cod,
-      required this.ute_nombre,
+      required this.emp_cod,
+      required this.nombre,
       required this.ute_pwd,
       required this.auto_pwd})
       : super(key: key);
-  final String ust_token;
+  final String token;
   final String empCod;
-  final int ute_emp_cod;
-  final String ute_nombre;
+  final int emp_cod;
+  final String nombre;
   final String ute_pwd;
   final bool auto_pwd;
   @override
-  State<filtros_usuario> createState() => _filtros_usuarioState();
+  State<FiltrosUsuario> createState() => _FiltrosUsuarioState();
 }
 
-class _filtros_usuarioState extends State<filtros_usuario> {
+class _FiltrosUsuarioState extends State<FiltrosUsuario> {
   Locale? anteriorLocale;
   final TextEditingController _codigo_filtro = TextEditingController();
   bool esperandoFiltrado = false;
@@ -64,16 +65,16 @@ class _filtros_usuarioState extends State<filtros_usuario> {
             children: <Widget>[
               Row(
                 children: [
-                  dobleTexto(traducciones.empresa + ": ", widget.empCod)
+                  campoValor(traducciones.empresa + ": ", widget.empCod)
                 ],
               ),
               SizedBox(height: 10),
               Row(children: [
-                dobleTexto(traducciones.nombre + ": ", widget.ute_nombre)
+                campoValor(traducciones.nombre + ": ", widget.nombre)
               ]),
               SizedBox(height: 10),
               Row(children: [
-                dobleTexto(traducciones.contrasena + ": ",
+                campoValor(traducciones.contrasena + ": ",
                     (widget.auto_pwd ? traducciones.autoGenerada : '*********'))
               ]),
               SizedBox(height: 30),
@@ -133,120 +134,59 @@ class _filtros_usuarioState extends State<filtros_usuario> {
     );
   }
 
-  RichText dobleTexto(String msg, String msg2) {
-    return RichText(
-      text: TextSpan(
-        //style: DefaultTextStyle.of(context).style,
-        children: <TextSpan>[
-          TextSpan(text: msg, style: TextStyle(fontWeight: FontWeight.bold)),
-          TextSpan(text: msg2),
-        ],
-      ),
-    );
-  }
-
   // Future encargado de enviar los datos del nuevo usuario al servidor
   // lo único que controla es si los campos están vacios
-  Future<void>? _enviar_filtro() async {
+  _enviar_filtro() {
     String url = globales.servidor + '/crear_usuarios_telemetria';
     //Si estamos esperando el filtro y se vuelve a pulsar login este lo ignorara.
     if (esperandoFiltrado) {
       globales.muestraToast(context, traducciones.esperandoAlServidor);
     } else {
+      // Datos del filtro
       String? filtrBBDD = filtroActivo == null ? '' : filtroActivo!.filtro_bbdd;
       String codFiltro = _codigo_filtro.text;
 
       // comprobamos que tengan datos
       if (filtrBBDD.isEmpty || codFiltro.isEmpty) {
-        // Mostramos avisos
+        // No tiene datos Mostramos avisos
         globales.muestraDialogo(context, traducciones.primerRellenaCampos);
       } else {
-        DateTime antes = DateTime.now();
         esperandoFiltrado = true;
-
-        try {
-          globales.debug('ute_filtro: ' +
-              filtroActivo!.filtro_bbdd +
-              ', ' +
-              'ute_cod_filtro: ' +
-              _codigo_filtro.text);
-
-          var response = await http.post(
-            Uri.parse(url),
-            // Cabecera para enviar JSON con una autorizacion token
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-              'Authorization': widget.ust_token
-            },
-            // Adjuntamos al body los datos en formato JSON
-            body: jsonEncode(<String, String>{
-              'ust_token': widget.ust_token,
-              'ute_emp_cod': widget.ute_emp_cod.toString(),
-              'ute_nombre': widget.ute_nombre,
-              'ute_pwd': widget.ute_pwd,
-              'auto_pwd': widget.auto_pwd.toString(),
-              'ute_filtro': filtroActivo!.filtro_bbdd,
-              'ute_cod_filtro': _codigo_filtro.text
-            }),
-          );
-          // Hay que tener en cuenta si la contraseña es autogenerada
-          // Adjuntar el token en la peticion.
-          int status = response.statusCode;
-
-          if (status == 200) {
-            final parsed =
-                jsonDecode(response.body).cast<Map<String, dynamic>>();
-            if (parsed[0]['bOk'].toString().parseBool()) {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => creacion_empre_usua(
-                      token: widget.ust_token,
-                    ),
-                  ),
-                  (Route<dynamic> route) => false);
-              globales.muestraToast(context,
-                  traducciones.elUsuarioHaSidoDadoDeAlta(widget.ute_nombre));
-
-              /*globales
-                  .muestraDialogo(
-                      context,
-                      traducciones.elUsuarioHaSidoDadoDeAlta(widget.ute_nombre),
-                      traducciones.usuarioAnyadido)
-                  .then((value) {});
-              // TODO escoger entre mostrar toast o diálogo
-              */
-            } else {
-              int cod_error = int.parse(parsed[0]['cod_error']);
-              if (cod_error == -2) {
-                globales.muestraDialogo(context,
-                    traducciones.elUsuarioYaEstaRegistrado(widget.ute_nombre));
-              } else {
-                globales.debug(parsed[0]['msg_error']);
-                globales.muestraDialogo(context,
-                    traducciones.errNoEspecificado(parsed[0]['msg_error']));
-              }
-            }
-          } else if (status == 500) {
-            globales.muestraDialogo(context, response.body);
-          } else {
-            globales.debug(response.body);
-          }
-        } on http.ClientException catch (e) {
-          globales.muestraDialogo(context, traducciones.servidorNoDisponible);
-        } on Exception catch (e) {
-          // Error no especificado
-          globales.debug("Error no especificado: " + e.runtimeType.toString());
-        } finally {
-          esperandoFiltrado = false;
-        }
-        return Future.delayed(Duration(seconds: 2), () {
-          //Si pasan más de 2 segundos
-          if (esperandoFiltrado) {
-            globales.muestraToast(context, traducciones.cargando);
-          }
+        String json = jsonEncode(<String, String>{
+          'ust_token': widget.token,
+          'ute_emp_cod': widget.emp_cod.toString(),
+          'ute_nombre': widget.nombre,
+          'ute_pwd': widget.ute_pwd,
+          'auto_pwd': widget.auto_pwd.toString(),
+          'ute_filtro': filtroActivo!.filtro_bbdd,
+          'ute_cod_filtro': _codigo_filtro.text
         });
+
+        // Enviamos al servidor
+        anyade(
+          context,
+          url,
+          token: widget.token,
+          json: json,
+          msgOk: traducciones.elUsuarioHaSidoDadoDeAlta(widget.nombre),
+          msgError: traducciones.elUsuarioHaSidoDadoDeAlta(widget.nombre),
+        ).then((value) => esperandoFiltrado = value);
       }
     }
+  }
+
+  // Passamos un nobre de campo y su valor y devuelve un widget
+  // con el nombre del campo en negrita y su valor normal
+  RichText campoValor(String campo, String valor) {
+    return RichText(
+      text: TextSpan(
+        //style: DefaultTextStyle.of(context).style,
+        children: <TextSpan>[
+          TextSpan(text: campo, style: TextStyle(fontWeight: FontWeight.bold)),
+          TextSpan(text: valor),
+        ],
+      ),
+    );
   }
 
   // A partir de aquí controlamos los filtros

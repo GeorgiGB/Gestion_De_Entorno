@@ -5,6 +5,7 @@
 
 
   "acceso": "Accès",
+  "anyade": "Ajouter",
   "anyadeEmpresa": "Ajouter une compagnie",
   "atras": "Arrière",
   "aviso": "Avis",
@@ -29,7 +30,7 @@
   "empresaNueva": "Entreprise nouvelle",
   "empresaCreadaCorrectamente": "L'entreprise a été correctement créée",
   "errNoEspecificado": "Erreur non spécifiée{error}",
-  "escogeOpcionParaCrear": "Choisissez l'option à créer.",
+  "escogeOpcion": "Choisissez l'option",
   "esperandoAlServidor": "En attendant le serveur",
   "esperandoRespuestaServidor": "En attente de la réponse du serveur.",
   "esteCampoNoPuedeEstarVacio": "Ce champ ne peut être vide",
@@ -49,6 +50,9 @@
   "introduceLaContrasena": "Entrez le mot de passe",
 
   "jefeDeArea": "Chef de zone",
+
+  "laEmpresaHaSidoDadoDeAlta": "L'entreprise {empresa} a été ajoutée",
+  "laEmpresaYaEstaregistrada": "L'entreprise {empresa} est déjà enregistrée.",
   
   "nohayEmpresasenlaBBDD": "Il n'y a pas d'entreprises dans la base de données",
   "nombre": "Nom",
@@ -72,6 +76,7 @@
   "seleccionaFiltro": "Sélectionner le filtre: ",
   "seleccionaFiltroUsuario": "Sélectionner le filtre utilisateur",
   "servidorNoDisponible": "Serveur non disponible",
+  "sesionActiva": "Session active",
   "siguiente": "Suivant",
 
   "usuario": "Utilisateur",
@@ -81,7 +86,7 @@
   
   "valorInvalidoEnEsteCampo":"Valeur non valide pour ce champ",
     
-  "codErrorLogin401": "Mauvaise authentification",
+  "codError401": "Mauvaise authentification",
   "codErrorLogin404": "Utilisateur non trouvé",
-  "codErrorLogin500": "Erreur de serveur"
+  "codError500": "Erreur de serveur"
 }

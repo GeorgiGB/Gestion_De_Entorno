@@ -38,7 +38,7 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
             (error, stackTrace) {
               if (error is ExceptionServidor) {
                 if (error.codError == 401) {
-                  msgErr = AppLocalizations.of(cntxt)!.codErrorLogin401;
+                  msgErr = AppLocalizations.of(cntxt)!.codError401;
                 } else {
                   msgErr = AppLocalizations.of(cntxt)!
                       .errNoEspecificado(': ' + error.codError.toString());
@@ -118,7 +118,7 @@ class AvisoAccion extends StatelessWidget {
       required this.aviso, // mensaje de aviso
       required this.msg, // mensaje a mostrar en la acción a realizar
       required this.icon, // icono  a mostrar en la acción a realizar
-      this.accion}) // accion a realizar
+      this.accion}) // Función que será llamada al pulsar el widget acccion
       : super(key: key);
   final String aviso;
   final String msg;

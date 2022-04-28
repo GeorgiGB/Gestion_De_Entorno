@@ -65,8 +65,6 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
       body: SingleChildScrollView(
         //Previene BOTTOM OVERFLOWED
         padding: EdgeInsets.all(20),
-        //child: Container(
-        //constraints: BoxConstraints(minHeight: 400, minWidth: 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           mainAxisSize: MainAxisSize.min,
@@ -139,11 +137,11 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => filtros_usuario(
-              ust_token: widget.ust_token,
+          builder: (context) => FiltrosUsuario(
+              token: widget.ust_token,
               empCod: empCod.toString(),
-              ute_emp_cod: empCod.empCod,
-              ute_nombre: _ute_nombre.text,
+              emp_cod: empCod.empCod,
+              nombre: _ute_nombre.text,
               ute_pwd: _ute_pwd.text,
               auto_pwd: _ute_pwd_auto),
         ),
@@ -173,6 +171,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+              // Campo formulario Nombre de usuario
           TextFormField(
             decoration: InputDecoration(
                 labelText: traducciones.nombreDelUsuario,

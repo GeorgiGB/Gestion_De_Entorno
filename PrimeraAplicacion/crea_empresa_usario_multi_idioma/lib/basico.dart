@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
 
-class basico extends StatefulWidget {
-  const basico({Key? key, required this.token}) : super(key: key);
+class Basico extends StatefulWidget {
+  const Basico({Key? key, required this.token}) : super(key: key);
   final String token;
   @override
-  State<basico> createState() => _basicoState();
+  State<Basico> createState() => _BasicoState();
 }
 
-class _basicoState extends State<basico> {
+class _BasicoState extends State<Basico> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

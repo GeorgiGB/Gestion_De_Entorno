@@ -1,8 +1,9 @@
+import 'package:crea_empresa_usario/nueva_empr.dart';
 import 'package:crea_empresa_usario/nuevo_usua.dart';
 import 'package:flutter/material.dart';
 import 'filtros_usuario.dart';
 import 'globales.dart' as globales;
-import 'creacion_empre_usua.dart';
+import 'escoge_opciones.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -89,7 +90,17 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
 
-      home: Login(),
+      //home: Login(),
+
+      home: EscogeOpciones(
+          token:
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NTEwNzA5MzJ9.mVW-YnXFcnUFxoL1xY3AZgkuZDikktyfKqPHpTTqVCo'),
+
+/*
+      home: NuevaEmpresa(
+          token:
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NTEwNzA5MzJ9.mVW-YnXFcnUFxoL1xY3AZgkuZDikktyfKqPHpTTqVCo'),
+*/
       /*  
         home: const NuevoUsuario(
             ust_token:
@@ -238,7 +249,7 @@ class _LoginState extends State<Login> {
         } else if (status == 401) {
           // Mostramos Alerta avisando del error
           globales.muestraDialogo(
-              context, AppLocalizations.of(context)!.codErrorLogin401);
+              context, AppLocalizations.of(context)!.codError401);
         } else if (status == 404) {
           // Mostramos Alerta avisando del error
           globales.muestraDialogo(
@@ -246,7 +257,7 @@ class _LoginState extends State<Login> {
         } else if (status == 500) {
           // Si no se introduce alguno de los campos saldra un aviso
           globales.muestraDialogo(
-              context, AppLocalizations.of(context)!.codErrorLogin500);
+              context, AppLocalizations.of(context)!.codError500);
         } else {
           // Mostramos en  terminal que error envia
           globales.debug('Code:\n' +
@@ -275,7 +286,7 @@ class _LoginState extends State<Login> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => creacion_empre_usua(
+        builder: (context) => EscogeOpciones(
           token: lista['token'].toString(),
         ),
       ),

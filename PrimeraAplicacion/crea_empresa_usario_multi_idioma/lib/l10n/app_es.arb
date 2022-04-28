@@ -5,6 +5,7 @@
     },
   
     "acceso": "Acceso",
+    "anyade": "Añade",
     "anyadeEmpresa": "Añade empresa",
     "atras": "Atrás",
     "autoGenerada": "Auto-Generada",
@@ -58,7 +59,7 @@
             }
         }
     },
-    "escogeOpcionParaCrear": "Escoge opción para crear.",
+    "escogeOpcion": "Escoge opción",
     "esperandoAlServidor": "Esperando al servidor",
     "esperandoRespuestaServidor": "Esperando Respuesta del servidor",
     "esteCampoNoPuedeEstarVacio": "Este campo no puede estar vacío",
@@ -78,6 +79,29 @@
     "introduceLaContrasena": "Introduce la contraseña",
 
     "jefeDeArea": "Jefe de Área",
+
+
+    "laEmpresaHaSidoDadoDeAlta": "La empresa {empresa} ha sido dado de alta.",
+    "@laEmpresaHaSidoDadoDeAlta": {
+        "description": "Empresa registrada",
+        "placeholders": {
+            "usuario": {
+                "type": "String",
+                "example": " "
+            }
+        }
+    },
+
+    "laEmpresaYaEstaregistrada": "La empresa {empresa} ya está registrada",
+    "@laEmpresaYaEstaregistrada": {
+        "description": "La empresa ya está registrada",
+        "placeholders": {
+            "empresa": {
+                "type": "String",
+                "example": " "
+            }
+        }
+    },
 
     "nohayEmpresasenlaBBDD": "No hay empresas en la BBDD",
     "nombre": "Nombre",
@@ -101,6 +125,7 @@
     "seleccionaFiltro": "Selecciona filtro: ",
     "seleccionaFiltroUsuario": "Selecciona filtro usuario",
     "servidorNoDisponible": "Servidor no disponible",
+    "sesionActiva": "Sesión activa",
     "siguiente": "Siguiente",
 
     "usuario": "Usuario:",
@@ -109,7 +134,7 @@
 
     "valorInvalidoEnEsteCampo":"Valor no válido en este campo.",
     
-    "codErrorLogin401": "Auntentificación errónea",
+    "codError401": "Auntentificación errónea",
     "codErrorLogin404": "Usuario no encontrado",
-    "codErrorLogin500": "Error de servidor"
+    "codError500": "Error de servidor"
 }

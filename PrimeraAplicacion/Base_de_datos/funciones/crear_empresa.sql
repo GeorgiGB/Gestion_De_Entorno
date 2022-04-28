@@ -1,6 +1,6 @@
 -- FUNCTION: public.crear_empresa(jsonb)
 
--- DROP FUNCTION IF EXISTS public.crear_empresa(jsonb);
+DROP FUNCTION IF EXISTS public.crear_empresa(jsonb);
 
 CREATE OR REPLACE FUNCTION public.crear_empresa(
 	jleer jsonb,
@@ -10,26 +10,25 @@ CREATE OR REPLACE FUNCTION public.crear_empresa(
     COST 100
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
-DECLARE
-	rRegistro record;
 	
+DECLARE
 	bOk boolean;
 	iemp_cod integer;
 	icod_error integer;
 	cError character varying;
-	
-	
+
 BEGIN
-	--  Inicializacion de los valores
 	bOk := false;
 	icod_error := 0;
 	cError := '';
-	
-	--  Consultamos si el token es válido
-	SELECT t.bok INTO bOk FROM public.validar_token(jleer::jsonb) t;
+	jresultado := '[]';
+
+	-- Consultamos si el token es válido
+	SELECT t.bOk INTO bOk
+		FROM public.validar_token(jleer::jsonb) t;
 	
 	IF (bOk) THEN
-		--  Tabla temporal la cual usaremos para introducir los datos
+		-- Tabla temporal
 		CREATE TEMP TABLE IF NOT EXISTS emp_json(
 			emp_nombre character varying,
 			emp_pwd character varying,
@@ -37,44 +36,61 @@ BEGIN
 			ust_token character varying
 		);
 		
-		SELECT * INTO rRegistro
-			FROM jsonb_populate_record(null::emp_json, jleer) AS j;
-			
-		IF rRegistro.auto_pwd THEN
-		--  Generador de pwd
-			Select cpwd, icoderror as e into rRegistro.emp_pwd, icod_error from public.generador_cadena_aleatoria(16);
-			IF icod_error !=0 THEN
-					RAISE EXCEPTION 'Error en la generación de la contraseña';
-			END IF;
-			
-		END IF;
-		
-		--  La creación de la empresa
+		--LA CREACION DE LA EMPRESA
 		INSERT INTO empresas (emp_nombre)
-			VALUES (rRegistro.emp_nombre)
-			RETURNING emp_cod into iemp_cod;
-		--  Al crear una empresa tambien
-        --  crearemos un usuario que tendra un nombre predeterminado
-        --  y usara el pwd de la empresa que le hemos indicado en el registro
+			SELECT j.emp_nombre
+				FROM jsonb_populate_record(null::emp_json, jleer) j
+				RETURNING emp_cod into iemp_cod;
+			
+		-- Empresa insertada
 		IF FOUND THEN
+			-- Creamos el usuario Administrador de la empresa en la tabla usuarios_telemetria
+			-- Por defecto se crea con el filtro ute_empresa := 0
 			INSERT INTO usuarios_telemetria(ute_nombre, ute_pwd, ute_emp_cod)
-				VALUES ('Admin', rRegistro.emp_pwd, iemp_cod);
-		  
+				SELECT
+					-- Usuario administrador
+					'Admin',
+					
+					-- contraseña autogenerada
+					(CASE WHEN j.auto_pwd THEN
+					 	(SELECT cpwd FROM public.generador_cadena_aleatoria(16))
+					 		ELSE j.emp_pwd END),
+					
+					-- código ermpresa
+					iemp_cod
+				FROM jsonb_populate_record(null::emp_json, jleer) j;
+				
 			IF FOUND THEN
 				bOk := true;
-				-- añdimos la variable bOk al JSON jresultado
-				select ('{"bOk":"'||bOk||'"}')::jsonb into jresultado;
 			END IF;
 		END IF;
+			
+	ELSE
+		-- Token no válido, usuario no validado.
+		SELECT ('{"cod_error":"401"}')::jsonb || jresultado ::jsonb into jresultado;
 	END IF;
+		
+	-- añadimos la variable bOk al JSON jresultado
+	SELECT ('{"bOk":"' || bOk || '"}')::jsonb || jresultado::jsonb into jresultado;
 
-	EXCEPTION WHEN OTHERS THEN
-		icod_error := -1;
+	EXCEPTION
+	-- Códigos de error -> https://www.postgresql.org/docs/current/errcodes-appendix.html
+	WHEN OTHERS THEN
+		bOk = false;
 		cError := SQLERRM;
-		jresultado :='[{"bOk":"'|| bOk
-					  ||'", "cod_error":"'|| icod_error 
-					  ||'", "msg_error":"'|| SQLERRM ||'"}]';
-		END;
+		CASE
+			 -- el '23505' equivale a unique_violation
+			 -- si ponemos directamente unique_violation en lugar de '23505'
+			 -- da el siguiente error "ERROR:  no existe la columna «unique_violation»"
+			WHEN SQLSTATE = '23505' THEN
+				icod_error := -2;
+			ELSE
+				icod_error := -1;		
+		END CASE;
+
+		SELECT ('{"bOk":"' || false || '", "cod_error":"' || icod_error || '", "msg_error":"' || cError || '"}')::jsonb
+			|| jresultado::jsonb into jresultado;
+	END;
 $BODY$;
 
 ALTER FUNCTION public.crear_empresa(jsonb)
