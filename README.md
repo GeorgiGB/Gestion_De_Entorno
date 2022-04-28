@@ -12,6 +12,10 @@ Creación de empresas y usuarios de telemetria.
 ### Estructura del programa
 ![Jerarquia](https://github.com/GeorgiGB/TFG-DAM/blob/main/PrimeraAplicacion/Base_de_datos/estructura_del_programa.png)
 
+### Relaciones en la tabla
+
+![Relaciones](https://github.com/GeorgiGB/TFG-DAM/blob/main/PrimeraAplicacion/Base_de_datos/ERD-BD-Aplicaci%C3%B3n.png)
+
 ---
 
 TFG DAM 2021-2022
