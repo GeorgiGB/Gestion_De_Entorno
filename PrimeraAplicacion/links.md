@@ -1,5 +1,30 @@
+
 # DOCUMENTACIÓN
 
+![CMAKE](https://cdn.iconscout.com/icon/free/png-256/cmake-3629279-3031863.png)
+
+## CMake
+
+```txt
+# Example of hello world
+cmake_minimum_required(VERSION 3.13)  # CMake version check
+project(simple_example)               # Create project "simple_example"
+set(CMAKE_CXX_STANDARD 14)            # Enable c++14 standard
+
+# Add main.cpp file of project root directory as source file
+set(SOURCE_FILES main.cpp)
+
+# Add executable target with source files listed in SOURCE_FILES variable
+add_executable(simple_example ${SOURCE_FILES})
+```
+
+---
+
+- [CMakeLists](https://www.jetbrains.com/help/clion/cmakelists-txt-file.html)
+- [Cheatsheet](https://usercontent.one/wp/cheatsheet.czutro.ch/wp-content/uploads/2020/09/CMake_Cheatsheet.pdf)
+- [CMake error running flutter app](https://stackoverflow.com/questions/69944913/cmake-error-while-running-flutter-desktop-application)
+  
+> Inacabado...
 ---
 
 ![DART](https://iconape.com/wp-content/files/pa/370777/svg/370777.svg) ![Flutter](https://cdn.iconscout.com/icon/free/png-256/flutter-3628777-3030139.png)
