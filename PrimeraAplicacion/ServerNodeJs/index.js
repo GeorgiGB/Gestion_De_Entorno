@@ -19,8 +19,10 @@ const crear_ute = require('./comandos/usuarios_telemetria');
 //  La conexion con el servidor obtener listado de empresas
 const obtener = require('./comandos/obtener');
 
+//  Cambiara el estado del token del usuario
 const cerrar = require('./comandos/cerrar_sesion');
 
+//  Puede mandar mensajes a la terminal y mandar peticiones al servidor
 const debug = require('./comandos/globales');
 
 const headers = require('./comandos/cabecera');
@@ -55,7 +57,7 @@ debug.msg("Servidor ok");
 app.post('/login', (req, res) => {
     verificar.login(req.body).then(response => {
         let bOk = response.bOk === 'true';
-        let cod_error = parseInt(response.cod_error );
+        let cod_error = parseInt(response.cod_error);
 
         if (bOk) {
             headers(res).status(200).json(response)
@@ -69,7 +71,7 @@ app.post('/login', (req, res) => {
         }
     })
         .catch(err => {
-            debug.msg(err)
+            //  debug.msg(err)
             headers(res).status(500).json(response);
         })
 });
@@ -81,31 +83,10 @@ app.post('/login', (req, res) => {
 
 app.post('/crear_empresa', (req, res) => {
     crear_emp.crear_empresa(req.body).then(response => {
-        let bOk = response[0].bOk === 'true';
-        let cod_error = parseInt(response[0].cod_error );
-        
-        if (bOk) {
-            headers(res).status(200).json(response)
-            debug.msg("Empresa creada correctamente")
-        } else {
-            switch(cod_error){
-                case 401:
-                    // Usuario no autorizado
-                    headers(res).status(401).json(response);
-                    break;
-                case -2:
-                    // Error de empresa existente (llave duplicada)
-                    headers(res).status(200).json(response);
-                    break;
-                default:
-                    // Otors errorese
-                    headers(res).status(500).json(response);
-                    break;
-            }
-        }
-    }).catch(err => {
-        debug.msg(err)
+        debug.peticiones(response).catch(err => {
+        //  debug.msg(err)
         headers(res).status(500).json(response)
+        });
     });
 });
 
@@ -116,31 +97,11 @@ app.post('/crear_empresa', (req, res) => {
 
 app.post('/crear_usuarios_telemetria', (req, res) => {
     crear_ute.crear_usuarios_telemetria(req.body).then(response => {
-        let bOk = response[0].bOk === 'true';
-        let cod_error = parseInt(response[0].cod_error );
-
-        if (bOk) {
-            headers(res).status(200).json(response)
-            debug.msg("Usuario de telemetria creado correctamente")
-        } else {
-            switch(cod_error){
-                case 401:
-                    // Usuario no autorizado
-                    headers(res).status(401).json(response);
-                    break;
-                case -2:
-                    // Error de empresa existente (llave duplicada)
-                    headers(res).status(200).json(response);
-                    break;
-                default:
-                    // Otors errorese
-                    headers(res).status(500).json(response);
-                    break;
-            }
-        }
-    }).catch(err => {
-        headers(res).status(500).json(([{"msg": "Error de servidor"}]))
-    });
+        debug.peticiones(response).catch(err => {
+        //  debug.msg(err)
+        headers(res).status(500).json(response)
+        });
+    });     
 });
 
 /*
@@ -152,7 +113,7 @@ app.post('/listado_empresas', (req, res) => {
     obtener.listado_empresas(req.body).then(response => {
         let bOk = response[0].bOk === 'true';
         let cod_error = parseInt(response[0].cod_error );
-
+        
         if (bOk) {
             headers(res).status(200).json(response)
         } else {

@@ -1,4 +1,4 @@
-//  Funcion que sirve para la cabecera de todas las peticiones
+//  Función que sirve para la cabecera de todas las peticiones
 function cabecera(response){
     response.header("Access-Control-Allow-Headers", "Content-Type")
     .header("Access-Control-Allow-Credentials", "true")
