@@ -54,10 +54,13 @@ debug.msg("Servidor ok");
 */
 app.post('/login', (req, res) => {
     verificar.login(req.body).then(response => {
-        if (response.bOk) {
+        let bOk = response.bOk === 'true';
+        let cod_error = parseInt(response.cod_error );
+
+        if (bOk) {
             headers(res).status(200).json(response)
         } else {
-            if (response.cod_error < 0) {
+            if (cod_error < 0) {
                 headers(res).status(500).json(response);
             } else {
                 headers(res).status(404).json(response);
@@ -78,16 +81,26 @@ app.post('/login', (req, res) => {
 
 app.post('/crear_empresa', (req, res) => {
     crear_emp.crear_empresa(req.body).then(response => {
-        if (response[0].bOk) {
+        let bOk = response[0].bOk === 'true';
+        let cod_error = parseInt(response[0].cod_error );
+        
+        if (bOk) {
             headers(res).status(200).json(response)
             debug.msg("Empresa creada correctamente")
         } else {
-            if (response[0].cod_error < 0) {
-                headers(res).status(500).json(response);
-            } else if (response[0].cod_error == 401) {
-                headers(res).status(401).json(response);
-            } else {
-                headers(res).status(500).json(response);
+            switch(cod_error){
+                case 401:
+                    // Usuario no autorizado
+                    headers(res).status(401).json(response);
+                    break;
+                case -2:
+                    // Error de empresa existente (llave duplicada)
+                    headers(res).status(200).json(response);
+                    break;
+                default:
+                    // Otors errorese
+                    headers(res).status(500).json(response);
+                    break;
             }
         }
     }).catch(err => {
@@ -103,17 +116,26 @@ app.post('/crear_empresa', (req, res) => {
 
 app.post('/crear_usuarios_telemetria', (req, res) => {
     crear_ute.crear_usuarios_telemetria(req.body).then(response => {
-        if (response[0].bOk) {
+        let bOk = response[0].bOk === 'true';
+        let cod_error = parseInt(response[0].cod_error );
+
+        if (bOk) {
             headers(res).status(200).json(response)
             debug.msg("Usuario de telemetria creado correctamente")
         } else {
-            if (response[0].cod_error < 0) {
-                headers(res).status(500).json(response);
-            } else if (response[0].cod_error == 401) {
-                headers(res).status(401).json(response);
-            } else {
-                // Error desconocido
-                headers(res).status(500).json(response);
+            switch(cod_error){
+                case 401:
+                    // Usuario no autorizado
+                    headers(res).status(401).json(response);
+                    break;
+                case -2:
+                    // Error de empresa existente (llave duplicada)
+                    headers(res).status(200).json(response);
+                    break;
+                default:
+                    // Otors errorese
+                    headers(res).status(500).json(response);
+                    break;
             }
         }
     }).catch(err => {
@@ -128,16 +150,21 @@ app.post('/crear_usuarios_telemetria', (req, res) => {
 */
 app.post('/listado_empresas', (req, res) => {
     obtener.listado_empresas(req.body).then(response => {
-        if (response[0].bOk) {
+        let bOk = response[0].bOk === 'true';
+        let cod_error = parseInt(response[0].cod_error );
+
+        if (bOk) {
             headers(res).status(200).json(response)
         } else {
-            if (response[0].cod_error < 0) {
-                headers(res).status(500).json(response);
-            } else if (response[0].cod_error == 401) {
-                headers(res).status(401).json(response);
-            } else {
-                // Error desconocido
-                headers(res).status(500).json(response);
+            switch(cod_error){
+                case 401:
+                    // Usuario no autorizado
+                    headers(res).status(401).json(response);
+                    break;
+                default:
+                    // Otors errorese
+                    headers(res).status(500).json(response);
+                    break;
             }
 
         }
@@ -155,7 +182,8 @@ app.post('/cerrar_sesion', (req, res) => {
         } else {
             if (response < 0) {
                 headers(res).status(500).json(response);
-        }}
+        }
+    }
     }).catch(err => {
         debug.msg(err)
         headers(res).status(500).json(response);
