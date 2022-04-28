@@ -25,22 +25,26 @@ const cerrar = require('./comandos/cerrar_sesion');
 //  Puede mandar mensajes a la terminal y mandar peticiones al servidor
 const debug = require('./comandos/globales');
 
+//  Son la petición al servidor
 const headers = require('./comandos/cabecera');
 const { response } = require('express');
 // Estas credenciales llevan implicitos el usuario y la contraseña
 // Viene encriptadas en SHA1 de la aplicación cliente
-const administrador = 'admin';
+const administrador = 'admin';  //? Esto aún hace falta?
 let app = express();
 app.set('accesTokenSecret', verificar.llaveSecreta)
 
 //! Configuración de cors
-var corsOptions = {
-    origin: '*',
-    optionsSuccessStatus: 200, // For legacy browser support
-    methods: "POST",
-    content_type: "application/json; charset=utf-8"
+var corsOptions = require("./config/cors.config")
 
-}
+// 
+// var corsOptions = {
+//     origin: '*',
+//     optionsSuccessStatus: 200, // For legacy browser support
+//     methods: "POST",
+//     content_type: "application/json; charset=utf-8"
+
+// }
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
@@ -58,7 +62,6 @@ app.post('/login', (req, res) => {
     verificar.login(req.body).then(response => {
         let bOk = response.bOk === 'true';
         let cod_error = parseInt(response.cod_error);
-
         if (bOk) {
             headers(res).status(200).json(response)
         } else {
@@ -82,7 +85,7 @@ app.post('/login', (req, res) => {
 */
 
 app.post('/crear_empresa', (req, res) => {
-    crear_emp.crear_empresa(req.body).then(response => {
+    crear_emp(req.body).then(response => {
         debug.peticiones(response).catch(err => {
         //  debug.msg(err)
         headers(res).status(500).json(response)
@@ -96,7 +99,7 @@ app.post('/crear_empresa', (req, res) => {
 */
 
 app.post('/crear_usuarios_telemetria', (req, res) => {
-    crear_ute.crear_usuarios_telemetria(req.body).then(response => {
+    crear_ute(req.body).then(response => {
         debug.peticiones(response).catch(err => {
         //  debug.msg(err)
         headers(res).status(500).json(response)
@@ -110,7 +113,7 @@ app.post('/crear_usuarios_telemetria', (req, res) => {
     haremos una petición al servidor el cual se mostrara en un desplegabe de la aplicación.
 */
 app.post('/listado_empresas', (req, res) => {
-    obtener.listado_empresas(req.body).then(response => {
+    obtener(req.body).then(response => {
         let bOk = response[0].bOk === 'true';
         let cod_error = parseInt(response[0].cod_error );
         
@@ -135,7 +138,7 @@ app.post('/listado_empresas', (req, res) => {
 });
 
 app.post('/cerrar_sesion', (req, res) => {
-    cerrar.cerrar_sesion(req.body).then(response => {
+    cerrar(req.body).then(response => {
         //debug.msg(response)
         if (response) {
             headers(res).status(200).json(response)

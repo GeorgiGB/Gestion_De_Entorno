@@ -13,7 +13,7 @@ async function peticiones(response, res){
     let bOk = response[0].bOk === 'true';
     //    Transformamos el bOk a boolean para poder seguir con la petición
     let cod_error = parseInt(response[0].cod_error );
-    //  el cod_error lo transformamos a integer para poder leerlo en la petición
+    //  el cod_error lo transformamos a integer para leerlo en la petición
     
     if (bOk) {
         //  Información enviada con éxito
