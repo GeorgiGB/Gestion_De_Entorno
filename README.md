@@ -8,8 +8,11 @@ Aplicación desarrollada en Flutter con un servidor configurado en Node Js y con
 
 Creación de empresas y usuarios de telemetria.
 
+---
+### Estructura del programa
 ![Jerarquia](https://github.com/GeorgiGB/TFG-DAM/blob/main/PrimeraAplicacion/Base_de_datos/estructura_del_programa.png)
 
+---
 
 TFG DAM 2021-2022
 
