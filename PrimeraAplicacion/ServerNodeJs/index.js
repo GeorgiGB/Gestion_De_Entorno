@@ -139,8 +139,9 @@ app.post('/listado_empresas', (req, res) => {
 
 app.post('/cerrar_sesion', (req, res) => {
     cerrar(req.body).then(response => {
-        //debug.msg(response)
-        if (response) {
+        debug.msg(response)
+        let cod_error = parseInt(response.icoderror );
+        if (cod_error == 0) {
             headers(res).status(200).json(response)
             debug.msg("Token desactivado")
         } else {

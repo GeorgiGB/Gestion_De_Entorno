@@ -48,3 +48,4 @@ ALTER FUNCTION public.cerrar_sesion(character varying)
 --	Función que permitira cambiar el estado de un token
 --	de un usuario principal, si este tiene el token activo
 --	cambiara a inactivo, por lo tanto tendria que iniciar de nuevo sesión
+--  SELECT * FROM cerrar_sesion('{"name_token":"7887186b33749971de515859532def15f4b210eb"}')

@@ -1,4 +1,5 @@
 import 'package:crea_empresa_usario/nuevo_usua.dart';
+import 'package:crea_empresa_usario/servidor/sesion.dart';
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
 import 'nueva_empr.dart';
@@ -24,66 +25,67 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
         title: Text(traducciones.escogeOpcion),
       ),
       body: SingleChildScrollView(
-          //Previene BOTTOM OVERFLOWED
-          padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(height: 30),
-              Row(
-                children: [
-                  Text(
-                    traducciones.anyade,
-                    style: globales.estiloNegrita_16,
-                  ),
-                ],
-              ),
-              SizedBox(height: 15),
-              // Botones Empresa y Usuarios
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ElevatedButton(
-                    child: Text(traducciones.empresa),
-                    onPressed: () {
-                      _cargaOpcion(0);
-                    },
-                  ),
-                  SizedBox(width: 15),
-                  ElevatedButton(
-                    child: Text(traducciones.usuario),
-                    onPressed: () {
-                      _cargaOpcion(1);
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(height: 30),
-              Row(
-                children: [
-                  Text(
-                    traducciones.sesionActiva,
-                    style: globales.estiloNegrita_16,
-                  ),
-                ],
-              ),
-              SizedBox(height: 15),
-              // Botones Empresa y Usuarios
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ElevatedButton(
-                    child: Text(traducciones.empresa),
-                    onPressed: () {
-                      _cerrarSesion();
-                    },
-                  ),
-                ],
-              ),
-            ],
-          )),
+        //Previene BOTTOM OVERFLOWED
+        padding: EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 30),
+            Row(
+              children: [
+                Text(
+                  traducciones.anyade,
+                  style: globales.estiloNegrita_16,
+                ),
+              ],
+            ),
+            SizedBox(height: 15),
+            // Botones Empresa y Usuarios
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ElevatedButton(
+                  child: Text(traducciones.empresa),
+                  onPressed: () {
+                    _cargaOpcion(0);
+                  },
+                ),
+                SizedBox(width: 15),
+                ElevatedButton(
+                  child: Text(traducciones.usuario),
+                  onPressed: () {
+                    _cargaOpcion(1);
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 30),
+            Row(
+              children: [
+                Text(
+                  traducciones.sesionActiva,
+                  style: globales.estiloNegrita_16,
+                ),
+              ],
+            ),
+            SizedBox(height: 15),
+            // Botones Empresa y Usuarios
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ElevatedButton(
+                  child: Text(traducciones.empresa),
+                  onPressed: () {
+                    _cerrarSesion();
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -113,7 +115,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
     }
   }
 
-}
-
-void _cerrarSesion() {
+  void _cerrarSesion() {
+    cerrarSesion(context, token: widget.token);
+  }
 }
