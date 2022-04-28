@@ -62,7 +62,7 @@ $BODY$;
 ALTER FUNCTION public.obten_lista_empresas(jsonb)
     OWNER TO postgres;
 
---  Función que se usara para la hora de la creación de un usuario de telemetria
+--  Función que se usara a la hora de la creación de un usuario de telemetria
 --  se mostrara en forma de lista y para poder acceder a esa lista tendremos
 --  que haber iniciado sesión con un usuario principal que tendra un token
 --  el cual se comprobara que este activo para poder continuar
