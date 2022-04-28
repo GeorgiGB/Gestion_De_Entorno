@@ -1,6 +1,3 @@
--- ejemplo consulta
--- select * from public.login('{"usu_nombre":"Joselito", "usu_pwd":"7887186b33749971de515859532def15f4b210eb"}')
-
 -- FUNCTION: public.login(json)
 
 -- DROP FUNCTION IF EXISTS public.login(jsonb);
@@ -24,7 +21,7 @@ DECLARE
 	iCoderror integer;
 
 BEGIN
-	-- tabla temporal para leer el json enviado por el servidor
+	-- Tabla temporal para leer el json enviado por el servidor
 	CREATE TEMP TABLE IF NOT EXISTS json_data(
 		usu_nombre character varying,
 		usu_pwd character varying
@@ -35,6 +32,7 @@ BEGIN
 	cError := '';
 	iCoderror := 0;
 	
+	--	Seleccionamos la tabla de la cual vamos a modificar y modificamos
 	SELECT usu_cod INTO iUsu_cod
 		FROM usuarios AS u, jsonb_populate_record(null::json_data, jleer) AS j
 		WHERE u.usu_nombre = j.usu_nombre AND u.usu_pwd = j.usu_pwd;
@@ -60,4 +58,8 @@ $BODY$;
 ALTER FUNCTION public.login(jsonb)
     OWNER TO postgres;
 
-select * from public.login('{"usu_nombre": "Joselito", "usu_pwd": "7887186b33749971de515859532def15f4b210eb"}')
+--	select * from public.login('{"usu_nombre": "Joselito", "usu_pwd": "7887186b33749971de515859532def15f4b210eb"}')
+
+--	Esta función se usara para la creación de usuarios principales de la aplicación
+--	los usuarios principales son lo que pueden crear tanto empresas como usuarios de telemetria
+--	a estos usuarios "principales" a la hora de la creación tendran un token asociado que los distingue de los usuarios de telemetria

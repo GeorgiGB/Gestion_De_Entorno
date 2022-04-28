@@ -22,20 +22,20 @@ BEGIN
 	cerror :='';
 	iAleat := 0;
 	
-	-- en ascii primero van los digitos
-	-- luego las mayúsculas 
-	-- y después las minúsculas
-	-- entre medias hay otras caracteres
+	--	En ascii primero van los digitos
+	--	luego las mayúsculas
+	--	y después las minúsculas
+	--	entre medias hay otros caracteres
 	
-	-- de 0 a 9 digitos
-	-- de 10 a 34 alfabeto mayúsculas
-	-- de 35 a 69 alfabeto minúsculas
-	-- iCount := iCount -1 ;
+	--	de 0 a 9 digitos
+	--	de 10 a 34 alfabeto mayúsculas
+	--	de 35 a 69 alfabeto minúsculas
+	--	iCount := iCount -1 ;
 	for ij in 1..iCount
 		LOOP
 		iAleat :=  round(random() * 59) :: integer;
 		
-		-- añadimos el salto
+		--	Añadimos el salto
 		CASE
 			WHEN iAleat >= 35 THEN
 				iAleat :=  iAleat + ascii('a') - 35;
@@ -45,8 +45,8 @@ BEGIN
 				iAleat :=  iAleat + ascii('0');
 		END CASE;
 		
-		-- obtenemos el caracter que representa iAleat
-		-- y lo concatenamos al pwd
+		--	Obtenemos el caracter que representa iAleat
+		--	y lo concatenamos al pwd
 		cpwd := cpwd || chr(iAleat);
 		
 	END LOOP;
@@ -59,3 +59,7 @@ $BODY$;
 
 ALTER FUNCTION public.generador_cadena_aleatoria(integer)
     OWNER TO postgres;
+
+
+--	Función de que permite crear una contraseña automática
+--	para la creación de una empresa o de un usuario de telemetria

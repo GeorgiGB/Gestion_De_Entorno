@@ -56,3 +56,5 @@ ALTER FUNCTION public.validar_token(jsonb)
 	
 -- SELECT * FROM validar_token('{"ust_token":"7887186b33749971de515859532def15f4b210eb"}')
 
+--	Función que se usará como método de seguridad en el que estara constamente
+--	comprobando si es el usuario principal esta activo y tiene permisos
