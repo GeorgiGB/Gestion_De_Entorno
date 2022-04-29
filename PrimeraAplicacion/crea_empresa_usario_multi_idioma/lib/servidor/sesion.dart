@@ -1,4 +1,6 @@
 import 'package:crea_empresa_usario/globales.dart' as globales;
+import 'package:crea_empresa_usario/main.dart';
+import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -6,6 +8,20 @@ import 'dart:convert';
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
+
+// No estoy autenticado me redirige a la pagina Login()
+// y muestra aviso.
+noEstoyAutenticado(BuildContext context) {
+  Future.delayed(Duration(seconds: 0), () {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => Login(),
+        ),
+        (Route<dynamic> route) => false);
+
+    globales.muestraDialogo(context, AppLocalizations.of(context)!.codError401);
+  });
+}
 
 Future<bool> cerrarSesion(BuildContext context, {required String token}) async {
   AppLocalizations traducciones = AppLocalizations.of(context)!;
@@ -35,7 +51,7 @@ Future<bool> cerrarSesion(BuildContext context, {required String token}) async {
     //final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
 
     // status correcto?
-    if (status == 200) {
+    if (status == CodigoResp.r_200) {
       //bool ok = parsed[0]['bOk'].toString().parseBool();
       // hemos añadido la empresa a la BBDD?
       //if (ok) {
@@ -73,10 +89,10 @@ Future<bool> cerrarSesion(BuildContext context, {required String token}) async {
       //}
 
       // Errores posibles
-      //} else if (status == 401) {
+      //} else if (status == CodigoResp.r_401) {
       // TODO redirigir a la pantalla inicial
       //  globales.muestraDialogo(context, traducciones.codError401);
-    } else if (status == 500) {
+    } else if (status == CodigoResp.r_500) {
       //globales.muestraDialogo(context, traducciones.codError500);
       //globales.muestraDialogo(context, response.body);
     } else {

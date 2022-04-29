@@ -1,5 +1,6 @@
 import 'package:crea_empresa_usario/nueva_empr.dart';
 import 'package:crea_empresa_usario/nuevo_usua.dart';
+import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:flutter/material.dart';
 import 'filtros_usuario.dart';
 import 'globales.dart' as globales;
@@ -242,17 +243,17 @@ class _LoginState extends State<Login> {
 
         int status = response.statusCode;
         //Si todo ha salido correcto el programa continuara
-        if (status == 200) {
+        if (status == CodigoResp.r_200) {
           _cargaCreaEmprUsuario(response);
-        } else if (status == 401) {
+        } else if (status == CodigoResp.r_401) {
           // Mostramos Alerta avisando del error
           globales.muestraDialogo(
               context, AppLocalizations.of(context)!.codError401);
-        } else if (status == 404) {
+        } else if (status == CodigoResp.r_404) {
           // Mostramos Alerta avisando del error
           globales.muestraDialogo(
               context, AppLocalizations.of(context)!.codErrorLogin404);
-        } else if (status == 500) {
+        } else if (status == CodigoResp.r_500) {
           // Si no se introduce alguno de los campos saldra un aviso
           globales.muestraDialogo(
               context, AppLocalizations.of(context)!.codError500);

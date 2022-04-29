@@ -1,6 +1,9 @@
 import 'package:crea_empresa_usario/excepciones_personalizadas/excepciones.dart';
+import 'package:crea_empresa_usario/main.dart';
 import 'package:crea_empresa_usario/nueva_empr.dart';
 import 'package:crea_empresa_usario/nuevo_usua.dart';
+import 'package:crea_empresa_usario/servidor/servidor.dart';
+import 'package:crea_empresa_usario/servidor/sesion.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -37,8 +40,10 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
             .onError(
             (error, stackTrace) {
               if (error is ExceptionServidor) {
-                if (error.codError == 401) {
+                if (error.codError == CodigoResp.r_401) {
+                  // No estoy auternticado
                   msgErr = AppLocalizations.of(cntxt)!.codError401;
+                  noEstoyAutenticado(cntxt);
                 } else {
                   msgErr = AppLocalizations.of(cntxt)!
                       .errNoEspecificado(': ' + error.codError.toString());
@@ -54,12 +59,19 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
     builder: (context, datos) {
       if (datos.hasError) {
         // en caso de error
-        if (msgErr.isNotEmpty) {
+        bool autenticado = (datos.error as ExceptionServidor).codError != 401;
+
+        if (autenticado && msgErr.isNotEmpty) {
           // tenemos que darle un retraso ya que mostrar el diálogo
           // mientras se está construyendo provoca un error
           globales.muestraDialogoDespuesDe(context, msgErr, 0);
+
+          // Mostramos mensaje
+          //globales.muestraToast(context, msgOk);
         }
+
         return AvisoAccion(
+          autenticado: autenticado,
           aviso: msgErr.isEmpty
               ? AppLocalizations.of(cntxt)!.esperandoRespuestaServidor
               : msgErr,
@@ -115,11 +127,13 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
 class AvisoAccion extends StatelessWidget {
   AvisoAccion(
       {Key? key,
+      this.autenticado = true,
       required this.aviso, // mensaje de aviso
       required this.msg, // mensaje a mostrar en la acción a realizar
       required this.icon, // icono  a mostrar en la acción a realizar
       this.accion}) // Función que será llamada al pulsar el widget acccion
       : super(key: key);
+  final bool autenticado;
   final String aviso;
   final String msg;
   final Icon icon;
@@ -160,30 +174,31 @@ class AvisoAccion extends StatelessWidget {
 
   List<Widget> getWidgets(BuildContext context) {
     List<Widget> widgets = [];
+    if (autenticado) {
+      // widget atrás en navegación
+      if (Navigator.canPop(context)) {
+        widgets.add(
+          TextButton.icon(
+            label: Text(AppLocalizations.of(context)!.atras),
+            icon: const BackButtonIcon(),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        );
+      }
 
-    // widget atrás en navegación
-    if (Navigator.canPop(context)) {
+      // Widget accion
       widgets.add(
         TextButton.icon(
-          label: Text(AppLocalizations.of(context)!.atras),
-          icon: const BackButtonIcon(),
+          label: Text(msg),
+          icon: icon,
           onPressed: () {
-            Navigator.pop(context);
+            if (accion != null) accion!();
           },
         ),
       );
     }
-
-    // Widget accion
-    widgets.add(
-      TextButton.icon(
-        label: Text(msg),
-        icon: icon,
-        onPressed: () {
-          if (accion != null) accion!();
-        },
-      ),
-    );
 
     return widgets;
   }

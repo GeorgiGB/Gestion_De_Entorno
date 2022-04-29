@@ -1,5 +1,6 @@
 import 'package:crea_empresa_usario/escoge_opciones.dart';
 import 'package:crea_empresa_usario/globales.dart' as globales;
+import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -37,7 +38,7 @@ Future<bool> anyade(BuildContext context, String url,
     final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
 
     // status correcto?
-    if (status == 200) {
+    if (status == CodigoResp.r_200) {
       bool ok = parsed[0]['bOk'].toString().parseBool();
       // hemos añadido la empresa a la BBDD?
       if (ok) {
@@ -74,10 +75,10 @@ Future<bool> anyade(BuildContext context, String url,
       }
 
       // Errores posibles
-    } else if (status == 401) {
+    } else if (status == CodigoResp.r_401) {
       // TODO redirigir a la pantalla inicial
       globales.muestraDialogo(context, traducciones.codError401);
-    } else if (status == 500) {
+    } else if (status == CodigoResp.r_500) {
       globales.muestraDialogo(context, traducciones.codError500);
       //globales.muestraDialogo(context, response.body);
     } else {

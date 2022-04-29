@@ -17,76 +17,105 @@ class EscogeOpciones extends StatefulWidget {
 
 class _EscogeOpcionesState extends State<EscogeOpciones> {
   late AppLocalizations traducciones;
+
+  // Lista de comandos
+  List<List<Widget>> comandos = [[]];
   @override
   Widget build(BuildContext context) {
     traducciones = AppLocalizations.of(context)!;
+
+    comandos.clear();
+    creaComandos();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(traducciones.escogeOpcion),
       ),
-      body: SingleChildScrollView(
-        //Previene BOTTOM OVERFLOWED
-        padding: EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(height: 30),
-            Row(
-              children: [
-                Text(
-                  traducciones.anyade,
-                  style: globales.estiloNegrita_16,
-                ),
-              ],
-            ),
-            SizedBox(height: 15),
-            // Botones Empresa y Usuarios
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ElevatedButton(
-                  child: Text(traducciones.empresa),
-                  onPressed: () {
-                    _cargaOpcion(0);
-                  },
-                ),
-                SizedBox(width: 15),
-                ElevatedButton(
-                  child: Text(traducciones.usuario),
-                  onPressed: () {
-                    _cargaOpcion(1);
-                  },
-                ),
-              ],
-            ),
-            SizedBox(height: 30),
-            Row(
-              children: [
-                Text(
-                  traducciones.sesionActiva,
-                  style: globales.estiloNegrita_16,
-                ),
-              ],
-            ),
-            SizedBox(height: 15),
-            // Botones Empresa y Usuarios
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ElevatedButton(
-                  child: Text(traducciones.empresa),
-                  onPressed: () {
-                    _cerrarSesion();
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
+      body: ListView.builder(
+        // Cosntruimos la lista de widgets dinámicamente
+        // Aquí viene los diferetes botones de comandos
+        padding: EdgeInsets.only(top: 5),
+        itemCount: comandos.length,
+        itemBuilder: (context, index) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              //SizedBox(height: 20),
+              Column(children: comandos[index]),
+              //Divider(),
+            ],
+          );
+        },
       ),
     );
+  }
+
+  creaComandos() {
+// Añadimos los comandos de añadir empresa / usuario
+    creaComando2(
+      traducciones.anyade,
+      [
+        ElevatedButton(
+          child: Text(traducciones.empresa),
+          onPressed: () {
+            // Acción a realizar
+            _cargaOpcion(0);
+          },
+        ),
+        ElevatedButton(
+          child: Text(traducciones.usuario),
+          onPressed: () {
+            // Acción a realizar
+            _cargaOpcion(1);
+          },
+        ),
+      ],
+    );
+
+    // Añadimos los comandos de añadir empresa / usuario
+    creaComando2(
+      traducciones.sesionActiva,
+      [
+        ElevatedButton(
+          child: Text(traducciones.cerrarSesion),
+          onPressed: () {
+            _cerrarSesion();
+          },
+        ),
+      ],
+    );
+  }
+
+  // Crea un Widget de comandos con titulos a partir de una lista
+  // de botones que continene su comando
+  creaComando2(String titulo, List<Widget> lista) {
+    comandos.add([
+      Card(
+        margin: EdgeInsets.all(10.0),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(10, 10, 10, 15),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    titulo,
+                    style: globales.estiloNegrita_16,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              // Botones Empresa y Usuarios
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Wrap(spacing: 15, children: lista),
+              )
+            ],
+          ),
+        ),
+      )
+    ]);
   }
 
   // Al pulsar en un botón lo que hará es mostrar el formulario que hayamos seleccionado
@@ -116,6 +145,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
   }
 
   void _cerrarSesion() {
+    globales.muestraToast(context, traducciones.cerrandoSesion);
     cerrarSesion(context, token: widget.token);
   }
 }

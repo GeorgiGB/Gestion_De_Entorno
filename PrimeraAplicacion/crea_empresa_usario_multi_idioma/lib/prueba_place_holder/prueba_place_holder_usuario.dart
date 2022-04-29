@@ -1,3 +1,5 @@
+import 'package:crea_empresa_usario/servidor/servidor.dart';
+
 import '../globales.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -12,7 +14,7 @@ Future<void> obtenerCodigoPlaceHolder() async {
 
   // En la resolución del Future tendremos el resultado de la petición
 
-  if (response.statusCode == 200) {
+  if (response.statusCode == CodigoResp.r_200) {
     // La petición tiene éxito. Obtenemos los resultados
     // a partir de la lista de elementos contenida en el body
     //Map codigosJson = json.decode(response.body);
@@ -49,7 +51,7 @@ Future<void> placeHolderObtenerCodigoUsers() async {
 
   // En la resolución del Future tendremos el resultado de la petición
 
-  if (response.statusCode == 200) {
+  if (response.statusCode == CodigoResp.r_200) {
     // La petición tiene éxito. Obtenemos los resultados
     // a partir de la lista de elementos contenida en el body
     //Map codigosJson = json.decode(response.body);

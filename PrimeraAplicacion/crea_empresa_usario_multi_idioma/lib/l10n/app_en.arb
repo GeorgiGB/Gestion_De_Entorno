@@ -16,6 +16,8 @@
     "cargandoUsuario": "Loading User",
     "centro": "Centre",
     "centroPadre": "Parent centre",
+    "cerrandoSesion":"Logging out",
+    "cerrarSesion":"Log out",
     "comprobandoDatos": "Checking data",
     "contrasena": "Password",
     "contrasenaAutogenerada": "Auto-generated password",
