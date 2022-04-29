@@ -92,9 +92,7 @@ class _MyAppState extends State<MyApp> {
 
       //home: Login(),
 
-      home: EscogeOpciones(
-          token:
-              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NTEwNzA5MzJ9.mVW-YnXFcnUFxoL1xY3AZgkuZDikktyfKqPHpTTqVCo'),
+      home: EscogeOpciones(token: 'a'),
 
 /*
       home: NuevaEmpresa(
