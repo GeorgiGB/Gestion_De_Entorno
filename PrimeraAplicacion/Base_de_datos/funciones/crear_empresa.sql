@@ -27,18 +27,18 @@ BEGIN
 	SELECT t.bOk INTO bOk
 		FROM public.validar_token(jleer::jsonb) t;
 	
-	IF (bOk) THEN
+	IF bOk THEN
 		-- Tabla temporal
 		CREATE TEMP TABLE IF NOT EXISTS emp_json(
-			emp_nombre character varying,
-			emp_pwd character varying,
+			nombre character varying,
+			pwd character varying,
 			auto_pwd boolean,
-			ust_token character varying
+			ctoken character varying
 		);
 		
 		--LA CREACION DE LA EMPRESA
 		INSERT INTO empresas (emp_nombre)
-			SELECT j.emp_nombre
+			SELECT j.nombre
 				FROM jsonb_populate_record(null::emp_json, jleer) j
 				RETURNING emp_cod into iemp_cod;
 			
@@ -54,9 +54,9 @@ BEGIN
 					-- contraseña autogenerada
 					(CASE WHEN j.auto_pwd THEN
 					 	(SELECT cpwd FROM public.generador_cadena_aleatoria(16))
-					 		ELSE j.emp_pwd END),
+					 		ELSE j.pwd END),
 					
-					-- código ermpresa
+					-- código empresa
 					iemp_cod
 				FROM jsonb_populate_record(null::emp_json, jleer) j;
 				
@@ -85,7 +85,7 @@ BEGIN
 			WHEN SQLSTATE = '23505' THEN
 				icod_error := -2;
 			ELSE
-				icod_error := -1;		
+				icod_error := -1;
 		END CASE;
 
 		SELECT ('{"bOk":"' || false || '", "cod_error":"' || icod_error || '", "msg_error":"' || cError || '"}')::jsonb
@@ -102,3 +102,4 @@ ALTER FUNCTION public.crear_empresa(jsonb)
 --	crear a un nuevo usuario de telemetria
 --	la relación entre empresas y usuarios de telemetria es
 --	que cada empresa ha de tener mínimo un usuario de telemetria
+--	select * from crear_empresa('{"nombre":"pruebaempresaaa","pwd":"12333","auto_pwd":"false","ctoken":"a"}')
