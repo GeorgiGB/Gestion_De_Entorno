@@ -153,13 +153,13 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
       } else {
         esperandoFiltrado = true;
         String json = jsonEncode(<String, String>{
-          'ust_token': widget.token,
-          'ute_emp_cod': widget.emp_cod.toString(),
-          'ute_nombre': widget.nombre,
-          'ute_pwd': widget.ute_pwd,
+          'ctoken': widget.token,
+          'emp_cod': widget.emp_cod.toString(),
+          'nombre': widget.nombre,
+          'pwd': widget.ute_pwd,
           'auto_pwd': widget.auto_pwd.toString(),
-          'ute_filtro': filtroActivo!.filtro_bbdd,
-          'ute_cod_filtro': _codigo_filtro.text
+          'filtro': filtroActivo!.filtro_bbdd,
+          'cod_filtro': _codigo_filtro.text
         });
 
         // Enviamos al servidor

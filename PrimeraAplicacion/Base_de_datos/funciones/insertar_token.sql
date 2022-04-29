@@ -17,16 +17,17 @@ DECLARE
 	iCoderror integer;
 	
 BEGIN
-	--	Creación de una tabla temporal para manipular los datos
-	CREATE TEMP TABLE IF NOT EXISTS json_insert_token(
-		token character varying,
-		cod integer
-	);
 
 	--	Inicialización de las variables
 	bOk := false;
 	cToken := '';
 	iCoderror := 0;
+	
+	--	Creación de una tabla temporal para manipular los datos
+	CREATE TEMP TABLE IF NOT EXISTS json_insert_token(
+		name_token character varying,
+		cod integer
+	);
 	
 		--	Primero miramos si el usuario tiene un token activo
 		SELECT ust_token INTO cToken
@@ -37,11 +38,11 @@ BEGIN
 			
 		IF FOUND THEN
 			--	Si existe el token activo
-			bok := true;
+			bOk := true;
 		ELSE
 			--	Si encuentra el registro entonces insertaremos el token a su respectiva tabla
 			INSERT INTO usuarios_token (ust_usuario, ust_token, ust_activo)
-				SELECT rg.cod, rg.token, 'true'
+				SELECT rg.cod, rg.name_token, 'true'
 				FROM jsonb_populate_record(null::json_insert_token, jleer) as rg
 				RETURNING ust_token INTO cToken;
 

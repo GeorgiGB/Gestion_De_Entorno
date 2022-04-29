@@ -233,8 +233,8 @@ class _LoginState extends State<Login> {
           },
           // Adjuntamos al body los datos en formato JSON
           body: jsonEncode(<String, String>{
-            'usu_nombre': nombre,
-            'usu_pwd': contra_encrypted
+            'nombre': nombre,
+            'pwd': contra_encrypted
           }),
         );
 

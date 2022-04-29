@@ -17,16 +17,17 @@ DECLARE
 	iCoderror integer;
 
 BEGIN
-	-- Tabla temporal para leer el json enviado por el servidor
-	CREATE TEMP TABLE IF NOT EXISTS json_data(
-		nombre character varying,
-		pwd character varying
-	);
 	
 	bOk := false;
 	iUsu_cod := -1;
 	cError := '';
 	iCoderror := 0;
+	
+	-- Tabla temporal para leer el json enviado por el servidor
+	CREATE TEMP TABLE IF NOT EXISTS json_data(
+		nombre character varying,
+		pwd character varying
+	);
 	
 	--	Seleccionamos la tabla de la cual vamos a modificar y modificamos
 	SELECT usu_cod INTO iUsu_cod

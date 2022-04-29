@@ -173,9 +173,9 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
     hemos introducido una contraseña. Y al revés, si hemos introducido un nombre 
     y hemos marcado el botón de autogenerado.
     */
-        // La informacion de la empresa
-        String nom_empresa = _emp_nombre.text;
-        String emp_pwd = _emp_pwd.text;
+      // La informacion de la empresa
+      String nom_empresa = _emp_nombre.text;
+      String emp_pwd = _emp_pwd.text;
 
       if (nom_empresa.isEmpty || !_emp_pwd_auto && emp_pwd.isEmpty) {
         // No tiene datos Mostramos avisos
@@ -183,10 +183,10 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
       } else {
         esperandoNuevaEmpresa = true;
         String json = jsonEncode(<String, String>{
-          'emp_nombre': nom_empresa,
+          'nombre': nom_empresa,
+          'pwd': emp_pwd,
           'auto_pwd': _emp_pwd_auto.toString(),
-          'emp_pwd': emp_pwd,
-          'ust_token': widget.token
+          'ctoken': widget.token
         });
 
         //Enviamos al servidor
