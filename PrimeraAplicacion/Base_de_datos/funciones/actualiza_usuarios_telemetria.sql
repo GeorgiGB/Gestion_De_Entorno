@@ -13,10 +13,9 @@ AS $BODY$
 	-- Declaramos variables y las inicializamos
     DECLARE
         bOk boolean;
-        iemp_cod integer;
         icod_error integer;
         cError character varying;
-
+		iemp_cod integer;
     BEGIN
         bOk := false;
         icod_error := 0;
@@ -30,20 +29,20 @@ AS $BODY$
         IF bOk THEN
 			--	Tabla temporal para recoger los valores del JSON jleer
 			CREATE TEMP TABLE IF NOT EXISTS json_update_usuarios_telemetria(
-				ust_token character varying,
-				ute_emp_cod integer,
-				ute_nombre character varying,
-				ute_nuevo_nombre character varying, -- Si está presente se cambiara el nombre por el nuevo nombre
-				ute_pwd character varying, 
+				ctoken character varying,
+				emp_cod integer,
+				nombre character varying,
+				nuevo_nombre character varying, -- Si está presente se cambiara el nombre por el nuevo nombre
+				pwd character varying, 
 				auto_pwd boolean, --	Indica si la contraseña se autogenerará
-				ute_filtro character varying, --	Nombre del campo de filtro donde se insertará
-				ute_cod_filtro integer --	El código de filtro se asociara con el nombre del filtro
+				filtro character varying, --	Nombre del campo de filtro donde se insertará
+				cod_filtro integer --	El código de filtro se asociara con el nombre del filtro
 			);
             
             --	Realizamos el UPDATE en usuarios_telemetria desde los valores de la tabla del JSON jleer
 			--	de forma que si algún campo de los que se encuentra
-			--	en el CASE WHEN coincide con el fitro contenido en j.ute_filtro
-            --	se le assignará el valor contenido en j.ute_cod_filtro
+			--	en el CASE WHEN coincide con el fitro contenido en j.filtro
+            --	se le assignará el valor contenido en j.cod_filtro
 			UPDATE usuarios_telemetria
 				SET (ute_nombre, ute_pwd,
 					 ute_centro_padre, ute_centro, ute_pdv,
@@ -52,41 +51,41 @@ AS $BODY$
 				 =
 				(	
 					--	Cambiamos el nombre?
-					(CASE WHEN j.ute_nuevo_nombre IS NULL THEN
+					(CASE WHEN j.nuevo_nombre IS NULL THEN
 					 	usuarios_telemetria.ute_nombre
 					ELSE 
-						j.ute_nuevo_nombre
+						j.nuevo_nombre
 					END),
 					
 					--	Actualizamos la contraseña?
-					(CASE WHEN j.ute_pwd IS NULL THEN
+					(CASE WHEN j.pwd IS NULL THEN
 					 	usuarios_telemetria.ute_pwd
 					ELSE  
 						--	Es autogenerada?
 						CASE WHEN j.auto_pwd THEN
 					 		(SELECT cpwd FROM public.generador_cadena_aleatoria(16))
-					 	ELSE j.ute_pwd END
+					 	ELSE j.pwd END
 					END),
 							
-					--	A partir de aquí se actualizará el valor de j.ute_cod_filtro
-					--	en el campo que en el CASE coincida con j.ute_filtro
-					(CASE WHEN 'ute_centro_padre' = j.ute_filtro THEN
-						j.ute_cod_filtro ELSE usuarios_telemetria.ute_centro_padre END),
-					(CASE WHEN 'ute_centro' = j.ute_filtro THEN
-						j.ute_cod_filtro ELSE usuarios_telemetria.ute_centro END),
-					(CASE WHEN 'ute_pdv' = j.ute_filtro THEN
-						j.ute_cod_filtro ELSE usuarios_telemetria.ute_pdv END),
-					(CASE WHEN 'ute_jefe_area' = j.ute_filtro THEN
-						j.ute_cod_filtro ELSE usuarios_telemetria.ute_jefe_area END),
-					(CASE WHEN 'ute_ruta' = j.ute_filtro THEN
-						j.ute_cod_filtro ELSE usuarios_telemetria.ute_ruta END),
-					(CASE WHEN 'ute_empresa' = j.ute_filtro THEN
-						j.ute_cod_filtro ELSE usuarios_telemetria.ute_empresa END)
+					--	A partir de aquí se actualizará el valor de j.cod_filtro
+					--	en el campo que en el CASE coincida con j.filtro
+					(CASE WHEN 'ute_centro_padre' = j.filtro THEN
+						j.cod_filtro ELSE usuarios_telemetria.ute_centro_padre END),
+					(CASE WHEN 'ute_centro' = j.filtro THEN
+						j.cod_filtro ELSE usuarios_telemetria.ute_centro END),
+					(CASE WHEN 'ute_pdv' = j.filtro THEN
+						j.cod_filtro ELSE usuarios_telemetria.ute_pdv END),
+					(CASE WHEN 'ute_jefe_area' = j.filtro THEN
+						j.cod_filtro ELSE usuarios_telemetria.ute_jefe_area END),
+					(CASE WHEN 'ute_ruta' = j.filtro THEN
+						j.cod_filtro ELSE usuarios_telemetria.ute_ruta END),
+					(CASE WHEN 'ute_empresa' = j.filtro THEN
+						j.cod_filtro ELSE usuarios_telemetria.ute_empresa END)
 				 )
 				--	Obtenemos los valores de la tabla del JSON jleer
 				FROM jsonb_populate_record(null::json_update_usuarios_telemetria, jleer) j
-					WHERE usuarios_telemetria.ute_emp_cod = j.ute_emp_cod
-					 AND usuarios_telemetria.ute_nombre = j.ute_nombre;
+					WHERE usuarios_telemetria.ute_emp_cod = j.emp_cod
+					 AND usuarios_telemetria.ute_nombre = j.nombre;
 			
 			--	Usuario actualizado?
 			IF FOUND THEN
@@ -94,7 +93,7 @@ AS $BODY$
 			END IF;
 			
 		ELSE
-			--	Token no válido, usuario no validado.
+			--	token no válido, usuario no validado.
 			SELECT ('{"cod_error":"401"}')::jsonb || jresultado ::jsonb into jresultado;
         END IF;
 		
@@ -114,9 +113,9 @@ ALTER FUNCTION public.actualiza_usuarios_telemetria(jsonb)
     OWNER TO postgres;
 
 
--- Para hacer un insert hay que poner un ute_emp_cod que exista en la tabla empresas
--- Para que funcione hay que poner un ute_emp_cod y un ute_nombre que existan en la tabla usuarios_telemetria
--- select * from actualiza_usuarios_telemetria('{"ute_emp_cod": "60", "ust_token": "7887186b33749971de515859532def15f4b210eb", "ute_nombre": "Jo5sssssssss", "ute_nuevo_nombre": "Joana", "ute_pwd": "490", "auto_pw": "true", "ute_filtro": "ute_pdv", "ute_cod_filtro": "35"}');
+-- Para hacer un insert hay que poner un emp_cod que exista en la tabla empresas
+-- Para que funcione hay que poner un emp_cod y un nombre que existan en la tabla usuarios_telemetria
+-- select * from actualiza_usuarios_telemetria('{"emp_cod": "69", "ctoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjkyOTIyMzBiMzcwZjRjNzkzYzM0MzM1ODk5ZWRlYTAxNzYwNGYwZDIiLCJpYXQiOjE2NDkzNDU0MTN9.3_yp3tm7KVnt_m5K_KjPpEzYXPbaN73X9zp_xedSyjo", "nombre": "oooo", "nuevo_nombre": "ActualizaNombre", "pwd": "1234555", "auto_pwd": "false", "filtro": "ute_pdv", "cod_filtro": "36"}');
 -- select * from usuarios_telemetria
 
 --	Función que permitira modificar a un usuario existente de telemetria

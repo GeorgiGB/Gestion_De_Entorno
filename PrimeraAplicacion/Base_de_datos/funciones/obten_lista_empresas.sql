@@ -31,7 +31,7 @@ BEGIN
 		--  Tabla temporal para leer el json enviado por el servidor
 		CREATE TEMP TABLE IF NOT EXISTS json_empr_data(
 			emp_busca character varying,
-			ust_token character varying
+			ctoken character varying
 		);
 		
 		--  Obtenemos los valores del JSON enviados por el servidor

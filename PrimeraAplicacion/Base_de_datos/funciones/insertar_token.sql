@@ -20,7 +20,7 @@ BEGIN
 	--	Creación de una tabla temporal para manipular los datos
 	CREATE TEMP TABLE IF NOT EXISTS json_insert_token(
 		token character varying,
-		usu_cod integer
+		cod integer
 	);
 
 	--	Inicialización de las variables
@@ -32,7 +32,7 @@ BEGIN
 		SELECT ust_token INTO cToken
 			FROM usuarios_token,
 			jsonb_populate_record(null::json_insert_token, jleer) as rg
-			WHERE ust_usuario = rg.usu_cod
+			WHERE ust_usuario = rg.cod
 			AND ust_activo LIMIT 1;
 			
 		IF FOUND THEN
@@ -41,7 +41,7 @@ BEGIN
 		ELSE
 			--	Si encuentra el registro entonces insertaremos el token a su respectiva tabla
 			INSERT INTO usuarios_token (ust_usuario, ust_token, ust_activo)
-				SELECT rg.usu_cod, rg.token, 'true'
+				SELECT rg.cod, rg.token, 'true'
 				FROM jsonb_populate_record(null::json_insert_token, jleer) as rg
 				RETURNING ust_token INTO cToken;
 

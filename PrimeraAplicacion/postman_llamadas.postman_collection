@@ -1,0 +1,266 @@
+{
+	"info": {
+		"_postman_id": "678c626b-d9b5-4c40-8000-c74a13a94f35",
+		"name": "AplicacionFlutter",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"usu_nombre\" : \"Joselito\",\r\n    \"usu_pwd\" : \"7887186b33749971de515859532def15f4b210eb\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"usu_nombre\" : \"Joselito\",\r\n    \"usu_pwd\" : \"7887186b33749971de515859532def15f4b210eb\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Crear Empresa",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\": \"pruebaempresaotrotoken\",\r\n    \"pwd\": \"\",\r\n    \"auto_pwd\": \"true\",\r\n    \"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImM4YTM5ZTIxZGU5NzcyOWEyYzgwNmJjNjU5NjhmMmI0ZmRlM2Q3OTgiLCJpYXQiOjE2NDkzNDAzNDV9.roHdoMAuRm5RMZq682VelqB6v8UaVIc4zQjbHko7xm8\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/crear_empresa",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"crear_empresa"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Crear Empresa",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"emp_nombre\": \"empresajsonautopwd\",\r\n    \"emp_pwd\": \"\",\r\n    \"auto_pwd\": \"true\",\r\n    \"ust_token\":\"a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/crear_empresa",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crear_empresa"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Crear Usuario Telemetria",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ust_token\":\"a\",\r\n    \"ute_emp_cod\":\"61\",\r\n    \"ute_nombre\": \"uterutapwdauto1\",\r\n    \"ute_pwd\": \"\",\r\n    \"auto_pwd\": \"true\",\r\n    \"ute_filtro\":\"ute_ruta\",\r\n    \"ute_cod_filtro\":\"23\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/crear_usuarios_telemetria",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"crear_usuarios_telemetria"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Crear Usuario Telemetria",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ust_token\":\"a\",\r\n    \"ute_emp_cod\":\"61\",\r\n    \"ute_nombre\": \"uterutapwdauto1\",\r\n    \"ute_pwd\": \"\",\r\n    \"auto_pwd\": \"true\",\r\n    \"ute_filtro\":\"ute_ruta\",\r\n    \"ute_cod_filtro\":\"23\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/crear_usuarios_telemetria",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crear_usuarios_telemetria"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Cerrar Sesion",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name_token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjkyOTIyMzBiMzcwZjRjNzkzYzM0MzM1ODk5ZWRlYTAxNzYwNGYwZDIiLCJpYXQiOjE2NDkzNDEyNTh9.eFGIk30xcLcyXLm4rxR1nOnwy1H-lNMNqsGYhxBWL_Q\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/cerrar_sesion",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cerrar_sesion"
+					]
+				},
+				"description": "### Cuerpo para cerrar sesión\r\n\r\nPost que permite cambiar el estado del token a false"
+			},
+			"response": [
+				{
+					"name": "Cerrar Sesion",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ust_token\":\"a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/cerrar_sesion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cerrar_sesion"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		}
+	]
+}

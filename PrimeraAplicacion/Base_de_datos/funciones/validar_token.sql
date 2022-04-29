@@ -13,28 +13,26 @@ CREATE OR REPLACE FUNCTION public.validar_token(
 AS $BODY$
 DECLARE
 	rRegistro record;
-	
-	
 	iUsu_cod integer;
-	cError character varying;
+	cerror character varying;
 	iCoderror integer;
 BEGIN
 	-- Inicializamos los parametros
 	
 	bok := false;
 	iUsu_cod := -1;
-	cerror := '';
+	cError := '';
 	iCoderror := 0;
 	
 	--	Creacion de una tabla temporal para manipular los datos en ella
 	CREATE TEMP TABLE IF NOT EXISTS json_validar_token(
-		ust_token character varying
+		ctoken character varying
 	);
 
 		
 	SELECT ut.ust_activo into bok FROM usuarios_token ut, -- tabla 1
 		 jsonb_populate_record(null::json_validar_token, jleer) t2 -- tabla 2 temporal
-			 WHERE ut.ust_token = t2.ust_token AND ut.ust_activo;
+			 WHERE ut.ust_token = t2.ctoken AND ut.ust_activo;
 	
 	IF NOT FOUND THEN
 		bok := false;
@@ -42,7 +40,7 @@ BEGIN
 		UPDATE usuarios_token ut
 			SET ust_usos = ust_usos + 1
 				FROM jsonb_populate_record(null::json_validar_token, jleer) t2
-					WHERE ut.ust_token = t2.ust_token;
+					WHERE ut.ust_token = t2.ctoken;
 	END IF;
 	
 	EXCEPTION WHEN OTHERS THEN
@@ -54,7 +52,7 @@ $BODY$;
 ALTER FUNCTION public.validar_token(jsonb)
     OWNER TO postgres;
 	
--- SELECT * FROM validar_token('{"ust_token":"7887186b33749971de515859532def15f4b210eb"}')
+-- SELECT * FROM validar_token('{"ctoken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjkyOTIyMzBiMzcwZjRjNzkzYzM0MzM1ODk5ZWRlYTAxNzYwNGYwZDIiLCJpYXQiOjE2NDkzNDU0MTN9.3_yp3tm7KVnt_m5K_KjPpEzYXPbaN73X9zp_xedSyjo"}')
 
 --	Función que se usará como método de seguridad en el que estara constamente
 --	comprobando si es el usuario principal esta activo y tiene permisos
