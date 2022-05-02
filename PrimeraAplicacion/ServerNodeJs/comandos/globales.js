@@ -10,11 +10,12 @@ function msg(message){
 
 //  Función asincrona que permite la petición a la base de datos con la información solicitada
 async function peticiones(response, res){
-    let bOk = response[0].bOk === 'true';
+    //let bOk = response[0].bOk === 'true';
     //    Transformamos el bOk a boolean para poder seguir con la petición
     
     //if (bOk) {
         //  Información enviada con éxito
+        msg(response)
         header(res).status(parseInt(response[0].status)).json(response)
     /*} else {
         let cod_error = parseInt(response[0].cod_error );

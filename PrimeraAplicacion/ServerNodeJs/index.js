@@ -114,43 +114,18 @@ app.post('/crear_usuarios_telemetria', (req, res) => {
 */
 app.post('/listado_empresas', (req, res) => {
     obtener(req.body).then(response => {
-        let bOk = response[0].bOk === 'true';
-        globales.msg(response);
-        if (bOk) {
-            headers(res).status(200).json(response)
-        } else {
-        let cod_error = parseInt(response[0].cod_error );
-            switch(cod_error){
-                case 401:
-                    // Usuario no autorizado
-                    headers(res).status(401).json(response);
-                    break;
-                default:
-                    // Otros errores
-                    headers(res).status(500).json(response);
-                    break;
-            }
-
-        }
-    }).catch(err => {
-        headers(res).status(500).json(response);
+        globales.peticiones(response, res)
     })
 });
 
+/*
+        -------------------------Cerrar Sesion de Usuario-------------------------
+    Cada usuario principal tiene un token asociado el cual solo se usara una vez,
+    durante la sesión iniciada ese token estara activo. Hasta que el usuario decida salir de la aplicación,
+    el cual cambiara al estado de 'false' y no se volvera a utilizar.
+*/
 app.post('/cerrar_sesion', (req, res) => {
     cerrar(req.body).then(response => {
-        globales.msg(response)
-        let cod_error = parseInt(response.icoderror );
-        if (cod_error == 0) {
-            headers(res).status(200).json(response)
-            globales.msg("Token desactivado")
-        } else {
-            if (response < 0) {
-                headers(res).status(500).json(response);
-        }
-    }
-    }).catch(err => {
-        globales.msg(err)
-        headers(res).status(500).json(response);
+        globales.peticiones(response, res)
     })
 });
