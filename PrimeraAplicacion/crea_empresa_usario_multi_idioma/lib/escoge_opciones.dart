@@ -1,5 +1,6 @@
+import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/nuevo_usua.dart';
-import 'package:crea_empresa_usario/servidor/sesion.dart';
+import 'package:crea_empresa_usario/servidor/servidor.dart' as Servidor;
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
@@ -145,8 +146,15 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
     }
   }
 
+  bool cerrandoSesion = false;
   void _cerrarSesion() {
-    EnCualquierLugar().muestraSnack(context, traducciones.cerrandoSesion);
-    cerrarSesion(context, token: widget.token);
+    if (cerrandoSesion) {
+      EnCualquierLugar()
+          .muestraSnack(context, traducciones.esperandoRespuestaServidor);
+    } else {
+      cerrandoSesion = true;
+      Servidor.cerrarSesion(context, token: widget.token)
+          .whenComplete(() => aLogin(context));
+    }
   }
 }

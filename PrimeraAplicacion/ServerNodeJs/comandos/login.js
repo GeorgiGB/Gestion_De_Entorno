@@ -11,7 +11,7 @@ async function login(json_login){
             Petición del servidor
             Verificar si el usuario existe y proseguir con la operación
         */
-       try{
+       
        let reslogin = await conexion.query("SELECT * FROM login('"+JSON.stringify(json_login)+"')");
        //   Resultado de la operación
         let fila0 = reslogin.rows[0].jresultado;
@@ -28,10 +28,6 @@ async function login(json_login){
             fila = fila0
         }
         return fila;
-    }catch(e){
-        errr = '[{"bOk":"'+ bOk
-        ||'", "cod_error":"'|| iCoderror 
-        ||'", "msg_error":"'|| SQLERRM ||'"}]';
     }
 
 // Función de generación de tokens

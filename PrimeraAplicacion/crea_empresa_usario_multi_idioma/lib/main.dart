@@ -1,19 +1,12 @@
-import 'package:crea_empresa_usario/nueva_empr.dart';
-import 'package:crea_empresa_usario/nuevo_usua.dart';
-import 'package:crea_empresa_usario/servidor/servidor.dart';
+import 'package:crea_empresa_usario/navegacion/navega.dart';
+import 'package:crea_empresa_usario/servidor/servidor.dart' as Servidor;
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
-import 'filtros_usuario.dart';
 import 'globales.dart' as globales;
-import 'escoge_opciones.dart';
 
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:crypto/crypto.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 // Imports multi-idioma ---------------------
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Constantes donde se guarda el idoma escogido y desde donde actualizamos
 // la configuración de la aplicación
@@ -84,7 +77,7 @@ class _MyAppState extends State<MyApp> {
       // Si queremos que el título de la aplicación realice el cambio
       // de idioma, la aplicación del nombre la debemos realizar
       // en este momento ya que si lo hacemos a traves de
-      // title: AppLocalizations.of(context)!.appName,
+      // title:traducciones.appName,
       // genera un error porque el objeto AppLocalizations devuelto es nulo
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context)!.nombreApp,
@@ -92,17 +85,17 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
 
-      // home: Login(),
+      home: Login(),
 
       //home: EscogeOpciones(token: 'a'),
 
 /*
       home: NuevaEmpresa(token: 'k'),
 */
-      /**/
-      home: const NuevoUsuario(token: "k"),
-      /**/
       /*
+      home: const NuevoUsuario(token: "k"),
+      /*
+      */
       home: const FiltrosUsuario(
           token:
               "k",
@@ -124,6 +117,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  late AppLocalizations traducciones;
+
   // Creamos el controlador campo de usuario
   final TextEditingController _usuario = TextEditingController();
 
@@ -138,6 +133,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    traducciones = AppLocalizations.of(context)!;
     // TODO poner información en blanco
     // informacion predeterminada que luego se borrara mas adelante
     _usuario.text = "Joselito";
@@ -152,27 +148,29 @@ class _LoginState extends State<Login> {
           actions: [
             op_leng.LanguageDropDown().getDropDown(context),
           ]),
-      body: Center(
-        // Centramos contenido
+      body: SingleChildScrollView(
+        //Previene BOTTOM OVERFLOWED
+        padding: EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(AppLocalizations.of(context)!.usuario),
             TextFormField(
               decoration: InputDecoration(
-                hintText: AppLocalizations.of(context)!.hintTuNombre,
-              ),
+                  hintText: traducciones.hintTuNombre,
+                  labelText: AppLocalizations.of(context)!.usuario),
               controller: _usuario,
               onFieldSubmitted: (String value) {
                 // Al pulsar enter ponemos el foco en el campo contraseña
                 FocusScope.of(context).requestFocus(_contrasenaFocus);
               },
             ),
-            Text(AppLocalizations.of(context)!.contrasena),
+            SizedBox(height: 30),
 
             TextFormField(
               decoration: InputDecoration(
-                  hintText: AppLocalizations.of(context)!.hintContrasena),
+                  hintText: traducciones.hintContrasena,
+                  labelText: AppLocalizations.of(context)!.contrasena),
               controller: _pwd,
               obscureText: true,
               enableSuggestions: false,
@@ -183,6 +181,7 @@ class _LoginState extends State<Login> {
                 _login();
               },
             ),
+            SizedBox(height: 30),
             // Botón para realizar el login
             ElevatedButton(
               child: Text(AppLocalizations.of(context)!.acceso),
@@ -198,93 +197,37 @@ class _LoginState extends State<Login> {
 
   Future<void> _login() async {
     if (esperandoLogin) {
-      EnCualquierLugar().muestraSnack(
-          context, AppLocalizations.of(context)!.esperandoAlServidor);
+      EnCualquierLugar()
+          .muestraSnack(context, traducciones.esperandoAlServidor);
     } else {
       //  TO-DO objeto que mire el tiempo de carga del sistema
       //  Interrumpe toast si el tiempo de espera es mayor a 0.5s el programa mostrara por pantalla cargando
       //  globales.muestraToast(context, "Cargando...");
-      esperandoLogin = true;
-      // URL del servidor
-      String url = globales.servidor + '/login';
 
       // Obtenemos usuario y la contraseña introducidas
       String nombre = _usuario.text;
       // Contraseña
       String pwd = _pwd.text;
 
-      // Encriptamos el usuario y la contraseña juntos si los dos campos estan rellenados
-      // TODO AVISAR de campos vacios
-      String contra_encrypted = '';
-      if (pwd.isNotEmpty && nombre.isNotEmpty) {
-        contra_encrypted = sha1.convert(utf8.encode(pwd + nombre)).toString();
-      }
-      globales.debug(contra_encrypted);
-      try {
-        // Lanzamos la petición Post al servidor con la URL
-        // El resultado será un Future y esperamos la respuesta
-        var response = await http.post(
-          Uri.parse(url),
-          // Cabecera para enviar JSON
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          // Adjuntamos al body los datos en formato JSON
-          body: jsonEncode(
-              <String, String>{'nombre': nombre, 'pwd': contra_encrypted}),
-        );
+      if (nombre.isEmpty || pwd.isEmpty) {
+        // No tiene datos Mostramos avisos
+        globales.muestraDialogo(context, traducciones.primerRellenaCampos);
+      } else {
+        esperandoLogin = true;
+        // URL del servidor
+        String url = globales.servidor + '/login';
 
-        globales.debug(response.statusCode);
-        globales.debug(response.body);
+        // Encriptamos el usuario y la contraseña juntos si los dos campos estan rellenados
+        // TODO AVISAR de campos vacios
 
-        int status = response.statusCode;
-        //Si todo ha salido correcto el programa continuara
-        if (status == CodigoResp.ok) {
-          _cargaCreaEmprUsuario(response);
-        } else if (status == CodigoResp.usuarioNoAutenticado) {
-          // Mostramos Alerta avisando del error
-          globales.muestraDialogo(
-              context, AppLocalizations.of(context)!.codError401);
-        } else if (status == CodigoResp.noEcontrado) {
-          // Mostramos Alerta avisando del error
-          globales.muestraDialogo(
-              context, AppLocalizations.of(context)!.codErrorLogin404);
-        } else if (status == CodigoResp.errorServidor) {
-          // Si no se introduce alguno de los campos saldra un aviso
-          globales.muestraDialogo(
-              context, AppLocalizations.of(context)!.codError500);
-        } else {
-          // Mostramos en  terminal que error envia
-          globales.debug('Code:\n' +
-              response.statusCode.toString() +
-              '\n' +
-              response.body.toString());
-        }
-      } on http.ClientException catch (e) {
-        // Error no se encuentra servidor
-        globales.muestraDialogo(
-            context, AppLocalizations.of(context)!.servidorNoDisponible);
-      } on Exception catch (e) {
-        // Error no especificado
-        globales.debug("Error no especificado: " + e.runtimeType.toString());
+        Servidor.login(nombre, pwd, context).then((response) {
+          if (response!.statusCode == Servidor.CodigoResp.ok) {
+            final parsed =
+                jsonDecode(response.body).cast<Map<String, dynamic>>();
+            cargaEscogeOpciones(context, parsed[0]['token']);
+          }
+        }).whenComplete(() => esperandoLogin = false);
       }
-      esperandoLogin = false;
     }
-  }
-
-  _cargaCreaEmprUsuario(http.Response response) {
-    // La petición tiene éxito. Obtenemos los resultados
-    // a partir del json Mapa de elementos contenidos en el body
-    Map lista = json.decode(response.body);
-
-    // Pasamos a la pantalla creación empresa usuario
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EscogeOpciones(
-          token: lista['token'].toString(),
-        ),
-      ),
-    );
   }
 }
