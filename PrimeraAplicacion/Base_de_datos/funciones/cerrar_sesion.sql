@@ -5,9 +5,6 @@
 CREATE OR REPLACE FUNCTION public.cerrar_sesion(
 	jleer jsonb,
 	OUT jresultado jsonb)
-	-- OUT icodusu integer,
-	-- OUT icoderror integer,
-	-- OUT cerror character varying)
     RETURNS jsonb
     LANGUAGE 'plpgsql'
     COST 100
