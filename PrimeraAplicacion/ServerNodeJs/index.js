@@ -114,26 +114,7 @@ app.post('/crear_usuarios_telemetria', (req, res) => {
 */
 app.post('/listado_empresas', (req, res) => {
     obtener(req.body).then(response => {
-        let bOk = response[0].bOk === 'true';
-        globales.msg(response);
-        if (bOk) {
-            headers(res).status(200).json(response)
-        } else {
-        let cod_error = parseInt(response[0].cod_error );
-            switch(cod_error){
-                case 401:
-                    // Usuario no autorizado
-                    headers(res).status(401).json(response);
-                    break;
-                default:
-                    // Otros errores
-                    headers(res).status(500).json(response);
-                    break;
-            }
-
-        }
-    }).catch(err => {
-        headers(res).status(500).json(response);
+        globales.peticiones(response, res)
     })
 });
 

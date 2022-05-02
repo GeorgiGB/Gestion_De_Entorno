@@ -51,7 +51,7 @@ Future<bool> cerrarSesion(BuildContext context, {required String token}) async {
     //final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
 
     // status correcto?
-    if (status == CodigoResp.r_200) {
+    if (status == CodigoResp.ok) {
       //bool ok = parsed[0]['bOk'].toString().parseBool();
       // hemos añadido la empresa a la BBDD?
       //if (ok) {
@@ -92,7 +92,7 @@ Future<bool> cerrarSesion(BuildContext context, {required String token}) async {
       //} else if (status == CodigoResp.r_401) {
       // TODO redirigir a la pantalla inicial
       //  globales.muestraDialogo(context, traducciones.codError401);
-    } else if (status == CodigoResp.r_500) {
+    } else if (status == CodigoResp.errorServidor) {
       //globales.muestraDialogo(context, traducciones.codError500);
       //globales.muestraDialogo(context, response.body);
     } else {
@@ -111,7 +111,7 @@ Future<bool> cerrarSesion(BuildContext context, {required String token}) async {
   Future.delayed(Duration(seconds: 2), () {
     //Si pasan más de 2 segundos
     if (esperando) {
-      EnCualquierLugar.muestraSnack(context, traducciones.cargando);
+      EnCualquierLugar().muestraSnack(context, traducciones.cargando);
     }
   });
   return esperando;

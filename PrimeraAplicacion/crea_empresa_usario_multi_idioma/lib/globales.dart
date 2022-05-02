@@ -29,6 +29,8 @@ Locale dimeLocal(BuildContext context) {
   return Localizations.localeOf(context);
 }
 
+
+
 Future<void> muestraDialogo(BuildContext context, String msg,
     [String titulo = '']) async {
   return showDialog<void>(

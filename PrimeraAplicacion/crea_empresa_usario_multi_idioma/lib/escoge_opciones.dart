@@ -124,7 +124,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
     globales.debug(widget.token);
     if (op == 0) {
       // Pantalla NuevaEmpresa
-      EnCualquierLugar.muestraSnack(context, traducciones.cargandoEmpresa);
+      // EnCualquierLugar.muestraSnack(context, traducciones.cargandoEmpresa);
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -133,7 +133,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
                   )));
     } else if (op == 1) {
       // Pantalla NuevoUsuario
-      EnCualquierLugar.muestraSnack(context, traducciones.cargandoUsuario);
+      // EnCualquierLugar.muestraSnack(context, traducciones.cargandoUsuario);
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -146,7 +146,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
   }
 
   void _cerrarSesion() {
-    EnCualquierLugar.muestraSnack(context, traducciones.cerrandoSesion);
+    EnCualquierLugar().muestraSnack(context, traducciones.cerrandoSesion);
     cerrarSesion(context, token: widget.token);
   }
 }

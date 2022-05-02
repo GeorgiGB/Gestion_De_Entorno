@@ -1,5 +1,6 @@
 import 'package:crea_empresa_usario/escoge_opciones.dart';
-import 'package:crea_empresa_usario/servidor/anyade.dart';
+import 'package:crea_empresa_usario/navegacion/navega.dart' as Navegacion;
+import 'package:crea_empresa_usario/servidor/servidor.dart' as Servidor;
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
@@ -163,7 +164,8 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
   _crearEmpresa() {
     String url = globales.servidor + '/crear_empresa';
     if (esperandoNuevaEmpresa) {
-      EnCualquierLugar.muestraSnack(context, traducciones.esperandoAlServidor);
+      EnCualquierLugar()
+          .muestraSnack(context, traducciones.esperandoAlServidor);
     } else {
       /* 
     Tenemos dos tipos de condiciones ya que se puede acceder de dos formas
@@ -191,14 +193,31 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
         });
 
         //Enviamos al servidor
-        anyade(
+        Servidor.anyade(
           context,
           url,
           token: widget.token,
           json: json,
           msgOk: traducciones.laEmpresaHaSidoDadoDeAlta(nom_empresa),
           msgError: traducciones.laEmpresaYaEstaregistrada(nom_empresa),
-        ).then((value) => esperandoNuevaEmpresa = value);
+        ).then((oK) {
+          esperandoNuevaEmpresa = false;
+          if (oK) {
+            EnCualquierLugar().muestraSnack(
+              context,
+              traducciones.laEmpresaHaSidoDadoDeAlta(nom_empresa),
+              onHide: () {
+                // Cargamos pantalla de escoger opciones
+                Navegacion.cargaEscogeOpciones(context, widget.token);
+              },
+            );
+            //globales.muestraDialogo(context, msgOk);
+            // volvemos a escoger opció
+          } else {
+            globales.muestraDialogo(
+                context, traducciones.laEmpresaYaEstaregistrada(nom_empresa));
+          }
+        });
       }
     }
   }

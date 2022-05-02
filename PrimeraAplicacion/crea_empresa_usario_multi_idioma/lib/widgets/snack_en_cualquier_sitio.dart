@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class EnCualquierLugar {
-  static muestraSnack(BuildContext context, String msg,
+  bool ejecutado = false;
+  muestraSnack(BuildContext context, String msg,
       {Duration duration = const Duration(seconds: 2),
       Function? onHide,
       Alignment alignment = Alignment.center,
@@ -11,11 +12,16 @@ class EnCualquierLugar {
       SnackBar(
         // Función que se ejecutará en el momento que haya
         // pasado el tiempo de duración de mostrar el snackbar
-        onVisible: onHide==null? null: () {
-          Future.delayed(duration, () async {
-            onHide();
-          });
-        },
+        onVisible: onHide == null
+            ? null
+            : () {
+                if (!ejecutado) {
+                  ejecutado = true;
+                  Future.delayed(duration, () async {
+                    onHide();
+                  });
+                }
+              },
         // Necesario Para mostrar un snack bar centrado
         // fondo transparente
         backgroundColor: Color.fromARGB(0, 0, 0, 0),

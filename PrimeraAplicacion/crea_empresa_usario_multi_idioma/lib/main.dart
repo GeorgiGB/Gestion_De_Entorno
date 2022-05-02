@@ -198,7 +198,7 @@ class _LoginState extends State<Login> {
 
   Future<void> _login() async {
     if (esperandoLogin) {
-      EnCualquierLugar.muestraSnack(
+      EnCualquierLugar().muestraSnack(
           context, AppLocalizations.of(context)!.esperandoAlServidor);
     } else {
       //  TO-DO objeto que mire el tiempo de carga del sistema
@@ -239,17 +239,17 @@ class _LoginState extends State<Login> {
 
         int status = response.statusCode;
         //Si todo ha salido correcto el programa continuara
-        if (status == CodigoResp.r_200) {
+        if (status == CodigoResp.ok) {
           _cargaCreaEmprUsuario(response);
-        } else if (status == CodigoResp.r_401) {
+        } else if (status == CodigoResp.usuarioNoAutenticado) {
           // Mostramos Alerta avisando del error
           globales.muestraDialogo(
               context, AppLocalizations.of(context)!.codError401);
-        } else if (status == CodigoResp.r_404) {
+        } else if (status == CodigoResp.noEcontrado) {
           // Mostramos Alerta avisando del error
           globales.muestraDialogo(
               context, AppLocalizations.of(context)!.codErrorLogin404);
-        } else if (status == CodigoResp.r_500) {
+        } else if (status == CodigoResp.errorServidor) {
           // Si no se introduce alguno de los campos saldra un aviso
           globales.muestraDialogo(
               context, AppLocalizations.of(context)!.codError500);

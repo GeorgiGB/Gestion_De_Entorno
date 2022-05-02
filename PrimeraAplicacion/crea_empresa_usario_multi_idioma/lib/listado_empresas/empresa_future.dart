@@ -1,9 +1,7 @@
 import 'package:crea_empresa_usario/excepciones_personalizadas/excepciones.dart';
-import 'package:crea_empresa_usario/main.dart';
 import 'package:crea_empresa_usario/nueva_empr.dart';
 import 'package:crea_empresa_usario/nuevo_usua.dart';
-import 'package:crea_empresa_usario/servidor/servidor.dart';
-import 'package:crea_empresa_usario/servidor/sesion.dart';
+import 'package:crea_empresa_usario/servidor/servidor.dart' as Servidor;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -15,17 +13,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
 import '../globales.dart' as globales;
-import '../globales.dart';
 import '../widgets/dropdownfield.dart';
 
 // Qué empresa ha sido seleccionada?
 EmpresCod? get empreCod => ListaEmpresas._empresaSeleccionada;
 
-// Función utilizada para obtener la lista de empresas del servidor
-// En caso de no haber empresas dadas de alta  muestra un mensaje y la opción
-// de ir a dar de alta una empresa o volver atrás
-// Si falla la conexión muestra un mensaje y un botón para volver atrás
-// Una vez se muestran los campos de formulario esta función no se volverá a ejecutar.
+/// Función utilizada para obtener la lista de empresas del servidor
+/// En caso de no haber empresas dadas de alta  muestra un mensaje y la opción
+/// de dar de alta una empresa o volver atrás
+/// Si falla la conexión muestra un mensaje y un botón para volver atrás
+/// Una vez se muestran los campos de formulario esta función no se volverá a ejecutar.
 FutureBuilder<List<EmpresCod>> dropDownEmpresas(
     String queBusco, NuevoUsuarioState ns) {
   late String msgErr = '';
@@ -33,17 +30,21 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
   NuevoUsuario widget = ns.widget;
 
   return FutureBuilder<List<EmpresCod>>(
+    // Future que gestiona la petición del listado de empresas al servidor
     future: ns.muestraFormulario.visible
         ? null
-        : buscaEmpresas(queBusco, http.Client(), widget.token, cntxt)
+        : Servidor.buscaEmpresas(queBusco, http.Client(), widget.token, cntxt)
+
             // En caso de error en el servidor capturamos el mensaje pertinente.
+
             .onError(
             (error, stackTrace) {
               if (error is ExceptionServidor) {
-                if (error.codError == CodigoResp.r_401) {
+                if (error.codError ==
+                    Servidor.CodigoResp.usuarioNoAutenticado) {
                   // No estoy auternticado
                   msgErr = AppLocalizations.of(cntxt)!.codError401;
-                  noEstoyAutenticado(cntxt);
+                  // noEstoyAutenticado(cntxt);
                 } else {
                   msgErr = AppLocalizations.of(cntxt)!
                       .errNoEspecificado(': ' + error.codError.toString());
@@ -53,14 +54,18 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
               }
               throw error!;
             },
-          ),
+          )
+
+            // si es correcto devolvemos u listado de empresas
+            // Utilizamos la función compute para ejecutar _parseEmpresas en un segundo plano.
+            .then((response) => compute(_parseEmpresas, response)),
     // Este future en función del error de la conexión o del servidor realiza
     // varios intentos antes de llamar a este método anónimo y crear los widgets a mostrar
     builder: (context, datos) {
       if (datos.hasError) {
         // en caso de error
-        bool autenticado =
-            (datos.error as ExceptionServidor).codError != CodigoResp.r_401;
+        bool autenticado = (datos.error as ExceptionServidor).codError !=
+            Servidor.CodigoResp.usuarioNoAutenticado;
 
         if (autenticado && msgErr.isNotEmpty) {
           // tenemos que darle un retraso ya que mostrar el diálogo
@@ -123,8 +128,8 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
   );
 }
 
-// Widget utilizado para mostrar avisos y generar acciones
-// Tiene un widget que se muestra si hay posibilidad de ir atrás en la navegación
+/// Widget utilizado para mostrar avisos y generar acciones
+/// Tiene un widget que se muestra si hay posibilidad de ir atrás en la navegación
 class AvisoAccion extends StatelessWidget {
   AvisoAccion(
       {Key? key,
@@ -205,43 +210,32 @@ class AvisoAccion extends StatelessWidget {
   }
 }
 
-Future<List<EmpresCod>> buscaEmpresas(String queBusco, http.Client client,
-    String token, BuildContext context) async {
-  // ejemplo tomado y modificado de:
-  // https://docs.flutter.dev/cookbook/networking/background-parsing#4-move-this-work-to-a-separate-isolate
-
-  String url = globales.servidor + '/listado_empresas';
-  final response = await client.post(
-    Uri.parse(url),
-    // Cabecera para enviar JSON
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    // Adjuntamos al body los datos en formato JSON
-    // que queremos buscar
-    body: jsonEncode(<String, String>{'emp_busca': queBusco, 'ctoken': token}),
-  );
-
-  // Utilizamos la función compute para ejecutar _parseEmpresas en un segundo plano.
-  return compute(_parseEmpresas, response.body);
-}
-
 // Funcion utilizada para convertir el cuerpo de la resuesta enviada
 // por el servidor en una List<EmpresCod>.
-List<EmpresCod> _parseEmpresas(String responseBody) {
-  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-  globales.debug(responseBody);
-  // ha ido correcto?
+List<EmpresCod> _parseEmpresas(http.Response response) {
+  final int status = response.statusCode;
+  switch (status) {
+    case Servidor.CodigoResp.ok:
+      globales.debug("hola");
+      final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
+      parsed.removeAt(0);
+      return parsed.map<EmpresCod>((json) => EmpresCod.fromJson(json)).toList();
+
+    // Respuestas que contiene errores o respuestaas no contempladas
+    default:
+      globales.debug("adios");
+      throw ExceptionServidor(status);
+  }
+  /*// ha ido correcto?
   if (parsed[0]['bOk'].toString().parseBool()) {
     // Eliminamos el primer elemento que contiene la información de si todo es correcto
     parsed.removeAt(0);
-    return parsed.map<EmpresCod>((json) => EmpresCod.fromJson(json)).toList();
     // <EmpresCod>[];
   } else {
     // lanzamos excepción de servidor
     int codError = int.parse(parsed[0]['cod_error']);
     throw ExceptionServidor(codError);
-  }
+  }*/
 }
 
 // Clase que utilizamos para crear cada elemento de la lista de Empresas

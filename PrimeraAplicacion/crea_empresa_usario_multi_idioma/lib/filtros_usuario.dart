@@ -1,6 +1,7 @@
 import 'package:crea_empresa_usario/escoge_opciones.dart';
+import 'package:crea_empresa_usario/navegacion/navega.dart' as Navegacion;
 import 'package:crea_empresa_usario/nuevo_usua.dart';
-import 'package:crea_empresa_usario/servidor/anyade.dart';
+import 'package:crea_empresa_usario/servidor/servidor.dart' as Servidor;
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
@@ -141,7 +142,8 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
     String url = globales.servidor + '/crear_usuarios_telemetria';
     //Si estamos esperando el filtro y se vuelve a pulsar login este lo ignorara.
     if (esperandoFiltrado) {
-      EnCualquierLugar.muestraSnack(context, traducciones.esperandoAlServidor);
+      EnCualquierLugar()
+          .muestraSnack(context, traducciones.esperandoAlServidor);
     } else {
       // Datos del filtro
       String? filtrBBDD = filtroActivo == null ? '' : filtroActivo!.filtro_bbdd;
@@ -164,14 +166,31 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
         });
 
         // Enviamos al servidor
-        anyade(
+        Servidor.anyade(
           context,
           url,
           token: widget.token,
           json: json,
           msgOk: traducciones.elUsuarioHaSidoDadoDeAlta(widget.nombre),
           msgError: traducciones.elUsuarioYaEstaRegistrado(widget.nombre),
-        ).then((value) => esperandoFiltrado = value);
+        ).then((oK) {
+          esperandoFiltrado = false;
+          if (oK) {
+            EnCualquierLugar().muestraSnack(
+              context,
+              traducciones.elUsuarioHaSidoDadoDeAlta(widget.nombre),
+              onHide: () {
+                // Cargamos pantalla de escoger opciones
+                Navegacion.cargaEscogeOpciones(context, widget.token);
+              },
+            );
+            //globales.muestraDialogo(context, msgOk);
+            // volvemos a escoger opció
+          } else {
+            globales.muestraDialogo(
+                context, traducciones.elUsuarioYaEstaRegistrado(widget.nombre));
+          }
+        });
       }
     }
   }
