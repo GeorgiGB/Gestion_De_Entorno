@@ -14,15 +14,19 @@ DECLARE
 
 	bOk boolean;
 	cToken character varying;
+	cError character varying;
 	iCoderror integer;
+	statusHTML integer;
 	
 BEGIN
 
 	--	Inicialización de las variables
 	bOk := false;
-    jresultado := '[]';
 	cToken := '';
+	cError := '';
 	iCoderror := 0;
+	statusHTML := 200;
+	jresultado := '[]';
 	
 	--	Creación de una tabla temporal para manipular los datos
 	CREATE TEMP TABLE IF NOT EXISTS json_insert_token(
@@ -53,14 +57,20 @@ BEGIN
 	END IF;
 
 	-- añadimos el resultado a la salida jresultado
-	SELECT ('{"bOk":"'||bOk ||'", "token":"'||cToken||'"}')::jsonb || jresultado ::jsonb INTO jresultado;
+	SELECT ('{"status":"' || statusHTML
+			|| '", "bOk":"' || bOk
+			|| '", "token":"' ||cToken||'"}')::jsonb || jresultado ::jsonb INTO jresultado;
 
 
 	EXCEPTION WHEN OTHERS THEN
+		statusHTML := 500;
 		iCoderror := -1;
-		jresultado :='[{"bOk":"'|| bOk
-					  ||'", "cod_error":"'|| iCoderror 
-					  ||'", "msg_error":"'|| SQLERRM ||'"}]';
+		cError := SQLERRM;
+
+		SELECT ('{"status":"' || statusHTML
+			|| '", "cod_error":"' || iCoderror
+			|| '", "msg_error":"' || cError || '"}')::jsonb
+			|| jresultado::jsonb into jresultado;
 	END;
 $BODY$;
 

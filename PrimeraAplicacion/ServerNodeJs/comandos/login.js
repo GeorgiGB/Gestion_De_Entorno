@@ -11,21 +11,27 @@ async function login(json_login){
             Petición del servidor
             Verificar si el usuario existe y proseguir con la operación
         */
-       
+       try{
        let reslogin = await conexion.query("SELECT * FROM login('"+JSON.stringify(json_login)+"')");
        //   Resultado de la operación
-        let fila = reslogin.rows[0].jresultado;
+        let fila0 = reslogin.rows[0].jresultado;
+        let fila = fila0[0]
         
-        if(fila.bOk){
+        if(parseInt(fila.status)==200){
             
             //  Insertar token en base de usuarios
             fila.token = getToken(json_login.usu_pwd);
-
             //  Hacemos la petición a la base de datos
             let instoken = await conexion.query("SELECT * FROM insertar_token('"+JSON.stringify(fila)+"')");
             fila = instoken.rows[0].jresultado
+        }else{
+            fila = fila0
         }
         return fila;
+    }catch(e){
+        errr = '[{"bOk":"'+ bOk
+        ||'", "cod_error":"'|| iCoderror 
+        ||'", "msg_error":"'|| SQLERRM ||'"}]';
     }
 
 // Función de generación de tokens

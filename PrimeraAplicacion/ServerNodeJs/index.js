@@ -60,19 +60,20 @@ globales.msg("Servidor ok");
 */
 app.post('/login', (req, res) => {
     verificar(req.body).then(response => {
-        globales.peticiones(response,res)
-        // let bOk = response.bOk === 'true';
-        // let cod_error = parseInt(response.cod_error);
-        // if (bOk) {
-        //     headers(res).status(200).json(response)
-        // } else {
-        //     if (cod_error < 0) {
-        //         headers(res).status(500).json(response);
-        //     } else {
-        //         headers(res).status(404).json(response);
-        //     }
+        
+        globales.peticiones(response, res)
+        /*let bOk = response.bOk === 'true';
+        let cod_error = parseInt(response.cod_error);
+        if (bOk) {
+            headers(res).status(200).json(response)
+        } else {
+            if (cod_error < 0) {
+                headers(res).status(500).json(response);
+            } else {
+                headers(res).status(404).json(response);
+            }
 
-        // }
+        }*/
     })
         // .catch(err => {
         //     headers(res).status(500).json(response);

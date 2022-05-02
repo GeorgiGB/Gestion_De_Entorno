@@ -46,6 +46,7 @@ BEGIN
 		bOk := true;
 	ELSE
 		iUsu_cod := -1;
+		statusHTML := 404;
 	END IF;
 	
 	-- Añadimos el resultado a la salida jresultado
