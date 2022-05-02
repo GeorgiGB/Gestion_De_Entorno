@@ -59,37 +59,35 @@ globales.msg("Servidor ok");
     Iniciar sesión con el usuario
 */
 app.post('/login', (req, res) => {
-    verificar.login(req.body).then(response => {
-        let bOk = response.bOk === 'true';
-        let cod_error = parseInt(response.cod_error);
-        if (bOk) {
-            headers(res).status(200).json(response)
-        } else {
-            if (cod_error < 0) {
-                headers(res).status(500).json(response);
-            } else {
-                headers(res).status(404).json(response);
-            }
+    verificar(req.body).then(response => {
+        globales.peticiones(response,res)
+        // let bOk = response.bOk === 'true';
+        // let cod_error = parseInt(response.cod_error);
+        // if (bOk) {
+        //     headers(res).status(200).json(response)
+        // } else {
+        //     if (cod_error < 0) {
+        //         headers(res).status(500).json(response);
+        //     } else {
+        //         headers(res).status(404).json(response);
+        //     }
 
-        }
+        // }
     })
-        .catch(err => {
-            //  globales.msg(err)
-            headers(res).status(500).json(response);
-        })
+        // .catch(err => {
+        //     headers(res).status(500).json(response);
+        // })
 });
 
 /*
         -------------------------Crear Empresa-------------------------
-    Con un post mandaremos al servidor la petición de la creación de una empresa
+    Con un post mandaremos al servidor la petición de la creación de una empresa.
+    Crearemos una empresa y un usuario predeterminado con la contraseña de la misma
 */
 
 app.post('/crear_empresa', (req, res) => {
     crear_emp(req.body).then(response => {
-        globales.peticiones(response, res)//.catch(err => {
-            //  globales.msg(err)
-            //headers(res).status(500).json(response)
-        //});
+        globales.peticiones(response, res)
     });
 });
 
@@ -100,10 +98,7 @@ app.post('/crear_empresa', (req, res) => {
 
 app.post('/crear_usuarios_telemetria', (req, res) => {
     crear_ute(req.body).then(response => {
-        globales.peticiones(response, res)/*.catch(err => {
-            //globales.msg(err)
-            headers(res).status(500).json(response)
-        })*/;
+        globales.peticiones(response, res)
     });     
 });
 

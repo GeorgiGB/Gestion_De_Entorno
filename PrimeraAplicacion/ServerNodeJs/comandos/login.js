@@ -14,7 +14,7 @@ async function login(json_login){
        
        let reslogin = await conexion.query("SELECT * FROM login('"+JSON.stringify(json_login)+"')");
        //   Resultado de la operación
-        let fila = reslogin.rows[0].jresultado[0];
+        let fila = reslogin.rows[0].jresultado;
         
         if(fila.bOk){
             
@@ -23,7 +23,7 @@ async function login(json_login){
 
             //  Hacemos la petición a la base de datos
             let instoken = await conexion.query("SELECT * FROM insertar_token('"+JSON.stringify(fila)+"')");
-            fila = instoken.rows[0].jresultado[0]
+            fila = instoken.rows[0].jresultado
         }
         return fila;
     }
@@ -34,7 +34,4 @@ function getToken(usuario_contra){
         {username: usuario_contra}, verificarJWT.llaveSecreta);
 }
 
-module.exports = {
-    login:login,
-    getToken:getToken
-}   
+module.exports = login;
