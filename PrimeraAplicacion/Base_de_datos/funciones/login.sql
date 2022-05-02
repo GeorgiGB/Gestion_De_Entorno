@@ -1,6 +1,6 @@
 -- FUNCTION: public.login(json)
 
-DROP FUNCTION IF EXISTS public.login(jsonb);
+-- DROP FUNCTION IF EXISTS public.login(jsonb);
 
 CREATE OR REPLACE FUNCTION public.login(
 	jleer jsonb,
@@ -10,20 +10,27 @@ CREATE OR REPLACE FUNCTION public.login(
     COST 100
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
+
+--	Esta función se usara para la creación de usuarios principales de la aplicación
+--	los usuarios principales son lo que pueden crear tanto empresas como usuarios de telemetria
+--	a estos usuarios "principales" a la hora de la creación tendran un token asociado que los distingue de los usuarios de telemetria
+
 DECLARE
 	bOk boolean;
 	iUsu_cod integer;
 	cError character varying;
 	iCoderror integer;
+	statusHTML integer;
 
 BEGIN
 	
 	bOk := false;
-	jresultado := '[]';
 	iUsu_cod := -1;
 	cError := '';
 	iCoderror := 0;
-	
+	statusHTML := 200;
+	jresultado := '[]';
+
 	-- Tabla temporal para leer el json enviado por el servidor
 	CREATE TEMP TABLE IF NOT EXISTS json_data(
 		nombre character varying,
@@ -42,21 +49,22 @@ BEGIN
 	END IF;
 	
 	-- Añadimos el resultado a la salida jresultado
-	SELECT ('{"bOk":"'|| bOk ||'", "cod":"'|| iUsu_cod ||'"}')::jsonb || jresultado ::jsonb INTO jresultado;
-	
+
+	SELECT ('{"status":"' ||statusHTML
+		|| '", "cod":"' || iUsu_cod 
+		|| '", "bOk":"' || bOk||'"}')::jsonb || jresultado::jsonb into jresultado;
+
 	EXCEPTION WHEN OTHERS THEN
+		statusHTML := 500;
 		iCoderror := -1;
-		jresultado :='[{"bOk":"'|| bOk
-					  ||'", "cod_error":"'|| iCoderror 
-					  ||'", "msg_error":"'|| SQLERRM ||'"}]';
+		cError := SQLERRM;
+
+		SELECT ('{"status":"' || statusHTML
+			|| '", "cod_error":"' || iCoderror
+			|| '", "msg_error":"' || cError || '"}')::jsonb
+			|| jresultado::jsonb into jresultado;
 		END;
 $BODY$;
 
 ALTER FUNCTION public.login(jsonb)
     OWNER TO postgres;
-
---	select * from public.login('{"nombre": "Joselito", "pwd": "7887186b33749971de515859532def15f4b210eb"}')
-
---	Esta función se usara para la creación de usuarios principales de la aplicación
---	los usuarios principales son lo que pueden crear tanto empresas como usuarios de telemetria
---	a estos usuarios "principales" a la hora de la creación tendran un token asociado que los distingue de los usuarios de telemetria
