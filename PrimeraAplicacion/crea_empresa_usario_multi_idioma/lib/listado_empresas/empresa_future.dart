@@ -35,7 +35,7 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
   return FutureBuilder<List<EmpresCod>>(
     future: ns.muestraFormulario.visible
         ? null
-        : buscaEmpresas(queBusco, http.Client(), widget.ust_token, cntxt)
+        : buscaEmpresas(queBusco, http.Client(), widget.token, cntxt)
             // En caso de error en el servidor capturamos el mensaje pertinente.
             .onError(
             (error, stackTrace) {
@@ -59,7 +59,8 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
     builder: (context, datos) {
       if (datos.hasError) {
         // en caso de error
-        bool autenticado = (datos.error as ExceptionServidor).codError != 401;
+        bool autenticado =
+            (datos.error as ExceptionServidor).codError != CodigoResp.r_401;
 
         if (autenticado && msgErr.isNotEmpty) {
           // tenemos que darle un retraso ya que mostrar el diálogo
@@ -93,7 +94,7 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NuevaEmpresa(token: widget.ust_token),
+                  builder: (context) => NuevaEmpresa(token: widget.token),
                 ),
               )
             },
@@ -218,8 +219,7 @@ Future<List<EmpresCod>> buscaEmpresas(String queBusco, http.Client client,
     },
     // Adjuntamos al body los datos en formato JSON
     // que queremos buscar
-    body:
-        jsonEncode(<String, String>{'emp_busca': queBusco, 'ust_token': token}),
+    body: jsonEncode(<String, String>{'emp_busca': queBusco, 'ctoken': token}),
   );
 
   // Utilizamos la función compute para ejecutar _parseEmpresas en un segundo plano.
@@ -230,7 +230,7 @@ Future<List<EmpresCod>> buscaEmpresas(String queBusco, http.Client client,
 // por el servidor en una List<EmpresCod>.
 List<EmpresCod> _parseEmpresas(String responseBody) {
   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-
+  globales.debug(responseBody);
   // ha ido correcto?
   if (parsed[0]['bOk'].toString().parseBool()) {
     // Eliminamos el primer elemento que contiene la información de si todo es correcto

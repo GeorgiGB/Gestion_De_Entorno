@@ -51,11 +51,11 @@
     "empresa": "Empresa",
     "empresaCreadaCorrectamente": "Empresa creada correctamente",
     "empresaNueva": "Empresa nueva",
-    "errNoEspecificado": "Error no especificado{error}",
+    "errNoEspecificado": "Error no especificado {error}",
     "@errNoEspecificado": {
         "description": "Error sin especificar",
         "placeholders": {
-            "usuario": {
+            "error": {
                 "type": "String",
                 "error": " "
             }
@@ -87,7 +87,7 @@
     "@laEmpresaHaSidoDadoDeAlta": {
         "description": "Empresa registrada",
         "placeholders": {
-            "usuario": {
+            "empresa": {
                 "type": "String",
                 "example": " "
             }
@@ -136,7 +136,7 @@
 
     "valorInvalidoEnEsteCampo":"Valor no válido en este campo.",
     
-    "codError401": "Auntentificación errónea",
+    "codError401": "Usuario no identificado",
     "codErrorLogin404": "Usuario no encontrado",
     "codError500": "Error de servidor"
 }

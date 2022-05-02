@@ -31,7 +31,7 @@
   "empresa": "Compagnie",
   "empresaNueva": "Entreprise nouvelle",
   "empresaCreadaCorrectamente": "L'entreprise a été correctement créée",
-  "errNoEspecificado": "Erreur non spécifiée{error}",
+  "errNoEspecificado": "Erreur non spécifiée {error}",
   "escogeOpcion": "Choisissez l'option",
   "esperandoAlServidor": "En attendant le serveur",
   "esperandoRespuestaServidor": "En attente de la réponse du serveur.",
@@ -88,7 +88,7 @@
   
   "valorInvalidoEnEsteCampo":"Valeur non valide pour ce champ",
     
-  "codError401": "Mauvaise authentification",
+  "codError401": "Utilisateur non identifié",
   "codErrorLogin404": "Utilisateur non trouvé",
   "codError500": "Erreur de serveur"
 }

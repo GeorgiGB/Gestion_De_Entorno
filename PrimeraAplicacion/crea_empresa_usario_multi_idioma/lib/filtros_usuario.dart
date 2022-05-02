@@ -1,6 +1,7 @@
 import 'package:crea_empresa_usario/escoge_opciones.dart';
 import 'package:crea_empresa_usario/nuevo_usua.dart';
 import 'package:crea_empresa_usario/servidor/anyade.dart';
+import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
 import 'package:http/http.dart' as http;
@@ -17,14 +18,14 @@ class FiltrosUsuario extends StatefulWidget {
       required this.empCod,
       required this.emp_cod,
       required this.nombre,
-      required this.ute_pwd,
+      required this.pwd,
       required this.auto_pwd})
       : super(key: key);
   final String token;
   final String empCod;
   final int emp_cod;
   final String nombre;
-  final String ute_pwd;
+  final String pwd;
   final bool auto_pwd;
   @override
   State<FiltrosUsuario> createState() => _FiltrosUsuarioState();
@@ -140,7 +141,7 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
     String url = globales.servidor + '/crear_usuarios_telemetria';
     //Si estamos esperando el filtro y se vuelve a pulsar login este lo ignorara.
     if (esperandoFiltrado) {
-      globales.muestraToast(context, traducciones.esperandoAlServidor);
+      EnCualquierLugar.muestraSnack(context, traducciones.esperandoAlServidor);
     } else {
       // Datos del filtro
       String? filtrBBDD = filtroActivo == null ? '' : filtroActivo!.filtro_bbdd;
@@ -156,7 +157,7 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
           'ctoken': widget.token,
           'emp_cod': widget.emp_cod.toString(),
           'nombre': widget.nombre,
-          'pwd': widget.ute_pwd,
+          'pwd': widget.pwd,
           'auto_pwd': widget.auto_pwd.toString(),
           'filtro': filtroActivo!.filtro_bbdd,
           'cod_filtro': _codigo_filtro.text
@@ -169,7 +170,7 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
           token: widget.token,
           json: json,
           msgOk: traducciones.elUsuarioHaSidoDadoDeAlta(widget.nombre),
-          msgError: traducciones.elUsuarioHaSidoDadoDeAlta(widget.nombre),
+          msgError: traducciones.elUsuarioYaEstaRegistrado(widget.nombre),
         ).then((value) => esperandoFiltrado = value);
       }
     }

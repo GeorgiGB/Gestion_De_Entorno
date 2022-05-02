@@ -1,24 +1,33 @@
--- FUNCTION: public.cerrar_sesion(character varying)
+-- FUNCTION: public.cerrar_sesion(jsonb)
 
--- DROP FUNCTION IF EXISTS public.cerrar_sesion(character varying);
+-- DROP FUNCTION IF EXISTS public.cerrar_sesion(jsonb);
 
 CREATE OR REPLACE FUNCTION public.cerrar_sesion(
-	jleer character varying,
-	OUT icodusu integer,
-	OUT icoderror integer,
-	OUT cerror character varying)
-    RETURNS record
+	jleer jsonb,
+	OUT jresultado jsonb)
+	-- OUT icodusu integer,
+	-- OUT icoderror integer,
+	-- OUT cerror character varying)
+    RETURNS jsonb
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
 DECLARE
+	icodusu integer;
+	icoderror integer;
+	cError character varying;
+	statusHTML integer;
 	cToken character varying;
+	
 BEGIN
 	-- Inicializamos los parametros
 	cerror := '';
 	icoderror := 0;
 	cToken := '';
+    statusHTML := 200;
+    jresultado := '[]';
+	
 	--	Transformamos el jleer que era principalmente un character varying
 	--	por un json ya que tenemos que manipular los datos
 	--	y luego insertarlo a cToken
@@ -35,21 +44,29 @@ BEGIN
 		--	devolvera el cod del usuario
 		
 	icodusu := COALESCE(icodusu, -1);
+	
+	
+	--	Añadimos la variable bOk i statusHTML al JSON jresultado
+	SELECT ('{"status":"' ||statusHTML
+		|| '", "cod_error":"' || icoderror || '"}')::jsonb
+		|| jresultado::jsonb into jresultado;
 		
 	EXCEPTION WHEN OTHERS THEN
+    	statusHTML := 500;
 		icoderror := -1;
 		cerror := SQLERRM;
+		
+		SELECT ('{"status":"' || statusHTML
+			|| '", "cod_error":"' || icoderror
+			|| '", "msg_error":"' || cerror || '"}')::jsonb
+			|| jresultado::jsonb into jresultado;
 		END;
 $BODY$;
 
-ALTER FUNCTION public.cerrar_sesion(character varying)
+ALTER FUNCTION public.cerrar_sesion(jsonb)
     OWNER TO postgres;
 
 --	Función que permitira cambiar el estado de un token
 --	de un usuario principal, si este tiene el token activo
 --	cambiara a inactivo, por lo tanto tendria que iniciar de nuevo sesión
-<<<<<<< HEAD
---	SELECT * FROM cerrar_sesion('{"ctoken":"a"}')
-=======
 --  SELECT * FROM cerrar_sesion('{"name_token":"7887186b33749971de515859532def15f4b210eb"}')
->>>>>>> 8c74d23670219eccb98fad267118eed08b61a314

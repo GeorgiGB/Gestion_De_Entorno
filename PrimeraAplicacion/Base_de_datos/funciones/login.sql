@@ -1,6 +1,6 @@
 -- FUNCTION: public.login(json)
 
--- DROP FUNCTION IF EXISTS public.login(jsonb);
+DROP FUNCTION IF EXISTS public.login(jsonb);
 
 CREATE OR REPLACE FUNCTION public.login(
 	jleer jsonb,
@@ -19,6 +19,7 @@ DECLARE
 BEGIN
 	
 	bOk := false;
+	jresultado := '[]';
 	iUsu_cod := -1;
 	cError := '';
 	iCoderror := 0;
@@ -39,11 +40,10 @@ BEGIN
 	ELSE
 		iUsu_cod := -1;
 	END IF;
-	jresultado :='[{"bOk":"'|| bOk
-				  ||'", "usu_cod":"'|| iUsu_cod ||'"}]';
 	
+	-- Añadimos el resultado a la salida jresultado
+	SELECT ('{"bOk":"'|| bOk ||'", "cod":"'|| iUsu_cod ||'"}')::jsonb || jresultado ::jsonb INTO jresultado;
 	
-
 	EXCEPTION WHEN OTHERS THEN
 		iCoderror := -1;
 		jresultado :='[{"bOk":"'|| bOk

@@ -12,13 +12,13 @@ function msg(message){
 async function peticiones(response, res){
     let bOk = response[0].bOk === 'true';
     //    Transformamos el bOk a boolean para poder seguir con la petición
-    let cod_error = parseInt(response[0].cod_error );
-    //  el cod_error lo transformamos a integer para leerlo en la petición
     
-    if (bOk) {
+    //if (bOk) {
         //  Información enviada con éxito
-        header(res).status(200).json(response)
-    } else {
+        header(res).status(parseInt(response[0].status)).json(response)
+    /*} else {
+        let cod_error = parseInt(response[0].cod_error );
+        //  el cod_error lo transformamos a integer para leerlo en la petición
         switch(cod_error){
             case 401:
                 // Usuario no autorizado
@@ -33,7 +33,7 @@ async function peticiones(response, res){
                 header(res).status(500).json(response);
                 break;
         }
-    }
+    }*/
 }
 
 

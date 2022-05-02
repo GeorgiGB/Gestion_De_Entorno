@@ -16,15 +16,17 @@ AS $BODY$
         iemp_cod integer;
         icod_error integer;
         cError character varying;
+        statusHTML integer;
 
     BEGIN
         bOk := false;
         icod_error := 0;
         cError := '';
         jresultado := '[]';
+        statusHTML := 200;
 		
         -- Consultamos si el token es válido
-        SELECT t.bOk INTO bOk
+        SELECT t.bok INTO bOk
         	FROM public.validar_token(jleer::jsonb) t;
 			
         IF bOk THEN
@@ -78,28 +80,35 @@ AS $BODY$
 			
 		ELSE
 			--	Token no válido, usuario no validado.
-			SELECT ('{"cod_error":"401"}')::jsonb || jresultado ::jsonb into jresultado;
+			statusHTML = 401;
         END IF;
 		
-			--	Añadimos la variable bOk al JSON jresultado
-			SELECT ('{"bOk":"' || bOk || '"}')::jsonb || jresultado::jsonb into jresultado;
+			--	Añadimos la variable bOk i statusHTML al JSON jresultado
+			SELECT ('{"status":"' ||statusHTML
+					||'", "bOk":"' || false 
+					||'", "cod_error":"' || icod_error || '"}')::jsonb || jresultado::jsonb into jresultado;
 
 		EXCEPTION
 			--	Códigos de error -> https://www.postgresql.org/docs/current/errcodes-appendix.html
 			WHEN OTHERS THEN
 				bOk = false;
 				cError := SQLERRM;
+                statusHTML := 500;
 				CASE
 					 --	El '23505' equivale a unique_violation
 					 --	si ponemos directamente unique_violation en lugar de '23505'
 					 --	da el siguiente error "ERROR:  no existe la columna «unique_violation»"
 					WHEN SQLSTATE = '23505' THEN
+                        statusHTML :=200;
 						icod_error := -2;
 					ELSE
 						icod_error := -1;		
 				END CASE;
 				
-				SELECT ('{"bOk":"' || false || '", "cod_error":"' || icod_error || '", "msg_error":"' || cError || '"}')::jsonb
+				SELECT ('{"status":"' || statusHTML
+					|| '", "bOk":"' || false
+					|| '", "cod_error":"' || icod_error
+					|| '", "msg_error":"' || cError || '"}')::jsonb
 					|| jresultado::jsonb into jresultado;
         END;
     
@@ -107,7 +116,7 @@ $BODY$;
 
 ALTER FUNCTION public.crear_usuarios_telemetria(jsonb)
     OWNER TO postgres;
-	
+
 --	Para hacer un insert hay que poner un emp_cod que exista en la tabla empresas
 --	Si exite en la tabla un nombre con el mismo ust_emp_cod HAY QUE CAMBIAR EL NOMBRE DE "nombre"
 --	select * from crear_usuarios_telemetria('{"emp_cod": "41", "ctoken": "a", "nombre": "usunuevotele", "pwd": "1111111", "auto_pwd": "false", "filtro": "ute_ruta", "cod_filtro": "37"}');

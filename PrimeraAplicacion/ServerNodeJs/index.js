@@ -23,7 +23,7 @@ const obtener = require('./comandos/obtener');
 const cerrar = require('./comandos/cerrar_sesion');
 
 //  Puede mandar mensajes a la terminal y mandar peticiones al servidor
-const debug = require('./comandos/globales');
+const globales = require('./comandos/globales');
 
 //  Son la petición al servidor
 const headers = require('./comandos/cabecera');
@@ -52,7 +52,7 @@ app.use(express.json())
 app.listen(8080);
 
 //! -------------------------------------
-debug.msg("Servidor ok");
+globales.msg("Servidor ok");
 //! -------------------------------------
 
 /*
@@ -74,7 +74,7 @@ app.post('/login', (req, res) => {
         }
     })
         .catch(err => {
-            //  debug.msg(err)
+            //  globales.msg(err)
             headers(res).status(500).json(response);
         })
 });
@@ -86,10 +86,10 @@ app.post('/login', (req, res) => {
 
 app.post('/crear_empresa', (req, res) => {
     crear_emp(req.body).then(response => {
-        debug.peticiones(response).catch(err => {
-        //  debug.msg(err)
-        headers(res).status(500).json(response)
-        });
+        globales.peticiones(response, res)//.catch(err => {
+            //  globales.msg(err)
+            //headers(res).status(500).json(response)
+        //});
     });
 });
 
@@ -100,10 +100,10 @@ app.post('/crear_empresa', (req, res) => {
 
 app.post('/crear_usuarios_telemetria', (req, res) => {
     crear_ute(req.body).then(response => {
-        debug.peticiones(response).catch(err => {
-        //  debug.msg(err)
-        headers(res).status(500).json(response)
-        });
+        globales.peticiones(response, res)/*.catch(err => {
+            //globales.msg(err)
+            headers(res).status(500).json(response)
+        })*/;
     });     
 });
 
@@ -115,18 +115,18 @@ app.post('/crear_usuarios_telemetria', (req, res) => {
 app.post('/listado_empresas', (req, res) => {
     obtener(req.body).then(response => {
         let bOk = response[0].bOk === 'true';
-        let cod_error = parseInt(response[0].cod_error );
-        
+        globales.msg(response);
         if (bOk) {
             headers(res).status(200).json(response)
         } else {
+        let cod_error = parseInt(response[0].cod_error );
             switch(cod_error){
                 case 401:
                     // Usuario no autorizado
                     headers(res).status(401).json(response);
                     break;
                 default:
-                    // Otors errorese
+                    // Otros errores
                     headers(res).status(500).json(response);
                     break;
             }
@@ -139,18 +139,18 @@ app.post('/listado_empresas', (req, res) => {
 
 app.post('/cerrar_sesion', (req, res) => {
     cerrar(req.body).then(response => {
-        debug.msg(response)
+        globales.msg(response)
         let cod_error = parseInt(response.icoderror );
         if (cod_error == 0) {
             headers(res).status(200).json(response)
-            debug.msg("Token desactivado")
+            globales.msg("Token desactivado")
         } else {
             if (response < 0) {
                 headers(res).status(500).json(response);
         }
     }
     }).catch(err => {
-        debug.msg(err)
+        globales.msg(err)
         headers(res).status(500).json(response);
     })
 });

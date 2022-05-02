@@ -1,6 +1,7 @@
 import 'package:crea_empresa_usario/nueva_empr.dart';
 import 'package:crea_empresa_usario/nuevo_usua.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
+import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import 'filtros_usuario.dart';
 import 'globales.dart' as globales;
@@ -91,28 +92,24 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
 
-      //home: Login(),
+      // home: Login(),
 
-      home: EscogeOpciones(token: 'a'),
+      //home: EscogeOpciones(token: 'a'),
 
 /*
-      home: NuevaEmpresa(
-          token:
-              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NTEwNzA5MzJ9.mVW-YnXFcnUFxoL1xY3AZgkuZDikktyfKqPHpTTqVCo'),
+      home: NuevaEmpresa(token: 'k'),
 */
-      /*  
-        home: const NuevoUsuario(
-            ust_token:
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k"),
-  */
+      /**/
+      home: const NuevoUsuario(token: "k"),
+      /**/
       /*
-      home: const filtros_usuario(
-          ust_token:
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ijc4ODcxODZiMzM3NDk5NzFkZTUxNTg1OTUzMmRlZjE1ZjRiMjEwZWIiLCJpYXQiOjE2NDkzNDUyMzV9.olI-c3Zzl-QsCIgSDmhJ5QY71O7eL2d1mhDOrQSkP2k",
+      home: const FiltrosUsuario(
+          token:
+              "k",
           empCod: '60 - funcioncrearempresa1',
-          ute_emp_cod: 60,
-          ute_nombre: "oooo",
-          ute_pwd: "wwwwwwwwwww",
+          emp_cod: 60,
+          nombre: "oooo",
+          pwd: "wwwwwwwwwww",
           auto_pwd: true),
       */
     );
@@ -201,7 +198,7 @@ class _LoginState extends State<Login> {
 
   Future<void> _login() async {
     if (esperandoLogin) {
-      globales.muestraToast(
+      EnCualquierLugar.muestraSnack(
           context, AppLocalizations.of(context)!.esperandoAlServidor);
     } else {
       //  TO-DO objeto que mire el tiempo de carga del sistema
@@ -217,6 +214,7 @@ class _LoginState extends State<Login> {
       String pwd = _pwd.text;
 
       // Encriptamos el usuario y la contraseña juntos si los dos campos estan rellenados
+      // TODO AVISAR de campos vacios
       String contra_encrypted = '';
       if (pwd.isNotEmpty && nombre.isNotEmpty) {
         contra_encrypted = sha1.convert(utf8.encode(pwd + nombre)).toString();
@@ -232,10 +230,8 @@ class _LoginState extends State<Login> {
             'Content-Type': 'application/json; charset=UTF-8',
           },
           // Adjuntamos al body los datos en formato JSON
-          body: jsonEncode(<String, String>{
-            'nombre': nombre,
-            'pwd': contra_encrypted
-          }),
+          body: jsonEncode(
+              <String, String>{'nombre': nombre, 'pwd': contra_encrypted}),
         );
 
         globales.debug(response.statusCode);

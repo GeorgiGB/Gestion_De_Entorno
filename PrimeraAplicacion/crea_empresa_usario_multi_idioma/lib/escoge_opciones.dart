@@ -1,5 +1,6 @@
 import 'package:crea_empresa_usario/nuevo_usua.dart';
 import 'package:crea_empresa_usario/servidor/sesion.dart';
+import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
 import 'nueva_empr.dart';
@@ -123,7 +124,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
     globales.debug(widget.token);
     if (op == 0) {
       // Pantalla NuevaEmpresa
-      globales.muestraToast(context, traducciones.cargandoEmpresa);
+      EnCualquierLugar.muestraSnack(context, traducciones.cargandoEmpresa);
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -132,12 +133,12 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
                   )));
     } else if (op == 1) {
       // Pantalla NuevoUsuario
-      globales.muestraToast(context, traducciones.cargandoUsuario);
+      EnCualquierLugar.muestraSnack(context, traducciones.cargandoUsuario);
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => NuevoUsuario(
-            ust_token: widget.token,
+            token: widget.token,
           ),
         ),
       );
@@ -145,7 +146,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
   }
 
   void _cerrarSesion() {
-    globales.muestraToast(context, traducciones.cerrandoSesion);
+    EnCualquierLugar.muestraSnack(context, traducciones.cerrandoSesion);
     cerrarSesion(context, token: widget.token);
   }
 }

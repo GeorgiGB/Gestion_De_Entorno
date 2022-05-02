@@ -1,6 +1,7 @@
 import 'package:crea_empresa_usario/globales.dart' as globales;
 import 'package:crea_empresa_usario/main.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
+import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -9,17 +10,16 @@ import 'dart:convert';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
-// No estoy autenticado me redirige a la pagina Login()
-// y muestra aviso.
-noEstoyAutenticado(BuildContext context) {
-  Future.delayed(Duration(seconds: 0), () {
+/// No estoy autenticado muestra aviso y me redirige a la pagina Login()
+noEstoyAutenticado(BuildContext context) async {
+  globales
+      .muestraDialogo(context, AppLocalizations.of(context)!.codError401)
+      .whenComplete(() {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (context) => Login(),
         ),
         (Route<dynamic> route) => false);
-
-    globales.muestraDialogo(context, AppLocalizations.of(context)!.codError401);
   });
 }
 
@@ -111,7 +111,7 @@ Future<bool> cerrarSesion(BuildContext context, {required String token}) async {
   Future.delayed(Duration(seconds: 2), () {
     //Si pasan más de 2 segundos
     if (esperando) {
-      globales.muestraToast(context, traducciones.cargando);
+      EnCualquierLugar.muestraSnack(context, traducciones.cargando);
     }
   });
   return esperando;

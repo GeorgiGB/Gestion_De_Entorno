@@ -1,5 +1,6 @@
 import 'package:crea_empresa_usario/escoge_opciones.dart';
 import 'package:crea_empresa_usario/servidor/anyade.dart';
+import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
 import 'dart:convert';
@@ -162,7 +163,7 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
   _crearEmpresa() {
     String url = globales.servidor + '/crear_empresa';
     if (esperandoNuevaEmpresa) {
-      globales.muestraToast(context, traducciones.esperandoAlServidor);
+      EnCualquierLugar.muestraSnack(context, traducciones.esperandoAlServidor);
     } else {
       /* 
     Tenemos dos tipos de condiciones ya que se puede acceder de dos formas

@@ -10,21 +10,21 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
 class NuevoUsuario extends StatefulWidget {
-  const NuevoUsuario({Key? key, required this.ust_token}) : super(key: key);
-  final String ust_token;
+  const NuevoUsuario({Key? key, required this.token}) : super(key: key);
+  final String token;
 
   @override
   State<NuevoUsuario> createState() => NuevoUsuarioState();
 }
 
 class NuevoUsuarioState extends State<NuevoUsuario> {
-  final TextEditingController _ute_nombre = TextEditingController();
-  final TextEditingController _ute_pwd = TextEditingController();
+  final TextEditingController _nombre = TextEditingController();
+  final TextEditingController _pwd = TextEditingController();
   final FocusNode _auto_contrasenaFocus = FocusNode();
 
   late AppLocalizations traducciones;
 
-  bool _ute_pwd_auto = true;
+  bool _pwd_auto = true;
   bool esperandoNuevoUsuario = false;
   bool enviar = false;
   //  para mostrar/ocultar la contraseña
@@ -48,7 +48,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
   @override
   void initState() {
     _contraVisible = false;
-    _ute_pwd_auto = true;
+    _pwd_auto = true;
   }
 
   @override
@@ -87,10 +87,10 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
   // Se encargara de limpiar el campo contraseña
   autoCheckBox(bool value) {
     if (value) {
-      _ute_pwd.clear();
+      _pwd.clear();
     }
     setState(() {
-      _ute_pwd_auto = value;
+      _pwd_auto = value;
     });
   }
 
@@ -104,7 +104,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
   avisoContraManual(bool hasFocus) {
     // Si la casilla de contraseña auto generada está marcada no permitirá
     // la escritura en el campo de la contraseña y mostrará un aviso.
-    if (hasFocus && _ute_pwd_auto) {
+    if (hasFocus && _pwd_auto) {
       FocusScope.of(context).requestFocus(_auto_contrasenaFocus);
       globales.muestraDialogo(context, traducciones.introContraDesmarcaCasilla);
     }
@@ -125,8 +125,8 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
     // obtenemos la empresa seleccionada
     ef.EmpresCod? empCod = ef.empreCod;
 
-    if (_ute_nombre.text.isNotEmpty &&
-        (_ute_pwd.text.isNotEmpty || _ute_pwd_auto) &&
+    if (_nombre.text.isNotEmpty &&
+        (_pwd.text.isNotEmpty || _pwd_auto) &&
         empCod != null) {
       // Este if no hace falta simplemente pasamos los datos a filtros
       // usuarios
@@ -138,12 +138,12 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
         context,
         MaterialPageRoute(
           builder: (context) => FiltrosUsuario(
-              token: widget.ust_token,
+              token: widget.token,
               empCod: empCod.toString(),
               emp_cod: empCod.empCod,
-              nombre: _ute_nombre.text,
-              ute_pwd: _ute_pwd.text,
-              auto_pwd: _ute_pwd_auto),
+              nombre: _nombre.text,
+              pwd: _pwd.text,
+              auto_pwd: _pwd_auto),
         ),
       );
       //}
@@ -176,7 +176,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
             decoration: InputDecoration(
                 labelText: traducciones.nombreDelUsuario,
                 hintText: traducciones.introduceElNombre),
-            controller: _ute_nombre,
+            controller: _nombre,
             onFieldSubmitted: (String value) {
               // Al pulsar intro pon el foco en el checkbox de contraseña auto generada
               FocusScope.of(context).requestFocus(_auto_contrasenaFocus);
@@ -192,7 +192,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
               Checkbox(
                 // Mientras este activo
                 // No permitirá al usuario escribir una contraseña
-                value: _ute_pwd_auto,
+                value: _pwd_auto,
                 focusNode: _auto_contrasenaFocus,
                 onChanged: (bool? value) {
                   autoCheckBox(value!);
@@ -229,7 +229,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
                         },
                       ),
                     ),
-                    controller: _ute_pwd,
+                    controller: _pwd,
                     // para mostrar/ocultar la contraseña
                     obscureText: !_contraVisible,
                     enableSuggestions: false,

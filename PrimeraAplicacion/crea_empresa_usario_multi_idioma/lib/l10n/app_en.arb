@@ -32,7 +32,7 @@
     "empresa": "Company",
     "empresaNueva": "New company",
     "empresaCreadaCorrectamente": "Company set up ok",
-    "errNoEspecificado": "Unspecified error{error}",
+    "errNoEspecificado": "Unspecified error {error}",
     "escogeOpcion": "Choose option",
     "esperandoAlServidor": "Waiting for server",
     "esperandoRespuestaServidor": "Waiting for server response.",
@@ -90,7 +90,7 @@
     
     "valorInvalidoEnEsteCampo":"Invalid value in this field!",
     
-    "codError401": "Wrong authentication",
+    "codError401": "Unknown user",
     "codErrorLogin404": "User not found",
     "codError500": "Server error"
 }

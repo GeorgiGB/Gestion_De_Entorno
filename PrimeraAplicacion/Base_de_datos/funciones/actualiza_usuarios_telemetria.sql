@@ -16,6 +16,8 @@ AS $BODY$
         icod_error integer;
         cError character varying;
 		iemp_cod integer;
+        statusHTML integer;
+		
     BEGIN
         bOk := false;
         icod_error := 0;
@@ -23,8 +25,9 @@ AS $BODY$
         jresultado := '[]';
 		
         --	Consultamos si el token es válido
-        SELECT t.bOk INTO bOk
+        SELECT t.bok INTO bOk
         	FROM public.validar_token(jleer::jsonb) t;
+			
 		--	Si es válido el programa seguira
         IF bOk THEN
 			--	Tabla temporal para recoger los valores del JSON jleer
@@ -87,24 +90,32 @@ AS $BODY$
 					WHERE usuarios_telemetria.ute_emp_cod = j.emp_cod
 					 AND usuarios_telemetria.ute_nombre = j.nombre;
 			
-			--	Usuario actualizado?
+			--	Usuario insertado?
 			IF FOUND THEN
 				bOk := true;
 			END IF;
 			
 		ELSE
-			--	token no válido, usuario no validado.
-			SELECT ('{"cod_error":"401"}')::jsonb || jresultado ::jsonb into jresultado;
+			--	Token no válido, usuario no validado.
+			statusHTML = 401;
         END IF;
 		
-			--	Añadimos la variable bOk al JSON jresultado
-			SELECT ('{"bOk":"' || bOk || '"}')::jsonb || jresultado::jsonb into jresultado;
+			--	Añadimos la variable bOk i statusHTML al JSON jresultado
+			SELECT ('{"status":"' ||statusHTML
+					||'", "bOk":"' || false 
+					||'", "cod_error":"' || icod_error || '"}')::jsonb || jresultado::jsonb INTO jresultado;
 
         EXCEPTION WHEN OTHERS THEN
-        	bOk := false;
+			bOk = false;
+			cError := SQLERRM;
             icod_error := -1;
-            cerror := SQLERRM;
-            jresultado := '[{"bOk":"' || bOk || '", "cod_error":"' || icod_error || '", "msg_error":"' || SQLERRM || '"}]';
+			statusHTML := 500;
+				
+			SELECT ('{"status":"' || statusHTML
+				|| '", "bOk":"' || false
+				|| '", "cod_error":"' || icod_error
+				|| '", "msg_error":"' || cError || '"}')::jsonb
+				|| jresultado::jsonb INTO jresultado;
         END;
     
 $BODY$;
