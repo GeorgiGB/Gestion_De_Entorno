@@ -33,8 +33,8 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
         title: Text(traducciones.escogeOpcion),
       ),
       body: ListView.builder(
-        // Cosntruimos la lista de widgets dinámicamente
-        // Aquí viene los diferetes botones de comandos
+        //  Construimos la lista de widgets dinámicamente
+        //  Aquí viene los diferetes botones de comandos
         padding: EdgeInsets.only(top: 5),
         itemCount: comandos.length,
         itemBuilder: (context, index) {
@@ -52,28 +52,28 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
   }
 
   creaComandos() {
-// Añadimos los comandos de añadir empresa / usuario
+//  Añadimos los comandos de añadir empresa / usuario
     creaComando2(
       traducciones.anyade,
       [
         ElevatedButton(
           child: Text(traducciones.empresa),
           onPressed: () {
-            // Acción a realizar
+            //  Acción a realizar
             _cargaOpcion(0);
           },
         ),
         ElevatedButton(
           child: Text(traducciones.usuario),
           onPressed: () {
-            // Acción a realizar
+            //  Acción a realizar
             _cargaOpcion(1);
           },
         ),
       ],
     );
 
-    // Añadimos los comandos de añadir empresa / usuario
+    //  Añadimos los comandos de añadir empresa / usuario
     creaComando2(
       traducciones.sesionActiva,
       [
@@ -87,8 +87,8 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
     );
   }
 
-  // Crea un Widget de comandos con titulos a partir de una lista
-  // de botones que continene su comando
+  ///  Crea un Widget de comandos con titulos a partir de una lista
+  ///  de botones que continene su comando
   creaComando2(String titulo, List<Widget> lista) {
     comandos.add([
       Card(
@@ -107,7 +107,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
                 ],
               ),
               const SizedBox(height: 15),
-              // Botones Empresa y Usuarios
+              //  Botones Empresa y Usuarios
               Align(
                 alignment: Alignment.centerLeft,
                 child: Wrap(spacing: 15, children: lista),
@@ -119,7 +119,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
     ]);
   }
 
-  // Al pulsar en un botón lo que hará es mostrar el formulario que hayamos seleccionado
+  /// Al pulsar en un botón lo que hará es mostrar el formulario que hayamos seleccionado
   _cargaOpcion(int op) {
     globales.debug(widget.token);
     if (op == 0) {

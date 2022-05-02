@@ -5,14 +5,16 @@
 CREATE OR REPLACE FUNCTION public.cerrar_sesion(
 	jleer jsonb,
 	OUT jresultado jsonb)
-	-- OUT icodusu integer,
-	-- OUT icoderror integer,
-	-- OUT cerror character varying)
     RETURNS jsonb
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
+--	Función que permitira cambiar el estado de un token
+--	de un usuario principal, si este tiene el token activo
+--	cambiara a inactivo, por lo tanto tendria que iniciar de nuevo sesión
+--  SELECT * FROM cerrar_sesion('{"name_token":"a"}')
+
 DECLARE
 	icodusu integer;
 	icoderror integer;
@@ -66,7 +68,4 @@ $BODY$;
 ALTER FUNCTION public.cerrar_sesion(jsonb)
     OWNER TO postgres;
 
---	Función que permitira cambiar el estado de un token
---	de un usuario principal, si este tiene el token activo
---	cambiara a inactivo, por lo tanto tendria que iniciar de nuevo sesión
---  SELECT * FROM cerrar_sesion('{"name_token":"7887186b33749971de515859532def15f4b210eb"}')
+

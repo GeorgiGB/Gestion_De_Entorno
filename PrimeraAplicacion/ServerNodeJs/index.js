@@ -59,37 +59,35 @@ globales.msg("Servidor ok");
     Iniciar sesión con el usuario
 */
 app.post('/login', (req, res) => {
-    verificar.login(req.body).then(response => {
-        let bOk = response.bOk === 'true';
-        let cod_error = parseInt(response.cod_error);
-        if (bOk) {
-            headers(res).status(200).json(response)
-        } else {
-            if (cod_error < 0) {
-                headers(res).status(500).json(response);
-            } else {
-                headers(res).status(404).json(response);
-            }
+    verificar(req.body).then(response => {
+        globales.peticiones(response,res)
+        // let bOk = response.bOk === 'true';
+        // let cod_error = parseInt(response.cod_error);
+        // if (bOk) {
+        //     headers(res).status(200).json(response)
+        // } else {
+        //     if (cod_error < 0) {
+        //         headers(res).status(500).json(response);
+        //     } else {
+        //         headers(res).status(404).json(response);
+        //     }
 
-        }
+        // }
     })
-        .catch(err => {
-            //  globales.msg(err)
-            headers(res).status(500).json(response);
-        })
+        // .catch(err => {
+        //     headers(res).status(500).json(response);
+        // })
 });
 
 /*
         -------------------------Crear Empresa-------------------------
-    Con un post mandaremos al servidor la petición de la creación de una empresa
+    Con un post mandaremos al servidor la petición de la creación de una empresa.
+    Crearemos una empresa y un usuario predeterminado con la contraseña de la misma
 */
 
 app.post('/crear_empresa', (req, res) => {
     crear_emp(req.body).then(response => {
-        globales.peticiones(response, res)//.catch(err => {
-            //  globales.msg(err)
-            //headers(res).status(500).json(response)
-        //});
+        globales.peticiones(response, res)
     });
 });
 
@@ -100,10 +98,7 @@ app.post('/crear_empresa', (req, res) => {
 
 app.post('/crear_usuarios_telemetria', (req, res) => {
     crear_ute(req.body).then(response => {
-        globales.peticiones(response, res)/*.catch(err => {
-            //globales.msg(err)
-            headers(res).status(500).json(response)
-        })*/;
+        globales.peticiones(response, res)
     });     
 });
 
@@ -118,20 +113,14 @@ app.post('/listado_empresas', (req, res) => {
     })
 });
 
+/*
+        -------------------------Cerrar Sesion de Usuario-------------------------
+    Cada usuario principal tiene un token asociado el cual solo se usara una vez,
+    durante la sesión iniciada ese token estara activo. Hasta que el usuario decida salir de la aplicación,
+    el cual cambiara al estado de 'false' y no se volvera a utilizar.
+*/
 app.post('/cerrar_sesion', (req, res) => {
     cerrar(req.body).then(response => {
-        globales.msg(response)
-        let cod_error = parseInt(response.icoderror );
-        if (cod_error == 0) {
-            headers(res).status(200).json(response)
-            globales.msg("Token desactivado")
-        } else {
-            if (response < 0) {
-                headers(res).status(500).json(response);
-        }
-    }
-    }).catch(err => {
-        globales.msg(err)
-        headers(res).status(500).json(response);
+        globales.peticiones(response, res)
     })
 });
