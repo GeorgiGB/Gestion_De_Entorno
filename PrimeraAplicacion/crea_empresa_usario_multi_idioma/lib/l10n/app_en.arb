@@ -48,6 +48,7 @@
     "hintTuNombre": "Your name",
 
     "identifica":"Login",
+    "idioma":"Language",
     "introduceElNombre": "Enter your name",
     "introContraDesmarcaCasilla": "To enter the password, uncheck the box",
     "introduceLaContrasena": "Introduce your contraseña",
@@ -76,9 +77,9 @@
 
 
     "selecionaEmpresa": "Select company",
-    "selecionaLenguage": "Select Language",
     "seleccionaFiltro": "Select filter: ",
     "seleccionaFiltroUsuario": "Select user filter",
+    "seleccionaLenguage": "Select Language",
     "servidorNoDisponible": "Server not available",
     "sesionActiva": "Active session",
     "siguiente": "Next",

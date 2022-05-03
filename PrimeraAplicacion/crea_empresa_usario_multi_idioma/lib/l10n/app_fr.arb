@@ -47,6 +47,7 @@
   "hintTuNombre": "Votre nom",
 
   "identifica":"Connexion",
+  "idioma":"Langue",
   "introduceElNombre": "Entrez le nom",
   "introContraDesmarcaCasilla":  "Pour saisir le mot de passe, décochez la case.",
   "introduceLaContrasena": "Entrez le mot de passe",
@@ -74,9 +75,9 @@
   "ruta": "Route",
 
   "selecionaEmpresa": "Sélectionner le entreprise",
-  "selecionaLenguage": "Choisir la langue",
   "seleccionaFiltro": "Sélectionner le filtre: ",
   "seleccionaFiltroUsuario": "Sélectionner le filtre utilisateur",
+  "seleccionaIdioma": "Sélectionnez Langue",
   "servidorNoDisponible": "Serveur non disponible",
   "sesionActiva": "Session active",
   "siguiente": "Suivant",

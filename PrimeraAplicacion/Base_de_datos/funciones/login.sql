@@ -51,7 +51,7 @@ BEGIN
 	
 	-- Añadimos el resultado a la salida jresultado
 
-	SELECT ('{"status":"' ||statusHTML
+	SELECT ('{"status":"' || statusHTML
 		|| '", "cod":"' || iUsu_cod 
 		|| '", "bOk":"' || bOk||'"}')::jsonb || jresultado::jsonb into jresultado;
 

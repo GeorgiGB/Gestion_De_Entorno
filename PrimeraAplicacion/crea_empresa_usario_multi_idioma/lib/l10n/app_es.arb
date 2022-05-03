@@ -76,6 +76,7 @@
     "hintTuNombre": "Tu nombre",
 
     "identifica":"Identifícate",
+    "idioma":"Idioma",
     "introduceElNombre": "Introduce el nombre",
     "introContraDesmarcaCasilla": "Para introducir la contraseña desmarca la casilla.",
     "introduceLaContrasena": "Introduce la contraseña",
@@ -123,9 +124,9 @@
     "ruta": "Ruta",
 
     "selecionaEmpresa": "Selecciona empresa",
-    "selecionaLenguage": "Selecciona Lenguaje",
     "seleccionaFiltro": "Selecciona filtro: ",
     "seleccionaFiltroUsuario": "Selecciona filtro usuario",
+    "seleccionaIdioma": "Selecciona Idioma",
     "servidorNoDisponible": "Servidor no disponible",
     "sesionActiva": "Sesión activa",
     "siguiente": "Siguiente",

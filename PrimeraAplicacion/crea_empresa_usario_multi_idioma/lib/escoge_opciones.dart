@@ -1,3 +1,4 @@
+import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/nuevo_usua.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart' as Servidor;
@@ -74,7 +75,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
       ],
     );
 
-    //  Añadimos los comandos de añadir empresa / usuario
+    //  Añadimos el comando de cerrar sessión
     creaComando2(
       traducciones.sesionActiva,
       [
@@ -84,6 +85,13 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
             _cerrarSesion();
           },
         ),
+      ],
+    );
+    //  Añadimos el comando del idioma
+    creaComando2(
+      traducciones.idioma,
+      [
+        LanguageDropDown().getDropDown(context),
       ],
     );
   }

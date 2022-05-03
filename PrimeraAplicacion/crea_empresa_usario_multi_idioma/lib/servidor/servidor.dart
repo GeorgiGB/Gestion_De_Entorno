@@ -96,7 +96,8 @@ Future<bool> cerrarSesion(BuildContext context, {required String token}) async {
   Future.delayed(Duration(seconds: 2), () {
     //Si pasan más de 2 segundos
     if (esperando) {
-      EnCualquierLugar().muestraSnack(context, traducciones.esperandoAlServidor);
+      EnCualquierLugar()
+          .muestraSnack(context, traducciones.esperandoAlServidor);
     }
   });
 

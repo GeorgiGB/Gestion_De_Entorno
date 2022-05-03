@@ -10,8 +10,7 @@ function msg(message){
 
 //  Función asincrona que permite la petición a la base de datos con la información solicitada
 async function peticiones(response, res){
-        msg(response)
-        header(res).status(parseInt(response[0].status)).json(response)
+    header(res).status(parseInt(response[0].status)).json(response)
 }
 
 module.exports = {

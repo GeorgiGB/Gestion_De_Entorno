@@ -10,7 +10,7 @@ class LanguageDropDown {
     return DropdownButton<LanguageData>(
       elevation: 15,
       iconSize: 15,
-      hint: Text(AppLocalizations.of(context)!.selecionaLenguage),
+      hint: Text(AppLocalizations.of(context)!.seleccionaIdioma),
       onChanged: (LanguageData? language) {
         changeLanguage(context, language!.lenguajeCodigo);
       },
