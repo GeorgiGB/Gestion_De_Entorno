@@ -17,34 +17,19 @@ const crear_emp = require('./comandos/empresas');
 const crear_ute = require('./comandos/usuarios_telemetria');
 
 //  La conexion con el servidor obtener listado de empresas
-const obtener = require('./comandos/obtener');
+const obtener_lista = require('./comandos/obtener');
 
 //  Cambiara el estado del token del usuario
-const cerrar = require('./comandos/cerrar_sesion');
+const cerrar_sesion = require('./comandos/cerrar_sesion');
 
-//  Puede mandar mensajes a la terminal y mandar peticiones al servidor
+//  Funciones generales del programa
 const globales = require('./comandos/globales');
 
-//  Son la petición al servidor
-const headers = require('./comandos/cabecera');
-const { response } = require('express');
-// Estas credenciales llevan implicitos el usuario y la contraseña
-// Viene encriptadas en SHA1 de la aplicación cliente
-const administrador = 'admin';  //? Esto aún hace falta?
 let app = express();
 app.set('accesTokenSecret', verificar.llaveSecreta)
 
 //! Configuración de cors
 var corsOptions = require("./config/cors.config")
-
-// 
-// var corsOptions = {
-//     origin: '*',
-//     optionsSuccessStatus: 200, // For legacy browser support
-//     methods: "POST",
-//     content_type: "application/json; charset=utf-8"
-
-// }
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
@@ -59,13 +44,7 @@ globales.msg("Servidor ok");
     Iniciar sesión con el usuario
 */
 app.post('/login', (req, res) => {
-    verificar(req.body).then(response => {
-        //console.log(2/0);
-        globales.peticiones(response, res)
-    }).catch(err => {
-        console.log(err)
-        headers(res).status(500).json(response);
-        });
+    globales.tryCath(verificar, req, res)
 });
 
 /*
@@ -73,11 +52,8 @@ app.post('/login', (req, res) => {
     Con un post mandaremos al servidor la petición de la creación de una empresa.
     Crearemos una empresa y un usuario predeterminado con la contraseña de la misma
 */
-
 app.post('/crear_empresa', (req, res) => {
-    crear_emp(req.body).then(response => {
-        globales.peticiones(response, res)
-    });
+    globales.tryCath(crear_emp, req, res)
 });
 
 /*
@@ -86,9 +62,7 @@ app.post('/crear_empresa', (req, res) => {
 */
 
 app.post('/crear_usuarios_telemetria', (req, res) => {
-    crear_ute(req.body).then(response => {
-        globales.peticiones(response, res)
-    });     
+    globales.tryCath(crear_ute, req, res)
 });
 
 /*
@@ -97,9 +71,7 @@ app.post('/crear_usuarios_telemetria', (req, res) => {
     haremos una petición al servidor el cual se mostrara en un desplegabe de la aplicación.
 */
 app.post('/listado_empresas', (req, res) => {
-    obtener(req.body).then(response => {
-        globales.peticiones(response, res)
-    })
+    globales.tryCath(obtener_lista, req, res)
 });
 
 /*
@@ -109,7 +81,5 @@ app.post('/listado_empresas', (req, res) => {
     el cual cambiara al estado de 'false' y no se volvera a utilizar.
 */
 app.post('/cerrar_sesion', (req, res) => {
-    cerrar(req.body).then(response => {
-        globales.peticiones(response, res)
-    })
+    globales.tryCath(cerrar_sesion, req, res)
 });
