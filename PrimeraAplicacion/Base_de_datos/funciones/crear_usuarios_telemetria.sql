@@ -10,6 +10,17 @@ CREATE OR REPLACE FUNCTION public.crear_usuarios_telemetria(
     COST 100
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
+
+--	Para hacer un insert hay que poner un emp_cod que exista en la tabla empresas
+--	Si exite en la tabla un nombre con el mismo ust_emp_cod HAY QUE CAMBIAR EL NOMBRE DE "nombre"
+--	select * from crear_usuarios_telemetria('{"emp_cod": "41", "ctoken": "a", "nombre": "usunuevotele", "pwd": "1111111", "auto_pwd": "false", "filtro": "ute_ruta", "cod_filtro": "37"}');
+--	select * from usuarios_telemetria
+
+
+--	Función de creación de usuarios de telemetria
+--	el cual solo podra acceder un usuario principal con un token activo
+--	a la hora de la creación del usuario de telemetria
+--	se tiene que relacionar con una empresa de forma obligatoria
 	
     DECLARE
         bOk boolean;
@@ -84,14 +95,12 @@ AS $BODY$
         END IF;
 		
 			--	Añadimos la variable bOk i statusHTML al JSON jresultado
-			SELECT ('{"status":"' ||statusHTML
-					||'", "bOk":"' || false 
+			SELECT ('{"status":"' ||statusHTML 
 					||'", "cod_error":"' || icod_error || '"}')::jsonb || jresultado::jsonb into jresultado;
 
 		EXCEPTION
 			--	Códigos de error -> https://www.postgresql.org/docs/current/errcodes-appendix.html
 			WHEN OTHERS THEN
-				bOk = false;
 				cError := SQLERRM;
                 statusHTML := 500;
 				CASE
@@ -106,7 +115,6 @@ AS $BODY$
 				END CASE;
 				
 				SELECT ('{"status":"' || statusHTML
-					|| '", "bOk":"' || false
 					|| '", "cod_error":"' || icod_error
 					|| '", "msg_error":"' || cError || '"}')::jsonb
 					|| jresultado::jsonb into jresultado;
@@ -116,14 +124,3 @@ $BODY$;
 
 ALTER FUNCTION public.crear_usuarios_telemetria(jsonb)
     OWNER TO postgres;
-
---	Para hacer un insert hay que poner un emp_cod que exista en la tabla empresas
---	Si exite en la tabla un nombre con el mismo ust_emp_cod HAY QUE CAMBIAR EL NOMBRE DE "nombre"
---	select * from crear_usuarios_telemetria('{"emp_cod": "41", "ctoken": "a", "nombre": "usunuevotele", "pwd": "1111111", "auto_pwd": "false", "filtro": "ute_ruta", "cod_filtro": "37"}');
---	select * from usuarios_telemetria
-
-
---	Función de creación de usuarios de telemetria
---	el cual solo podra acceder un usuario principal con un token activo
---	a la hora de la creación del usuario de telemetria
---	se tiene que relacionar con una empresa de forma obligatoria
