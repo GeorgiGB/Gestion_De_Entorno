@@ -59,7 +59,7 @@ AS $BODY$
 			INSERT INTO usuarios_telemetria
 				(ute_emp_cod, ute_nombre, ute_pwd,
 				 ute_centro_padre, ute_centro, ute_pdv,
-				 ute_jefe_area, ute_ruta, ute_empresa) 
+				 ute_jefe_area, ute_ruta) 
 				SELECT 
 					j.emp_cod, j.nombre,
 					--	Contraseña autogenerada
@@ -78,9 +78,8 @@ AS $BODY$
 					(CASE WHEN 'ute_jefe_area' = j.filtro THEN
 						j.cod_filtro ELSE null END),
 					(CASE WHEN 'ute_ruta' = j.filtro THEN
-						j.cod_filtro ELSE null END),
-					(CASE WHEN 'ute_empresa' = j.filtro THEN
 						j.cod_filtro ELSE null END)
+						
 				--	Obtenemos los valores de la tabla del JSON jleer
 				FROM jsonb_populate_record(null::json_insert_usuarios_telemetria, jleer) j;
 			

@@ -200,22 +200,24 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
           json: json,
           msgOk: traducciones.laEmpresaHaSidoDadoDeAlta(nom_empresa),
           msgError: traducciones.laEmpresaYaEstaregistrada(nom_empresa),
-        ).then((oK) {
+        ).then((codigo) {
           esperandoNuevaEmpresa = false;
-          if (oK) {
-            EnCualquierLugar().muestraSnack(
-              context,
-              traducciones.laEmpresaHaSidoDadoDeAlta(nom_empresa),
-              onHide: () {
-                // Cargamos pantalla de escoger opciones
-                Navegacion.cargaEscogeOpciones(context, widget.token);
-              },
-            );
+          switch (codigo) {
+            case 0:
+              EnCualquierLugar().muestraSnack(
+                context,
+                traducciones.laEmpresaHaSidoDadoDeAlta(nom_empresa),
+                onHide: () {
+                  Navegacion.vaciaNavegacionYCarga(context,
+                      builder: (context) => NuevaEmpresa(token: widget.token));
+                },
+              );
+              break;
             //globales.muestraDialogo(context, msgOk);
             // volvemos a escoger opció
-          } else {
-            globales.muestraDialogo(
-                context, traducciones.laEmpresaYaEstaregistrada(nom_empresa));
+            case -2:
+              globales.muestraDialogo(
+                  context, traducciones.laEmpresaYaEstaregistrada(nom_empresa));
           }
         });
       }

@@ -238,7 +238,9 @@ class _LoginState extends State<Login> {
           if (response!.statusCode == Servidor.CodigoResp.ok) {
             final parsed =
                 jsonDecode(response.body).cast<Map<String, dynamic>>();
-            cargaEscogeOpciones(context, parsed[0]['token']);
+            vaciaNavegacionYCarga(context,
+                builder: (context) =>
+                    EscogeOpciones(token: parsed[0]['token']));
           }
         }).whenComplete(() => esperandoLogin = false);
       }

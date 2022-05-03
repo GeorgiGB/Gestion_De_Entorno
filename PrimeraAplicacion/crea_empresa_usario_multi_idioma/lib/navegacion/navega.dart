@@ -4,14 +4,12 @@ import '../escoge_opciones.dart';
 
 // Fin imports multi-idioma ----------------
 
-cargaEscogeOpciones(BuildContext context, String token) {
+vaciaNavegacionYCarga(BuildContext context,
+    {required Widget Function(BuildContext) builder}) {
   Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => EscogeOpciones(
-          token: token,
-        ),
-      ),
-      (Route<dynamic> route) => false);
+    MaterialPageRoute(builder: builder),
+    (Route<dynamic> route) => false,
+  );
 }
 
 aLogin(BuildContext context) {
@@ -22,15 +20,12 @@ aLogin(BuildContext context) {
       (Route<dynamic> route) => false);
 }
 
-popAndPush(BuildContext context, {required Widget Function(BuildContext) builder}) {
+popAndPush(BuildContext context,
+    {required Widget Function(BuildContext) builder}) {
   // Eliminamos la página actual del historial de Navigator
   if (Navigator.canPop(context)) {
     Navigator.pop(context);
   }
   // Cargamos la página de NuevaEmpresa
-  Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: builder
-      ));
+  Navigator.push(context, MaterialPageRoute(builder: builder));
 }

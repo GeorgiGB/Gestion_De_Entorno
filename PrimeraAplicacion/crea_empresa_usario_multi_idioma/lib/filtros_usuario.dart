@@ -173,22 +173,22 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
           json: json,
           msgOk: traducciones.elUsuarioHaSidoDadoDeAlta(widget.nombre),
           msgError: traducciones.elUsuarioYaEstaRegistrado(widget.nombre),
-        ).then((oK) {
+        ).then((codigo) {
           esperandoFiltrado = false;
-          if (oK) {
-            EnCualquierLugar().muestraSnack(
-              context,
-              traducciones.elUsuarioHaSidoDadoDeAlta(widget.nombre),
-              onHide: () {
+          switch (codigo) {
+            case 0:
+              EnCualquierLugar().muestraSnack(context,
+                  traducciones.elUsuarioHaSidoDadoDeAlta(widget.nombre),
+                  onHide: () {
                 // Cargamos pantalla de escoger opciones
-                Navegacion.cargaEscogeOpciones(context, widget.token);
-              },
-            );
-            //globales.muestraDialogo(context, msgOk);
-            // volvemos a escoger opció
-          } else {
-            //globales.muestraDialogo(
-            //    context, traducciones.elUsuarioYaEstaRegistrado(widget.nombre));
+                Navegacion.vaciaNavegacionYCarga(context,
+                    builder: (context) => NuevoUsuario(token: widget.token));
+              });
+              break;
+            case -2:
+              globales.muestraDialogo(context,
+                  traducciones.elUsuarioYaEstaRegistrado(widget.nombre));
+              break;
           }
         });
       }

@@ -121,7 +121,7 @@ Future<bool> cerrarSesion(BuildContext context, {required String token}) async {
   return esperando;
 }
 
-Future<bool> anyade(BuildContext context, String url,
+Future<int> anyade(BuildContext context, String url,
     {required String token,
     required String json,
     required String msgOk,
@@ -133,7 +133,6 @@ Future<bool> anyade(BuildContext context, String url,
 
   // Mostramos un toast si tarda más de dos segundos en responmder el servidor
   Future.delayed(Duration(seconds: 2), () {
-    print("hola" + esperando.toString());
     //Si pasan más de 2 segundos
     if (esperando) {
       EnCualquierLugar()
@@ -143,22 +142,10 @@ Future<bool> anyade(BuildContext context, String url,
 
   // Lanzamos la peticion Post al servidor
   try {
-    var _url = globales.servidor + url;
+    var _url = url;
     globales.debug(_url);
     var _json = json;
-    //var response = await _enviaPeticionAlservidor(context, _url, _json);
-    /**/
-    var response = await http.post(
-      Uri.parse(_url),
-      // Cabecera para enviar JSON con una autorizacion token
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ' + token
-      },
-      // Adjuntamos al body los datos en formato JSON
-      body: _json,
-    );
-    /**/
+    var response = await _enviaPeticionAlservidor(context, _url, _json);
 
     int status = response.statusCode;
 
@@ -166,35 +153,16 @@ Future<bool> anyade(BuildContext context, String url,
     // status correcto?
     if (status == CodigoResp.ok) {
       bool ok = parsed[0]['bOk'].toString().parseBool();
-      int cod_error = int.parse(parsed[0]['cod_error']);
-
-      switch (cod_error) {
+      int codEerror = int.parse(parsed[0]['cod_error']);
+      return codEerror;
+      /*switch (codEerror) {
         case 0:
-          return true;
+          return 0;
         case -2:
-          globales.muestraDialogo(
-                context, msgError);
+          globales.muestraDialogo(context, msgError);
           return false;
-        /*default:
-          //globales.debug(parsed[0]['msg_error']);
-          globales.muestraDialogo(
-              context, traducciones.errNoEspecificado(parsed[0]['msg_error']));
-        // TODO preparar accion
-        // TODO volvemos a escoger opción*/
-      }
-      //}
-/**/
-      // Errores posibles
-    } else if (status == CodigoResp.usuarioNoAutenticado) {
-      // Muestra un diálogo y cambia a la pantalla principal al cerrarlo
-      noEstoyAutenticado(context);
-    } else if (status == CodigoResp.errorServidor) {
-      globales.muestraDialogo(context, traducciones.codError500);
-      //globales.muestraDialogo(context, response.body);
-    } else {
-      globales.debug(response.body);
+      }*/
     }
-    /**/
 
     //Errores de conexión del cliente u otros no especificados
   } on http.ClientException catch (e) {
@@ -205,7 +173,7 @@ Future<bool> anyade(BuildContext context, String url,
   } finally {
     esperando = false;
   }
-  return false;
+  return -1;
 }
 
 Future<http.Response> buscaEmpresas(String queBusco, http.Client client,

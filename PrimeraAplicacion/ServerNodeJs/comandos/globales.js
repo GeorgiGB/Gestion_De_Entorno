@@ -21,6 +21,7 @@ async function peticiones(response, res){
             peticiones(response, res)
         })
     } catch (error) {
+        // TODO enviar respuesta a quien a generado la petición
         msg(error)
     }
 }
