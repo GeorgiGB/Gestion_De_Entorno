@@ -13,7 +13,20 @@ async function peticiones(response, res){
     header(res).status(parseInt(response[0].status)).json(response)
 }
 
+//  Función asincrona que añade un try cath para evitar errores
+//  y manda la peticion deseada
+ function tryCath(x, req, res){
+    try {
+        x(req.body).then(response => {
+            peticiones(response, res)
+        })
+    } catch (error) {
+        msg(error)
+    }
+}
+
 module.exports = {
     msg:msg,
-    peticiones:peticiones
+    peticiones:peticiones,
+    tryCath:tryCath
 }
