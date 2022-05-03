@@ -139,7 +139,7 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
   // Future encargado de enviar los datos del nuevo usuario al servidor
   // lo único que controla es si los campos están vacios
   _enviar_filtro() {
-    String url = globales.servidor + '/crear_usuarios_telemetria';
+    String url = '/crear_usuarios_telemetria';
     //Si estamos esperando el filtro y se vuelve a pulsar login este lo ignorara.
     if (esperandoFiltrado) {
       EnCualquierLugar()
@@ -187,8 +187,8 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
             //globales.muestraDialogo(context, msgOk);
             // volvemos a escoger opció
           } else {
-            globales.muestraDialogo(
-                context, traducciones.elUsuarioYaEstaRegistrado(widget.nombre));
+            //globales.muestraDialogo(
+            //    context, traducciones.elUsuarioYaEstaRegistrado(widget.nombre));
           }
         });
       }

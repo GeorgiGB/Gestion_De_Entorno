@@ -93,6 +93,7 @@ BEGIN
 					
 					-- código empresa
 					iemp_cod
+					
 				FROM jsonb_populate_record(null::emp_json, jleer) j;
 				
 			IF FOUND THEN

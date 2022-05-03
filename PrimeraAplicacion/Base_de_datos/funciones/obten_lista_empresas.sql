@@ -42,8 +42,7 @@ BEGIN
 
 		--  Añadimos la variable bOk al JSON jresultado
 		--  importante añadir COALESCE(jresultado, '{}') porque jresultado puede ser null
-		
-		SELECT (COALESCE(jresultado, '[]'))::jsonb || jresultado::jsonb into jresultado;
+		SELECT (COALESCE(jresultado, '[]'))::jsonb into jresultado;
 	ELSE
 		statusHTML := 401;
 	END IF;

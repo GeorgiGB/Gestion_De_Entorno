@@ -1,4 +1,5 @@
 import 'package:crea_empresa_usario/excepciones_personalizadas/excepciones.dart';
+import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/nueva_empr.dart';
 import 'package:crea_empresa_usario/nuevo_usua.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart' as Servidor;
@@ -55,10 +56,13 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
               throw error!;
             },
           )
+            // ejemplo tomado y modificado de:
+            // https://docs.flutter.dev/cookbook/networking/background-parsing#4-move-this-work-to-a-separate-isolate
 
             // si es correcto devolvemos u listado de empresas
             // Utilizamos la función compute para ejecutar _parseEmpresas en un segundo plano.
             .then((response) => compute(_parseEmpresas, response)),
+
     // Este future en función del error de la conexión o del servidor realiza
     // varios intentos antes de llamar a este método anónimo y crear los widgets a mostrar
     builder: (context, datos) {
@@ -95,13 +99,17 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
             msg: AppLocalizations.of(cntxt)!.anyadeEmpresa,
             icon: const Icon(Icons.add_business_rounded),
             accion: () => {
+              popAndPush(context,
+                  builder: (context) => NuevaEmpresa(token: widget.token)),
+              // Eliminamos la página actual del historial de Navigator
+              /*if (Navigator.canPop(context)) {Navigator.pop(context)},
               // Cargamos la página de NuevaEmpresa
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => NuevaEmpresa(token: widget.token),
                 ),
-              )
+              )*/
             },
           );
         } else {

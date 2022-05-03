@@ -1,26 +1,3 @@
-class LanguageData {
-  final String bandera;
-  final String idioma;
-  final String lenguajeCodigo;
-
-  LanguageData(this.bandera, this.idioma, this.lenguajeCodigo);
-  // para obtener las banderas podemos ir a:
-  // https://emojipedia.org/flags/
-  // y buscamos la cadena de caracteres correspondientes a la bandera
-
-  // Lista para rellenar con los datos:
-  //  flag:bandera, name: nombre_idioma, lenguajeCodigo: codigo lenguaje
-
-  static List<LanguageData> languageList() {
-    return <LanguageData>[
-      LanguageData("🇺🇸", "English", 'en'),
-      LanguageData("🇪🇸", "Español", "es"),
-      LanguageData("🇫🇷", "Frances", "fr"),
-    ];
-  }
-}
-
-/*
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,7 +19,7 @@ class LanguageData {
   static final List<LanguageData> languageList = <LanguageData>[
     LanguageData("🇺🇸", "English", 'en'),
     LanguageData("🇪🇸", "Español", "es"),
-    LanguageData("🇸🇦", "اَلْعَرَبِيَّةُ", "ar"),
+    LanguageData("🇫🇷", "Frances", "fr"),
   ];
 
   static LanguageData? getLanguageData(String? insignia) {
@@ -52,7 +29,7 @@ class LanguageData {
     } else {
       if (insignia != null) {
         for (var bd in languageList) {
-          if (bd.bandera == insignia) {
+          if (bd.bandera == insignia || bd.lenguajeCodigo == insignia) {
             ld = bd;
             break;
           }
@@ -68,7 +45,7 @@ class LanguageData {
 
 // Para comentar  como funciona las SharedPreferences
 
-const String prefBandera = "SelectedLanguageCode";
+const String prefBandera = "SelectedLanguageData";
 
 Future<LanguageData?> setLenguaje(String bandera) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();
@@ -76,22 +53,21 @@ Future<LanguageData?> setLenguaje(String bandera) async {
   return _lenguage(bandera);
 }
 
-Future<LanguageData?> getLenguaje() async {
+Future<LanguageData?> getLenguajeData() async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   String? bandera = _prefs.getString(prefBandera);
   return _lenguage(bandera);
 }
 
 LanguageData? _lenguage(String? bandera) {
+  LanguageData._lenguage = LanguageData.getLanguageData(bandera);
   return bandera != null && bandera.isNotEmpty
       ? LanguageData.getLanguageData(bandera)
       : null;
 }
 
-void changeLanguageData(BuildContext context, String bandera) async {
+void changeLanguageData(String bandera) async {
   LanguageData._lenguage = await setLenguaje(bandera);
 
-  MyApp.setLocale(context, LanguageData._lenguage);
+  //MyApp.setLocale(context, LanguageData._lenguage);
 }
-
-*/

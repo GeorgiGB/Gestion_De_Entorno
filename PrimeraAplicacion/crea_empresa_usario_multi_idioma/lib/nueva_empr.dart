@@ -162,7 +162,7 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
   }
 
   _crearEmpresa() {
-    String url = globales.servidor + '/crear_empresa';
+    String url = '/crear_empresa';
     if (esperandoNuevaEmpresa) {
       EnCualquierLugar()
           .muestraSnack(context, traducciones.esperandoAlServidor);

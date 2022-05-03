@@ -1,4 +1,6 @@
+import 'package:crea_empresa_usario/escoge_opciones.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
+import 'package:crea_empresa_usario/preferencias/preferencias.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart' as Servidor;
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
@@ -16,14 +18,22 @@ import 'config_regional/opciones_idiomas/ops_lenguaje.dart' as op_leng;
 
 // Fin imports multi-idioma ----------------
 
+/// Cargamos preferencias y nos devuelve un Future con la sesion si ha sido guardada
 void main() {
-  runApp(MyApp());
+  String? sesion;
+  cargaPreferencia().then((value) {
+    globales.debug('inicio: ' + (value ?? 'nada'));
+    sesion = value;
+  }).whenComplete(() {
+    globales.debug("sesion: " + (sesion == null).toString());
+    runApp(MyApp(token: sesion == null || sesion!.isEmpty ? null : sesion));
+  });
 }
 
 // Necesitamos que el Widget sea stateful para mantener los cambios de idiomas
 // si se produce un cambio en la elección de idioma
 class MyApp extends StatefulWidget {
-  MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key, this.token}) : super(key: key);
 
   // Método estático disponible para todos las clsses y así realizar el cambió de idioma
   // desde donde queramos
@@ -31,6 +41,8 @@ class MyApp extends StatefulWidget {
     // buscamos el objeto state para establece la nueva configuración regional
     context.findAncestorStateOfType<_MyAppState>()?.setLocale(newLocale);
   }
+
+  final String? token;
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -85,7 +97,9 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
 
-      home: Login(),
+      home:
+          widget.token == null ? Login() : EscogeOpciones(token: widget.token!),
+      //home: getPreferencia(MyApp.claveGuardaSesion).whenComplete(() => Login()),
 
       //home: EscogeOpciones(token: 'a'),
 

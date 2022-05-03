@@ -21,3 +21,16 @@ aLogin(BuildContext context) {
       ),
       (Route<dynamic> route) => false);
 }
+
+popAndPush(BuildContext context, {required Widget Function(BuildContext) builder}) {
+  // Eliminamos la página actual del historial de Navigator
+  if (Navigator.canPop(context)) {
+    Navigator.pop(context);
+  }
+  // Cargamos la página de NuevaEmpresa
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: builder
+      ));
+}
