@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS public.usuarios_telemetria
     ute_usu_cod integer,
     ute_nombre character varying(30) COLLATE pg_catalog."default" NOT NULL,
     ute_pwd character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    ute_empresa integer NOT NULL DEFAULT 0,
     ute_centro_padre integer,
     ute_centro integer,
     ute_pdv integer,
