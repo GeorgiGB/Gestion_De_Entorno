@@ -2,7 +2,7 @@ import 'package:crea_empresa_usario/excepciones_personalizadas/excepciones.dart'
 import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/nueva_empr.dart';
 import 'package:crea_empresa_usario/nuevo_usua.dart';
-import 'package:crea_empresa_usario/servidor/servidor.dart' as Servidor;
+import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -41,8 +41,7 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
             .onError(
             (error, stackTrace) {
               if (error is ExceptionServidor) {
-                if (error.codError ==
-                    Servidor.CodigoResp.usuarioNoAutenticado) {
+                if (error.codError == Servidor.usuarioNoAutenticado) {
                   // No estoy auternticado
                   msgErr = AppLocalizations.of(cntxt)!.codError401;
                   // noEstoyAutenticado(cntxt);
@@ -69,7 +68,7 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
       if (datos.hasError) {
         // en caso de error
         bool autenticado = (datos.error as ExceptionServidor).codError !=
-            Servidor.CodigoResp.usuarioNoAutenticado;
+            Servidor.usuarioNoAutenticado;
 
         if (autenticado && msgErr.isNotEmpty) {
           // tenemos que darle un retraso ya que mostrar el diálogo
@@ -222,11 +221,11 @@ class AvisoAccion extends StatelessWidget {
 // por el servidor en una List<EmpresCod>.
 List<EmpresCod> _parseEmpresas(http.Response? response) {
   if (response == null) {
-    throw ExceptionServidor(Servidor.CodigoResp.errorServidor);
+    throw ExceptionServidor(Servidor.errorServidor);
   } else {
     final int status = response.statusCode;
     switch (status) {
-      case Servidor.CodigoResp.ok:
+      case Servidor.ok:
         globales.debug("hola");
         final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
         parsed.removeAt(0);
