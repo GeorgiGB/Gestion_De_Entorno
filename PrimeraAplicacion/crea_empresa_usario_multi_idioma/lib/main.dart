@@ -111,13 +111,13 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         // La ruta raíz (/) es la primera pantalla
-        '/': (context) =>
+        Rutas.Raiz.str: (context) =>
             Identificate(_setToken, traduce: _traduce), //Login(_traducc),
-        '/EscogeOpciones': (context) => Opciones(_setToken, context,
+        Rutas.Opciones.str: (context) => Opciones(_setToken, context,
             traduce: _traduce, token: widget._token),
-        '/NuevaEmpresa': (context) =>
+        Rutas.EmpresaNueva.str: (context) =>
             EmpresaNueva(context, traduce: _traduce, token: widget._token),
-        '/NuevoUsuario': (context) =>
+        Rutas.UsuarioNuevo.str: (context) =>
             UsuarioNuevo(context, traduce: _traduce, token: widget._token),
         // A esta ruta no se puede acceder por aquí se tiene que acceder a traves de Nuevo usuario
         //'/NuevoUsuario/FiltrosUsuario': (context) => FiltrosUsuario(token: token, empCod: empCod, emp_cod: emp_cod, nombre: nombre, pwd: pwd, auto_pwd: auto_pwd);,

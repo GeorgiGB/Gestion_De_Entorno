@@ -12,6 +12,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
+enum Rutas { Raiz, Opciones, EmpresaNueva, UsuarioNuevo }
+
+extension ParseToString on Rutas {
+  String get str {
+    var str = toString().split('.').last;
+
+    return str.toLowerCase() == 'raiz' ? '/' : str;
+  }
+}
+
 vaciaNavegacionYCarga(BuildContext context,
     {required Widget Function(BuildContext) builder}) {
   if (Navigator.canPop(context)) {
