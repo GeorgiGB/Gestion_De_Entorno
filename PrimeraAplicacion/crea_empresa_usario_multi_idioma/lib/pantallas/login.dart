@@ -1,4 +1,3 @@
-
 import 'package:crea_empresa_usario/pantallas/escoge_opciones.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/preferencias/preferencias.dart';
@@ -15,16 +14,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
 // Fin imports multi-idioma ----------------
 
-
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login(this.traduce, {Key? key}) : super(key: key);
+  final AppLocalizations traduce;
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Login> createState() => _LoginState(traduce);
 }
 
 class _LoginState extends State<Login> {
-  late AppLocalizations traducciones;
+  _LoginState(AppLocalizations this.traduce) {}
+  final AppLocalizations traduce;
 
   // Creamos el controlador campo de usuario
   final TextEditingController _usuario = TextEditingController();
@@ -40,7 +40,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    traducciones = AppLocalizations.of(context)!;
+    //traduce = AppLocalizations.of(context)!;
     // TODO poner información en blanco
     // informacion predeterminada que luego se borrara mas adelante
     _usuario.text = "Joselito";
@@ -64,7 +64,7 @@ class _LoginState extends State<Login> {
           children: <Widget>[
             TextFormField(
               decoration: InputDecoration(
-                  hintText: traducciones.hintTuNombre,
+                  hintText: traduce.hintTuNombre,
                   labelText: AppLocalizations.of(context)!.usuario),
               controller: _usuario,
               onFieldSubmitted: (String value) {
@@ -76,7 +76,7 @@ class _LoginState extends State<Login> {
 
             TextFormField(
               decoration: InputDecoration(
-                  hintText: traducciones.hintContrasena,
+                  hintText: traduce.hintContrasena,
                   labelText: AppLocalizations.of(context)!.contrasena),
               controller: _pwd,
               obscureText: true,
@@ -104,8 +104,7 @@ class _LoginState extends State<Login> {
 
   Future<void> _login() async {
     if (esperandoLogin) {
-      EnCualquierLugar()
-          .muestraSnack(context, traducciones.esperandoAlServidor);
+      EnCualquierLugar().muestraSnack(context, traduce.esperandoAlServidor);
     } else {
       // Obtenemos usuario y la contraseña introducidas
       String nombre = _usuario.text;
@@ -114,15 +113,14 @@ class _LoginState extends State<Login> {
 
       if (nombre.isEmpty || pwd.isEmpty) {
         // No tiene datos Mostramos avisos
-        globales.muestraDialogo(context, traducciones.primerRellenaCampos);
+        globales.muestraDialogo(context, traduce.primerRellenaCampos);
       } else {
         esperandoLogin = true;
         // URL del servidor
         String url = globales.servidor + '/login';
 
         Servidor.login(context, nombre, pwd).then((response) {
-          if (response != null &&
-              response.statusCode == Servidor.ok) {
+          if (response != null && response.statusCode == Servidor.ok) {
             final parsed =
                 jsonDecode(response.body).cast<Map<String, dynamic>>();
             vaciaNavegacionYCarga(context,

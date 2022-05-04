@@ -226,7 +226,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
     } else {
       cerrandoSesion = true;
       Servidor.cerrarSesion(context, token: widget.token)
-          .whenComplete(() => aLogin(context));
+          .whenComplete(() => aLogin(context, traducciones));
     }
   }
 }

@@ -1,5 +1,8 @@
 import 'package:crea_empresa_usario/pantallas/escoge_opciones.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
+import 'package:crea_empresa_usario/pantallas/filtros_usuario.dart';
+import 'package:crea_empresa_usario/pantallas/nueva_empr.dart';
+import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
 import 'package:crea_empresa_usario/preferencias/preferencias.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
@@ -49,6 +52,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Locale? _locale = null;
+  late AppLocalizations _traducc;
 
   void setLocale(Locale? locale) {
     setState(() {
@@ -90,14 +94,30 @@ class _MyAppState extends State<MyApp> {
       // en este momento ya que si lo hacemos a traves de
       // title:traducciones.appName,
       // genera un error porque el objeto AppLocalizations devuelto es nulo
-      onGenerateTitle: (BuildContext context) =>
-          AppLocalizations.of(context)!.nombreApp,
+      onGenerateTitle: (BuildContext context) {
+        _traducc = AppLocalizations.of(context)!;
+        return _traducc.nombreApp;
+      },
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
 
-      home:
-          widget.token == null ? Login() : EscogeOpciones(token: widget.token!),
+      initialRoute: '/',
+      routes: {
+        // La ruta raíz (/) es la primera pantalla
+        '/': (context) => Sesion(traducciones: _traducc), //Login(_traducc),
+        '/EscogeOpciones': (context) => EscogeOpciones(token: widget.token!),
+        '/NuevaEmpresa': (context) => NuevaEmpresa(token: widget.token!),
+        '/NuevoUsuario': (context) => NuevoUsuario(token: widget.token!),
+        // A esta ruta no se puede acceder por aquí se tiene que acceder a traves de Nuevo usuario
+        //'/NuevoUsuario/FiltrosUsuario': (context) => FiltrosUsuario(token: token, empCod: empCod, emp_cod: emp_cod, nombre: nombre, pwd: pwd, auto_pwd: auto_pwd);,
+        '/Sesion': (context) => Sesion(traducciones: _traducc), //
+      },
+
+      //home:
+      //    widget.token == null ? Login() : EscogeOpciones(token: widget.token!),
+
+      //home: Sesion(traducciones: AppLocalizations.of(context)!),
       //home: getPreferencia(MyApp.claveGuardaSesion).whenComplete(() => Login()),
 
       //home: EscogeOpciones(token: 'a'),
