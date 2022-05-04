@@ -1,7 +1,7 @@
 import 'package:crea_empresa_usario/escoge_opciones.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart' as Navegacion;
 import 'package:crea_empresa_usario/nuevo_usua.dart';
-import 'package:crea_empresa_usario/servidor/servidor.dart' as Servidor;
+import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;

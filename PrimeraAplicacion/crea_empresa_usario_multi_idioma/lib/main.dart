@@ -1,7 +1,7 @@
 import 'package:crea_empresa_usario/escoge_opciones.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/preferencias/preferencias.dart';
-import 'package:crea_empresa_usario/servidor/servidor.dart' as Servidor;
+import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
@@ -229,7 +229,7 @@ class _LoginState extends State<Login> {
 
         Servidor.login(context, nombre, pwd).then((response) {
           if (response != null &&
-              response.statusCode == Servidor.CodigoResp.ok) {
+              response.statusCode == Servidor.ok) {
             final parsed =
                 jsonDecode(response.body).cast<Map<String, dynamic>>();
             vaciaNavegacionYCarga(context,
