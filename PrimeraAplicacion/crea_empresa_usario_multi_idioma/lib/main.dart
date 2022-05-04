@@ -214,10 +214,6 @@ class _LoginState extends State<Login> {
       EnCualquierLugar()
           .muestraSnack(context, traducciones.esperandoAlServidor);
     } else {
-      //  TO-DO objeto que mire el tiempo de carga del sistema
-      //  Interrumpe toast si el tiempo de espera es mayor a 0.5s el programa mostrara por pantalla cargando
-      //  globales.muestraToast(context, "Cargando...");
-
       // Obtenemos usuario y la contraseña introducidas
       String nombre = _usuario.text;
       // Contraseña
@@ -231,11 +227,9 @@ class _LoginState extends State<Login> {
         // URL del servidor
         String url = globales.servidor + '/login';
 
-        // Encriptamos el usuario y la contraseña juntos si los dos campos estan rellenados
-        // TODO AVISAR de campos vacios
-
-        Servidor.login(nombre, pwd, context).then((response) {
-          if (response!.statusCode == Servidor.CodigoResp.ok) {
+        Servidor.login(context, nombre, pwd).then((response) {
+          if (response != null &&
+              response.statusCode == Servidor.CodigoResp.ok) {
             final parsed =
                 jsonDecode(response.body).cast<Map<String, dynamic>>();
             vaciaNavegacionYCarga(context,

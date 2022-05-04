@@ -169,17 +169,14 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
         Servidor.anyade(
           context,
           url,
-          token: widget.token,
           json: json,
-          msgOk: traducciones.elUsuarioHaSidoDadoDeAlta(widget.nombre),
-          msgError: traducciones.elUsuarioYaEstaRegistrado(widget.nombre),
         ).then((codigo) {
           esperandoFiltrado = false;
           switch (codigo) {
             case 0:
               EnCualquierLugar().muestraSnack(context,
                   traducciones.elUsuarioHaSidoDadoDeAlta(widget.nombre),
-                  onHide: () {
+                  duration: Duration(milliseconds: 1250), onHide: () {
                 // Cargamos pantalla de escoger opciones
                 Navegacion.vaciaNavegacionYCarga(context,
                     builder: (context) => NuevoUsuario(token: widget.token));

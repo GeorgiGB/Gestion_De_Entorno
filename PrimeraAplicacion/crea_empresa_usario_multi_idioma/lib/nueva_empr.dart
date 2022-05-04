@@ -196,10 +196,7 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
         Servidor.anyade(
           context,
           url,
-          token: widget.token,
           json: json,
-          msgOk: traducciones.laEmpresaHaSidoDadoDeAlta(nom_empresa),
-          msgError: traducciones.laEmpresaYaEstaregistrada(nom_empresa),
         ).then((codigo) {
           esperandoNuevaEmpresa = false;
           switch (codigo) {
@@ -207,6 +204,7 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
               EnCualquierLugar().muestraSnack(
                 context,
                 traducciones.laEmpresaHaSidoDadoDeAlta(nom_empresa),
+                duration: Duration(milliseconds: 1250),
                 onHide: () {
                   Navegacion.vaciaNavegacionYCarga(context,
                       builder: (context) => NuevaEmpresa(token: widget.token));

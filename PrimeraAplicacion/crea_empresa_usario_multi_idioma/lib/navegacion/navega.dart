@@ -6,18 +6,18 @@ import '../escoge_opciones.dart';
 
 vaciaNavegacionYCarga(BuildContext context,
     {required Widget Function(BuildContext) builder}) {
-  Navigator.of(context).pushAndRemoveUntil(
-    MaterialPageRoute(builder: builder),
-    (Route<dynamic> route) => false,
-  );
+  if (Navigator.canPop(context)) {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: builder),
+      (Route<dynamic> route) => false,
+    );
+  } else {
+    Navigator.push(context, MaterialPageRoute(builder: builder));
+  }
 }
 
 aLogin(BuildContext context) {
-  Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => Login(),
-      ),
-      (Route<dynamic> route) => false);
+  vaciaNavegacionYCarga(context, builder: (context) => Login());
 }
 
 popAndPush(BuildContext context,

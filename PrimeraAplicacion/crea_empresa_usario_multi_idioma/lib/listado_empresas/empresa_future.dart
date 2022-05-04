@@ -34,7 +34,7 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
     // Future que gestiona la petición del listado de empresas al servidor
     future: ns.muestraFormulario.visible
         ? null
-        : Servidor.buscaEmpresas(queBusco, http.Client(), widget.token, cntxt)
+        : Servidor.buscaEmpresas(queBusco, widget.token, cntxt)
 
             // En caso de error en el servidor capturamos el mensaje pertinente.
 
@@ -220,19 +220,25 @@ class AvisoAccion extends StatelessWidget {
 
 // Funcion utilizada para convertir el cuerpo de la resuesta enviada
 // por el servidor en una List<EmpresCod>.
-List<EmpresCod> _parseEmpresas(http.Response response) {
-  final int status = response.statusCode;
-  switch (status) {
-    case Servidor.CodigoResp.ok:
-      globales.debug("hola");
-      final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
-      parsed.removeAt(0);
-      return parsed.map<EmpresCod>((json) => EmpresCod.fromJson(json)).toList();
+List<EmpresCod> _parseEmpresas(http.Response? response) {
+  if (response == null) {
+    throw ExceptionServidor(Servidor.CodigoResp.errorServidor);
+  } else {
+    final int status = response.statusCode;
+    switch (status) {
+      case Servidor.CodigoResp.ok:
+        globales.debug("hola");
+        final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
+        parsed.removeAt(0);
+        return parsed
+            .map<EmpresCod>((json) => EmpresCod.fromJson(json))
+            .toList();
 
-    // Respuestas que contiene errores o respuestaas no contempladas
-    default:
-      globales.debug("adios");
-      throw ExceptionServidor(status);
+      // Respuestas que contiene errores o respuestaas no contempladas
+      default:
+        globales.debug("adios");
+        throw ExceptionServidor(status);
+    }
   }
   /*// ha ido correcto?
   if (parsed[0]['bOk'].toString().parseBool()) {
