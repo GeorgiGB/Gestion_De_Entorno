@@ -49,7 +49,7 @@ AS $BODY$
 			UPDATE usuarios_telemetria
 				SET (ute_nombre, ute_pwd,
 					 ute_centro_padre, ute_centro, ute_pdv,
-					 ute_jefe_area, ute_ruta, ute_empresa
+					 ute_jefe_area, ute_ruta
 					)
 				 =
 				(	
@@ -81,9 +81,7 @@ AS $BODY$
 					(CASE WHEN 'ute_jefe_area' = j.filtro THEN
 						j.cod_filtro ELSE usuarios_telemetria.ute_jefe_area END),
 					(CASE WHEN 'ute_ruta' = j.filtro THEN
-						j.cod_filtro ELSE usuarios_telemetria.ute_ruta END),
-					(CASE WHEN 'ute_empresa' = j.filtro THEN
-						j.cod_filtro ELSE usuarios_telemetria.ute_empresa END)
+						j.cod_filtro ELSE usuarios_telemetria.ute_ruta END)
 				 )
 				--	Obtenemos los valores de la tabla del JSON jleer
 				FROM jsonb_populate_record(null::json_update_usuarios_telemetria, jleer) j
