@@ -63,9 +63,9 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
     creaComandos();
 
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: Text(traducciones.escogeOpcion),
-      ),
+      ),*/
       body: ListView.builder(
         //  Construimos la lista de widgets dinámicamente
         //  Aquí viene los diferetes botones de comandos
@@ -192,23 +192,25 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
     if (op == 0) {
       // Pantalla NuevaEmpresa
       // EnCualquierLugar.muestraSnack(context, traducciones.cargandoEmpresa);
-      Navigator.push(
+      Navigator.of(context).pushNamed('/NuevaEmpresa');
+      /*Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => NuevaEmpresa(
                     token: widget.token,
-                  )));
+                  )));*/
     } else if (op == 1) {
       // Pantalla NuevoUsuario
       // EnCualquierLugar.muestraSnack(context, traducciones.cargandoUsuario);
-      Navigator.push(
+      Navigator.of(context).pushNamed('/NuevoUsuario');
+      /*Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => NuevoUsuario(
             token: widget.token,
           ),
         ),
-      );
+      );*/
     }
   }
 

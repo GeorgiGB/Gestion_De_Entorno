@@ -15,8 +15,9 @@ import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaj
 // Fin imports multi-idioma ----------------
 
 class Login extends StatefulWidget {
-  const Login(this.traduce, {Key? key}) : super(key: key);
+  const Login(this.traduce, this.hola, {Key? key}) : super(key: key);
   final AppLocalizations traduce;
+  final Function(String?) hola;
 
   @override
   State<Login> createState() => _LoginState(traduce);
@@ -47,14 +48,14 @@ class _LoginState extends State<Login> {
     _pwd.text = "1234";
 
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
           // Barra aplicación tiutlo
           title: Text(AppLocalizations.of(context)!.identifica),
 
           // Añadimos el DropButton de elección de idioma
           actions: [
             LanguageDropDown().getDropDown(context),
-          ]),
+          ]),*/
       body: SingleChildScrollView(
         //Previene BOTTOM OVERFLOWED
         padding: EdgeInsets.all(20),
@@ -123,9 +124,13 @@ class _LoginState extends State<Login> {
           if (response != null && response.statusCode == Servidor.ok) {
             final parsed =
                 jsonDecode(response.body).cast<Map<String, dynamic>>();
-            vaciaNavegacionYCarga(context,
+
+            var token = parsed[0]['token'];
+            widget.hola(token);
+            Navigator.of(context).pushNamedAndRemoveUntil('/EscogeOpciones', (route) => false);
+            /*vaciaNavegacionYCarga(context,
                 builder: (context) =>
-                    EscogeOpciones(token: parsed[0]['token']));
+                    EscogeOpciones(token: parsed[0]['token']));*/
           }
         }).whenComplete(() => esperandoLogin = false);
       }

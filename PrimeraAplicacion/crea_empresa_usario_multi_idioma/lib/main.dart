@@ -35,24 +35,30 @@ void main() {
 // Necesitamos que el Widget sea stateful para mantener los cambios de idiomas
 // si se produce un cambio en la elección de idioma
 class MyApp extends StatefulWidget {
-  MyApp({Key? key, this.token}) : super(key: key);
+  MyApp({Key? key, String? token}) : super(key: key) {
+    _token = token;
+  }
 
-  // Método estático disponible para todos las clsses y así realizar el cambió de idioma
+  // Método estático disponible para todos las classes y así realizar el cambió de idioma
   // desde donde queramos
   static void setLocale(BuildContext context, Locale? newLocale) async {
     // buscamos el objeto state para establece la nueva configuración regional
     context.findAncestorStateOfType<_MyAppState>()?.setLocale(newLocale);
   }
 
-  final String? token;
+  String? _token;
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  // funcio utilizada per a recibir el token que servirá para poder trabajar con
+  // el servidor
+  void _setToken(String? value) => widget._token = value;
+
   Locale? _locale = null;
-  late AppLocalizations _traducc;
+  late AppLocalizations _traduce;
 
   void setLocale(Locale? locale) {
     setState(() {
@@ -95,8 +101,8 @@ class _MyAppState extends State<MyApp> {
       // title:traducciones.appName,
       // genera un error porque el objeto AppLocalizations devuelto es nulo
       onGenerateTitle: (BuildContext context) {
-        _traducc = AppLocalizations.of(context)!;
-        return _traducc.nombreApp;
+        _traduce = AppLocalizations.of(context)!;
+        return _traduce.nombreApp;
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -105,13 +111,17 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         // La ruta raíz (/) es la primera pantalla
-        '/': (context) => Sesion(traducciones: _traducc), //Login(_traducc),
-        '/EscogeOpciones': (context) => EscogeOpciones(token: widget.token!),
-        '/NuevaEmpresa': (context) => NuevaEmpresa(token: widget.token!),
-        '/NuevoUsuario': (context) => NuevoUsuario(token: widget.token!),
+        '/': (context) =>
+            Identificate(_setToken, traduce: _traduce), //Login(_traducc),
+        '/EscogeOpciones': (context) => Opciones(_setToken, context,
+            traduce: _traduce, token: widget._token),
+        '/NuevaEmpresa': (context) =>
+            EmpresaNueva(context, traduce: _traduce, token: widget._token),
+        '/NuevoUsuario': (context) =>
+            UsuarioNuevo(context, traduce: _traduce, token: widget._token),
         // A esta ruta no se puede acceder por aquí se tiene que acceder a traves de Nuevo usuario
         //'/NuevoUsuario/FiltrosUsuario': (context) => FiltrosUsuario(token: token, empCod: empCod, emp_cod: emp_cod, nombre: nombre, pwd: pwd, auto_pwd: auto_pwd);,
-        '/Sesion': (context) => Sesion(traducciones: _traducc), //
+        '/Sesion': (context) => Sesion(traduce: _traduce), //
       },
 
       //home:
