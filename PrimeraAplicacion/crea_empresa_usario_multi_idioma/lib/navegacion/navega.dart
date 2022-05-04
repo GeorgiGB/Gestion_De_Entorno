@@ -1,6 +1,5 @@
-import 'package:crea_empresa_usario/main.dart';
+import 'package:crea_empresa_usario/pantallas/login.dart';
 import 'package:flutter/material.dart';
-import '../escoge_opciones.dart';
 
 // Fin imports multi-idioma ----------------
 

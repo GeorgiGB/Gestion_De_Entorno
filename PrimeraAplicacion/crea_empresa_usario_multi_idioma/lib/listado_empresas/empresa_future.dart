@@ -1,7 +1,7 @@
 import 'package:crea_empresa_usario/excepciones_personalizadas/excepciones.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
-import 'package:crea_empresa_usario/nueva_empr.dart';
-import 'package:crea_empresa_usario/nuevo_usua.dart';
+import 'package:crea_empresa_usario/pantallas/nueva_empr.dart';
+import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

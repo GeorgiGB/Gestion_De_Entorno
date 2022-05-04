@@ -1,4 +1,4 @@
-import 'package:crea_empresa_usario/escoge_opciones.dart';
+import 'package:crea_empresa_usario/pantallas/escoge_opciones.dart';
 import 'package:crea_empresa_usario/globales.dart' as globales;
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';

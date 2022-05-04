@@ -2,7 +2,7 @@
 
 import 'package:crea_empresa_usario/listado_empresas/empresa_future.dart' as ef;
 import 'package:flutter/material.dart';
-import 'globales.dart' as globales;
+import '../globales.dart' as globales;
 import 'filtros_usuario.dart';
 
 // Imports multi-idioma ---------------------
