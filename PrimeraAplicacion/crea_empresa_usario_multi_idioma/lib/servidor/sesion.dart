@@ -16,7 +16,7 @@ noEstoyAutenticado(BuildContext context) async {
   var traduce = AppLocalizations.of(context)!;
   globales
       .muestraDialogo(context, traduce.codError401)
-      .whenComplete(() => aLogin(context, traduce));
+      .whenComplete(() => aLogin(context));
 }
 
 error500Servidor(BuildContext context) async {

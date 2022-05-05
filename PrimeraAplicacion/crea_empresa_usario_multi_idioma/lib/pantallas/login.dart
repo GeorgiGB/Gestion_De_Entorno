@@ -1,3 +1,4 @@
+import 'package:crea_empresa_usario/main.dart';
 import 'package:crea_empresa_usario/pantallas/escoge_opciones.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/preferencias/preferencias.dart';
@@ -15,17 +16,14 @@ import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaj
 // Fin imports multi-idioma ----------------
 
 class Login extends StatefulWidget {
-  const Login(this.traduce, this.hola, {Key? key}) : super(key: key);
-  final AppLocalizations traduce;
-  final Function(String?) hola;
+  const Login({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState(traduce);
+  State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  _LoginState(AppLocalizations this.traduce) {}
-  final AppLocalizations traduce;
+  late AppLocalizations traduce;
 
   // Creamos el controlador campo de usuario
   final TextEditingController _usuario = TextEditingController();
@@ -41,6 +39,8 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    traduce = AppLocalizations.of(context)!;
+
     //traduce = AppLocalizations.of(context)!;
     // TODO poner información en blanco
     // informacion predeterminada que luego se borrara mas adelante
@@ -126,11 +126,9 @@ class _LoginState extends State<Login> {
                 jsonDecode(response.body).cast<Map<String, dynamic>>();
 
             var token = parsed[0]['token'];
-            widget.hola(token);
-            Navigator.of(context).pushNamedAndRemoveUntil(Rutas.OpcionesSesion, (route) => false);
-            /*vaciaNavegacionYCarga(context,
-                builder: (context) =>
-                    EscogeOpciones(token: parsed[0]['token']));*/
+            MyApp.setToken(context, token);
+
+            aOpciones(context);
           }
         }).whenComplete(() => esperandoLogin = false);
       }

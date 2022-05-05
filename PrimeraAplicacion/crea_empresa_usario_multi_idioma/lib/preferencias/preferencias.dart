@@ -19,9 +19,9 @@ Future<String?> cargaPreferencia() async {
   // encadenamos futuros
   // Obtenemos locale
   await getLocale();
-    // Obtenemos LenguageData
+  // Obtenemos LenguageData
   await getLenguajeData();
-      // Obtenemos la session y la devolvemos
+  // Obtenemos la session y la devolvemos
   return getSesion(claveSesion);
 }
 
@@ -29,6 +29,11 @@ Future<String?> setPreferencias(String preferencia, String valor) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   await _prefs.setString(preferencia, valor);
   return valor;
+}
+
+Future<bool> removePreferencias(String preferencia) async {
+  SharedPreferences _prefs = await SharedPreferences.getInstance();
+  return await _prefs.remove(preferencia);
 }
 
 Future<String?> getSesion(String preferencia) async {

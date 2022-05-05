@@ -44,9 +44,9 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
     traducciones = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: Text(traducciones.empresaNueva),
-      ),
+      ),*/
       body: SingleChildScrollView(
           //Previene BOTTOM OVERFLOWED
           padding: EdgeInsets.all(20),
@@ -196,6 +196,7 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
         Servidor.anyade(
           context,
           url,
+          widget.token,
           json: json,
         ).then((codigo) {
           esperandoNuevaEmpresa = false;
@@ -206,8 +207,7 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
                 traducciones.laEmpresaHaSidoDadoDeAlta(nom_empresa),
                 duration: Duration(milliseconds: 1250),
                 onHide: () {
-                  Navegacion.vaciaNavegacionYCarga(context,
-                      builder: (context) => NuevaEmpresa(token: widget.token));
+                  Navegacion.aEmpresaNueva(context);
                 },
               );
               break;

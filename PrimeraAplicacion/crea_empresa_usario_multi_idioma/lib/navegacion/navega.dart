@@ -3,7 +3,8 @@ import 'package:crea_empresa_usario/pantallas/escoge_opciones.dart';
 import 'package:crea_empresa_usario/pantallas/login.dart';
 import 'package:crea_empresa_usario/pantallas/nueva_empr.dart';
 import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
-import 'package:crea_empresa_usario/pantallas/sesion.dart';
+import 'package:crea_empresa_usario/pantallas/sesion_activa.dart';
+import 'package:crea_empresa_usario/widgets/esperando_servidor.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
@@ -13,21 +14,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
 class Rutas {
-  static String Raiz = '/';
+  static String Identificate = '/';
   static String Opciones = '/Opciones';
   static String EmpresaNueva = '/EmpresaNueva';
   static String UsuarioNuevo = '/UsuarioNuevo';
   static String FiltrosUsuario = '/UsuarioNuevo/FiltrosUsuario';
   static String OpcionesSesion = '/Sesion';
   static String Configuracion = '/Configuracion';
-}
-
-extension ParseToString on Rutas {
-  String get _ {
-    var str = toString().split('.').last;
-
-    return str.toLowerCase() == 'raiz' ? '/' : str;
-  }
 }
 
 vaciaNavegacionYCarga(BuildContext context,
@@ -49,11 +42,24 @@ Widget noLogin(BuildContext context) {
       Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
     },
   );
-  return Container();
+  return Esperando.esperandoA(
+      AppLocalizations.of(context)!.esperandoAlServidor);
 }
 
-aLogin(BuildContext context, AppLocalizations traducc) {
-  //vaciaNavegacionYCarga(context, builder: (context) => Login(traducc));
+aLogin(BuildContext context) {
+  vesA(Rutas.Identificate, context);
+}
+
+aEmpresaNueva(BuildContext context) {
+  vesA(Rutas.EmpresaNueva, context);
+}
+
+aOpciones(BuildContext context) {
+  vesA(Rutas.Opciones, context);
+}
+
+vesA(String ruta, BuildContext context) {
+  Navigator.of(context).pushNamedAndRemoveUntil(ruta, (route) => false);
 }
 
 popAndPush(BuildContext context,
@@ -68,32 +74,33 @@ popAndPush(BuildContext context,
 
 /// Clase abstracta que sirve de base para todas las pantalla muestren o no el
 /// menú lateral [menuLateral].
-/// Rquiere que le pasemos el parámetro AppLocalizations [traduce]
+/// Si se muestra el [menuLateral] y no añadimos un token lanzará un error.
+/// Requiere que le pasemos el parámetro AppLocalizations [traduce]
 abstract class PantallasMenu extends StatelessWidget {
   const PantallasMenu(Widget this.titulo,
-      {Key? key,
-      required this.traduce,
-      required this.wgt,
-      this.menuLateral = true})
+      {Key? key, this.token, required this.wgt, this.menuLateral = true})
       : super(key: key);
 
   /// Titulo a mostrar en el [AppBar]
   final Widget titulo;
 
+  /// Necesario para poder cerrar la sesión
+  final String? token;
+
   /// El widget a cargar que tendrá una [AppBar] con título y opcional el [menuLateral]
   final Widget wgt;
-
-  /// Es la base para las traducciones de los textos localizados
-  final AppLocalizations traduce;
 
   /// Indica si se va a mostrar el menú lateral.
   final bool menuLateral;
 
   @override
   Widget build(BuildContext context) {
+    // Es la base para las traducciones de los textos localizados
+    final AppLocalizations traduce = AppLocalizations.of(context)!;
+
     // Constuctor del widget
     return Scaffold(
-      drawer: menuLateral ? const MainDrawer() : null,
+      drawer: menuLateral ? MainDrawer(traduce, token!) : null,
       appBar: AppBar(
         title: titulo,
       ),
@@ -103,52 +110,49 @@ abstract class PantallasMenu extends StatelessWidget {
   }
 }
 
-/// Clase abstracta que extiende [PantallasMenu] y sirve de base para las
-/// pantallas sin menú lateral
-abstract class Pantallas extends PantallasMenu {
-  const Pantallas(Widget titulo,
-      {Key? key, required AppLocalizations traduce, required Widget wgt})
-      : super(titulo, key: key, traduce: traduce, wgt: wgt, menuLateral: false);
+class Identificate extends Pantallas {
+  Identificate({Key? key, required AppLocalizations traduce})
+      : super(Text(traduce.identifica), key: key, wgt: Login());
 }
 
-class Identificate extends Pantallas {
-  Identificate(Function(String?) hola,
-      {Key? key, required AppLocalizations traduce})
-      : super(Text(traduce.identifica),
-            traduce: traduce, wgt: Login(traduce, hola));
+/// Clase abstracta que extiende [PantallasMenu] y sirve de base para las
+/// pantallas sin menú lateral. Al no tener menú lateral
+abstract class Pantallas extends PantallasMenu {
+  const Pantallas(Widget titulo, {Key? key, required Widget wgt})
+      : super(titulo, key: key, wgt: wgt, menuLateral: false);
 }
 
 class Opciones extends PantallasMenu {
-  Opciones(Function(String) hola, BuildContext context,
+  Opciones(BuildContext context,
       {Key? key, required AppLocalizations traduce, required token})
       : super(Text(traduce.escogeOpcion),
-            traduce: traduce,
-            wgt: token == null
-                ? noLogin(context)
-                : EscogeOpciones(token: token));
+            key: key, token: token, wgt: EscogeOpciones(token: token));
 }
 
 class EmpresaNueva extends PantallasMenu {
   EmpresaNueva(BuildContext context,
       {Key? key, required AppLocalizations traduce, required token})
       : super(Text(traduce.nuevaEmpresa),
-            traduce: traduce,
-            wgt: token == null ? noLogin(context) : NuevaEmpresa(token: token));
+            key: key, token: token, wgt: NuevaEmpresa(token: token));
 }
 
 class UsuarioNuevo extends PantallasMenu {
   UsuarioNuevo(BuildContext context,
       {Key? key, required AppLocalizations traduce, required token})
       : super(Text(traduce.nuevoUsuario),
-            traduce: traduce,
-            wgt: token == null ? noLogin(context) : NuevoUsuario(token: token));
+            key: key, token: token, wgt: NuevoUsuario(token: token));
 }
 
 class OpcionesSesion extends PantallasMenu {
-  OpcionesSesion(Function(String?) hola, BuildContext context,
-      AppLocalizations traduce, String? token, {Key? key})
+  OpcionesSesion(BuildContext context, AppLocalizations traduce, String? token,
+      {Key? key})
       : super(Text(traduce.sesionActiva),
-            key: key,
-            traduce: traduce,
-            wgt: token == null ? noLogin(context) : SesionActiva());
+            key: key, token: token, wgt: SesionActiva());
+}
+
+class OpcionesConfig extends PantallasMenu {
+  OpcionesConfig(BuildContext context, AppLocalizations traduce, String? token,
+      {Key? key})
+      : super(Text('Configuración'),
+            key: key, token: token, wgt: SesionActiva());
 }

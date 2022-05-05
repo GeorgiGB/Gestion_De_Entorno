@@ -3,6 +3,7 @@ import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/pantallas/nueva_empr.dart';
 import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
+import 'package:crea_empresa_usario/widgets/esperando_servidor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -40,6 +41,7 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
 
             .onError(
             (error, stackTrace) {
+              globales.debug("-> Estoy en error: " + error.toString());
               if (error is ExceptionServidor) {
                 if (error.codError == Servidor.usuarioNoAutenticado) {
                   // No estoy auternticado
@@ -66,9 +68,12 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
     // varios intentos antes de llamar a este método anónimo y crear los widgets a mostrar
     builder: (context, datos) {
       if (datos.hasError) {
+        globales.debug("Te pille: " + msgErr);
         // en caso de error
-        bool autenticado = (datos.error as ExceptionServidor).codError !=
-            Servidor.usuarioNoAutenticado;
+        bool autenticado = (datos.error is ExceptionServidor) &&
+            (datos.error as ExceptionServidor).codError !=
+                Servidor.usuarioNoAutenticado;
+        globales.debug("Me pillaste");
 
         if (autenticado && msgErr.isNotEmpty) {
           // tenemos que darle un retraso ya que mostrar el diálogo
@@ -121,15 +126,8 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
         }
       } else {
         // Esperando datos del servidor
-        return Center(
-          child: Column(
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 15),
-              Text(AppLocalizations.of(context)!.esperandoAlServidor),
-            ],
-          ),
-        );
+        return Esperando.esperandoA(
+            AppLocalizations.of(context)!.esperandoAlServidor);
       }
     },
   );
@@ -223,11 +221,16 @@ List<EmpresCod> _parseEmpresas(http.Response? response) {
   if (response == null) {
     throw ExceptionServidor(Servidor.errorServidor);
   } else {
+    // Qué status ha llegado en el response?
     final int status = response.statusCode;
     switch (status) {
+
+      // ha ido correcto?
       case Servidor.ok:
         globales.debug("hola");
         final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
+        // Eliminamos el primer elemento que contiene la información de si todo es correcto
+        // Pues la lista de empresas empieza después del primer elemento
         parsed.removeAt(0);
         return parsed
             .map<EmpresCod>((json) => EmpresCod.fromJson(json))
@@ -235,20 +238,9 @@ List<EmpresCod> _parseEmpresas(http.Response? response) {
 
       // Respuestas que contiene errores o respuestaas no contempladas
       default:
-        globales.debug("adios");
         throw ExceptionServidor(status);
     }
   }
-  /*// ha ido correcto?
-  if (parsed[0]['bOk'].toString().parseBool()) {
-    // Eliminamos el primer elemento que contiene la información de si todo es correcto
-    parsed.removeAt(0);
-    // <EmpresCod>[];
-  } else {
-    // lanzamos excepción de servidor
-    int codError = int.parse(parsed[0]['cod_error']);
-    throw ExceptionServidor(codError);
-  }*/
 }
 
 // Clase que utilizamos para crear cada elemento de la lista de Empresas
@@ -309,8 +301,8 @@ class ListaEmpresas extends StatelessWidget {
       traducciones: AppLocalizations.of(context)!,
       controller: controladorEmpresa,
       focusNode: FocusNode(),
-      hintText: AppLocalizations.of(context)!.selecionaEmpresa,
-      labelText: AppLocalizations.of(context)!.empresa,
+      hintText: AppLocalizations.of(context)!.empresa,
+      labelText: AppLocalizations.of(context)!.selecionaEmpresa,
       enabled: true,
       itemsVisibleInDropdown: 5,
       items: empresas,

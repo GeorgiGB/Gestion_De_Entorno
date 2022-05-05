@@ -41,7 +41,7 @@ class LanguageDropDown {
                     e.bandera,
                     style: TextStyle(fontSize: 15),
                   ),
-                  Text(e.idioma)
+                  //Text(e.idioma)
                 ],
               ),
             ),
@@ -59,10 +59,10 @@ class LanguageDropDown {
             children: <Widget>[
               Text(
                 LanguageData.lenguage!.bandera,
-                style: TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 20),
               ),
-              Text(' '),
-              Text(LanguageData.lenguage!.idioma),
+              /*Text(' '),
+              Text(LanguageData.lenguage!.idioma),*/
             ],
           );
   }
