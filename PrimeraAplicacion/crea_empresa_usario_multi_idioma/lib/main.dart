@@ -147,13 +147,13 @@ class _MyAppState extends State<MyApp> {
         // se tiene que acceder a través de la pantalla de Nuevo usuario
         //Rutas.FiltrosUsuario: (context) =>
 
-        Rutas.OpcionesSesion: (context) => widget._token == null
+        Rutas.SesionActiva: (context) => widget._token == null
             ? noLogin(context)
-            : OpcionesSesion(context, _traduce, widget._token),
+            : SesionAtcv(context, _traduce, token: widget._token),
 
         Rutas.Configuracion: (context) => widget._token == null
             ? noLogin(context)
-            : OpcionesConfig(context, _traduce, widget._token),
+            : OpcionesConfig(context, _traduce, token: widget._token),
       },
 
       //home:

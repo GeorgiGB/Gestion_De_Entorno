@@ -95,13 +95,13 @@ class MainDrawer extends StatelessWidget {
                     Navigator.of(context).pushNamed(Rutas.UsuarioNuevo);
                   },
                 ),
-          currentRoute == Rutas.OpcionesSesion
+          currentRoute == Rutas.SesionActiva
               ? vacio
               : ListTile(
                   title: Text(traduce.sesionActiva,
                       style: Theme.of(context).textTheme.headline6),
                   onTap: () {
-                    Navigator.of(context).pushNamed(Rutas.OpcionesSesion);
+                    Navigator.of(context).pushNamed(Rutas.SesionActiva);
                   },
                 ),
           currentRoute == Rutas.Configuracion
