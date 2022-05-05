@@ -2,7 +2,7 @@
 
 import 'package:crea_empresa_usario/listado_empresas/empresa_future.dart' as ef;
 import 'package:flutter/material.dart';
-import 'globales.dart' as globales;
+import '../globales.dart' as globales;
 import 'filtros_usuario.dart';
 
 // Imports multi-idioma ---------------------
@@ -58,9 +58,9 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
     _mostrar = getControlesVsibles();
 
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: Text(traducciones.nuevoUsuario),
-      ),
+      ),*/
       extendBody: true,
       body: SingleChildScrollView(
         //Previene BOTTOM OVERFLOWED
@@ -171,7 +171,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-              // Campo formulario Nombre de usuario
+          // Campo formulario Nombre de usuario
           TextFormField(
             decoration: InputDecoration(
                 labelText: traducciones.nombreDelUsuario,

@@ -1,5 +1,8 @@
-import 'package:crea_empresa_usario/escoge_opciones.dart';
+import 'package:crea_empresa_usario/pantallas/escoge_opciones.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
+import 'package:crea_empresa_usario/pantallas/filtros_usuario.dart';
+import 'package:crea_empresa_usario/pantallas/nueva_empr.dart';
+import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
 import 'package:crea_empresa_usario/preferencias/preferencias.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
@@ -13,8 +16,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Constantes donde se guarda el idoma escogido y desde donde actualizamos
 // la configuración de la aplicación
 import 'config_regional/model/locale_constant.dart' as const_reg;
-// Construye el DropdownButton para selecionar idioma
-import 'config_regional/opciones_idiomas/ops_lenguaje.dart' as op_leng;
+import 'pantallas/login.dart';
 
 // Fin imports multi-idioma ----------------
 
@@ -33,23 +35,30 @@ void main() {
 // Necesitamos que el Widget sea stateful para mantener los cambios de idiomas
 // si se produce un cambio en la elección de idioma
 class MyApp extends StatefulWidget {
-  MyApp({Key? key, this.token}) : super(key: key);
+  MyApp({Key? key, String? token}) : super(key: key) {
+    _token = token;
+  }
 
-  // Método estático disponible para todos las clsses y así realizar el cambió de idioma
+  // Método estático disponible para todos las classes y así realizar el cambió de idioma
   // desde donde queramos
   static void setLocale(BuildContext context, Locale? newLocale) async {
     // buscamos el objeto state para establece la nueva configuración regional
     context.findAncestorStateOfType<_MyAppState>()?.setLocale(newLocale);
   }
 
-  final String? token;
+  String? _token;
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  // funcio utilizada per a recibir el token que servirá para poder trabajar con
+  // el servidor
+  void _setToken(String? value) => widget._token = value;
+
   Locale? _locale = null;
+  late AppLocalizations _traduce;
 
   void setLocale(Locale? locale) {
     setState(() {
@@ -91,14 +100,38 @@ class _MyAppState extends State<MyApp> {
       // en este momento ya que si lo hacemos a traves de
       // title:traducciones.appName,
       // genera un error porque el objeto AppLocalizations devuelto es nulo
-      onGenerateTitle: (BuildContext context) =>
-          AppLocalizations.of(context)!.nombreApp,
+      onGenerateTitle: (BuildContext context) {
+        _traduce = AppLocalizations.of(context)!;
+        return _traduce.nombreApp;
+      },
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
 
-      home:
-          widget.token == null ? Login() : EscogeOpciones(token: widget.token!),
+      initialRoute: '/',
+      routes: {
+        // La ruta raíz (/) es la primera pantalla
+        Rutas.Raiz: (context) =>
+            Identificate(_setToken, traduce: _traduce), //Login(_traducc),
+        Rutas.Opciones: (context) => Opciones(_setToken, context,
+            traduce: _traduce, token: widget._token),
+        Rutas.EmpresaNueva: (context) =>
+            EmpresaNueva(context, traduce: _traduce, token: widget._token),
+        Rutas.UsuarioNuevo: (context) =>
+            UsuarioNuevo(context, traduce: _traduce, token: widget._token),
+
+        // A esta ruta, Rutas.FiltrosUsuario no se puede acceder por aquí,
+        // se tiene que acceder a través de la pantalla de Nuevo usuario
+        //Rutas.FiltrosUsuario: (context) =>
+
+        Rutas.OpcionesSesion: (context) =>
+            OpcionesSesion(_setToken, context, _traduce, widget._token),
+      },
+
+      //home:
+      //    widget.token == null ? Login() : EscogeOpciones(token: widget.token!),
+
+      //home: Sesion(traducciones: AppLocalizations.of(context)!),
       //home: getPreferencia(MyApp.claveGuardaSesion).whenComplete(() => Login()),
 
       //home: EscogeOpciones(token: 'a'),
@@ -120,124 +153,5 @@ class _MyAppState extends State<MyApp> {
           auto_pwd: true),
       */
     );
-  }
-}
-
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
-
-  @override
-  State<Login> createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
-  late AppLocalizations traducciones;
-
-  // Creamos el controlador campo de usuario
-  final TextEditingController _usuario = TextEditingController();
-
-  // Creamos el controlador campo de contraseña
-  final TextEditingController _pwd = TextEditingController();
-  // Widget Focus para enviari el foco al compo contraseña
-  final FocusNode _contrasenaFocus = FocusNode();
-
-  // Al realizar el login en el servidor y esperar su respuesta tenemos que saber
-  // si estamos esperando la respuesta del servidor y así evitar múltiples peticiones al servidor
-  bool esperandoLogin = false;
-
-  @override
-  Widget build(BuildContext context) {
-    traducciones = AppLocalizations.of(context)!;
-    // TODO poner información en blanco
-    // informacion predeterminada que luego se borrara mas adelante
-    _usuario.text = "Joselito";
-    _pwd.text = "1234";
-
-    return Scaffold(
-      appBar: AppBar(
-          // Barra aplicación tiutlo
-          title: Text(AppLocalizations.of(context)!.identifica),
-
-          // Añadimos el DropButton de elección de idioma
-          actions: [
-            op_leng.LanguageDropDown().getDropDown(context),
-          ]),
-      body: SingleChildScrollView(
-        //Previene BOTTOM OVERFLOWED
-        padding: EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            TextFormField(
-              decoration: InputDecoration(
-                  hintText: traducciones.hintTuNombre,
-                  labelText: AppLocalizations.of(context)!.usuario),
-              controller: _usuario,
-              onFieldSubmitted: (String value) {
-                // Al pulsar enter ponemos el foco en el campo contraseña
-                FocusScope.of(context).requestFocus(_contrasenaFocus);
-              },
-            ),
-            SizedBox(height: 30),
-
-            TextFormField(
-              decoration: InputDecoration(
-                  hintText: traducciones.hintContrasena,
-                  labelText: AppLocalizations.of(context)!.contrasena),
-              controller: _pwd,
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              focusNode: _contrasenaFocus,
-              onFieldSubmitted: (String value) {
-                // al pulsar enter en este campo ya realizamos el login
-                _login();
-              },
-            ),
-            SizedBox(height: 30),
-            // Botón para realizar el login
-            ElevatedButton(
-              child: Text(AppLocalizations.of(context)!.acceso),
-              onPressed: () {
-                _login();
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<void> _login() async {
-    if (esperandoLogin) {
-      EnCualquierLugar()
-          .muestraSnack(context, traducciones.esperandoAlServidor);
-    } else {
-      // Obtenemos usuario y la contraseña introducidas
-      String nombre = _usuario.text;
-      // Contraseña
-      String pwd = _pwd.text;
-
-      if (nombre.isEmpty || pwd.isEmpty) {
-        // No tiene datos Mostramos avisos
-        globales.muestraDialogo(context, traducciones.primerRellenaCampos);
-      } else {
-        esperandoLogin = true;
-        // URL del servidor
-        String url = globales.servidor + '/login';
-
-        Servidor.login(context, nombre, pwd).then((response) {
-          if (response != null &&
-              response.statusCode == Servidor.ok) {
-            final parsed =
-                jsonDecode(response.body).cast<Map<String, dynamic>>();
-            vaciaNavegacionYCarga(context,
-                builder: (context) =>
-                    EscogeOpciones(token: parsed[0]['token']));
-          }
-        }).whenComplete(() => esperandoLogin = false);
-      }
-    }
   }
 }

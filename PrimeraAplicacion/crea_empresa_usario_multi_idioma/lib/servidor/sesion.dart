@@ -13,9 +13,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// No estoy autenticado muestra aviso y me redirige a la pagina Login()
 noEstoyAutenticado(BuildContext context) async {
+  var traduce = AppLocalizations.of(context)!;
   globales
-      .muestraDialogo(context, AppLocalizations.of(context)!.codError401)
-      .whenComplete(() => aLogin(context));
+      .muestraDialogo(context, traduce.codError401)
+      .whenComplete(() => aLogin(context, traduce));
 }
 
 error500Servidor(BuildContext context) async {
@@ -24,6 +25,6 @@ error500Servidor(BuildContext context) async {
 }
 
 noEncontrado(BuildContext context) async {
-   globales.muestraDialogo(
-            context, AppLocalizations.of(context)!.codErrorLogin404);
+  globales.muestraDialogo(
+      context, AppLocalizations.of(context)!.codErrorLogin404);
 }

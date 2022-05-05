@@ -1,11 +1,11 @@
-import 'package:crea_empresa_usario/escoge_opciones.dart';
+import 'package:crea_empresa_usario/pantallas/escoge_opciones.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart' as Navegacion;
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
-import 'globales.dart' as globales;
+import '../globales.dart' as globales;
 import 'dart:convert';
-import 'main.dart';
+import '../main.dart';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

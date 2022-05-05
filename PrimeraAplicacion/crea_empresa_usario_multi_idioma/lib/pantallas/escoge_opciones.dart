@@ -1,15 +1,12 @@
 import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
-import 'package:crea_empresa_usario/main.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
-import 'package:crea_empresa_usario/nuevo_usua.dart';
 import 'package:crea_empresa_usario/preferencias/preferencias.dart'
     as Preferencias;
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/labeled_checkbox.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
-import 'globales.dart' as globales;
-import 'nueva_empr.dart';
+import '../globales.dart' as globales;
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -63,9 +60,9 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
     creaComandos();
 
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: Text(traducciones.escogeOpcion),
-      ),
+      ),*/
       body: ListView.builder(
         //  Construimos la lista de widgets dinámicamente
         //  Aquí viene los diferetes botones de comandos
@@ -192,23 +189,25 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
     if (op == 0) {
       // Pantalla NuevaEmpresa
       // EnCualquierLugar.muestraSnack(context, traducciones.cargandoEmpresa);
-      Navigator.push(
+      Navigator.of(context).pushNamed(Rutas.EmpresaNueva);
+      /*Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => NuevaEmpresa(
                     token: widget.token,
-                  )));
+                  )));*/
     } else if (op == 1) {
       // Pantalla NuevoUsuario
       // EnCualquierLugar.muestraSnack(context, traducciones.cargandoUsuario);
-      Navigator.push(
+      Navigator.of(context).pushNamed(Rutas.UsuarioNuevo);
+      /*Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => NuevoUsuario(
             token: widget.token,
           ),
         ),
-      );
+      );*/
     }
   }
 
@@ -226,7 +225,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
     } else {
       cerrandoSesion = true;
       Servidor.cerrarSesion(context, token: widget.token)
-          .whenComplete(() => aLogin(context));
+          .whenComplete(() => aLogin(context, traducciones));
     }
   }
 }
