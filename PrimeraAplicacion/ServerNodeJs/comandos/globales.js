@@ -20,11 +20,9 @@ async function peticiones(response, res){
 
 //  Función asincrona que añade un try cath para evitar errores
 //  y manda la peticion deseada
- function tryCath(x, req, res){
+ function lanzarPeticion(x, req, res){
     //  ctoken = bearer token
     //  Esta linea recoge el token del usuario
-    
-    
     try {
         //header(res).status(parseInt('hola')).json("asa")
         let authorization = req.headers.authorization
@@ -59,5 +57,5 @@ function registrarErr(msgerr){
 module.exports = {
     msg:msg,
     peticiones:peticiones,
-    tryCath:tryCath
+    lanzarPeticion:lanzarPeticion
 }
