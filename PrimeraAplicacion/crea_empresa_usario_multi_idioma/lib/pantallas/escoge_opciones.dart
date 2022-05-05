@@ -1,7 +1,5 @@
 import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
-import 'package:crea_empresa_usario/main.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
-import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
 import 'package:crea_empresa_usario/preferencias/preferencias.dart'
     as Preferencias;
 import 'package:crea_empresa_usario/servidor/servidor.dart';
@@ -9,7 +7,6 @@ import 'package:crea_empresa_usario/widgets/labeled_checkbox.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import '../globales.dart' as globales;
-import 'nueva_empr.dart';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -192,7 +189,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
     if (op == 0) {
       // Pantalla NuevaEmpresa
       // EnCualquierLugar.muestraSnack(context, traducciones.cargandoEmpresa);
-      Navigator.of(context).pushNamed('/NuevaEmpresa');
+      Navigator.of(context).pushNamed(Rutas.EmpresaNueva);
       /*Navigator.push(
           context,
           MaterialPageRoute(
@@ -202,7 +199,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
     } else if (op == 1) {
       // Pantalla NuevoUsuario
       // EnCualquierLugar.muestraSnack(context, traducciones.cargandoUsuario);
-      Navigator.of(context).pushNamed('/NuevoUsuario');
+      Navigator.of(context).pushNamed(Rutas.UsuarioNuevo);
       /*Navigator.push(
         context,
         MaterialPageRoute(

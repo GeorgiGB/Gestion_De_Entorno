@@ -127,7 +127,7 @@ class _LoginState extends State<Login> {
 
             var token = parsed[0]['token'];
             widget.hola(token);
-            Navigator.of(context).pushNamedAndRemoveUntil('/EscogeOpciones', (route) => false);
+            Navigator.of(context).pushNamedAndRemoveUntil(Rutas.OpcionesSesion, (route) => false);
             /*vaciaNavegacionYCarga(context,
                 builder: (context) =>
                     EscogeOpciones(token: parsed[0]['token']));*/

@@ -3,7 +3,7 @@ import 'package:crea_empresa_usario/pantallas/escoge_opciones.dart';
 import 'package:crea_empresa_usario/pantallas/login.dart';
 import 'package:crea_empresa_usario/pantallas/nueva_empr.dart';
 import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
-import 'package:crea_empresa_usario/pantallas/yellow_bird.dart';
+import 'package:crea_empresa_usario/pantallas/sesion.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
@@ -12,10 +12,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
-enum Rutas { Raiz, Opciones, EmpresaNueva, UsuarioNuevo }
+class Rutas {
+  static String Raiz = '/';
+  static String Opciones = '/Opciones';
+  static String EmpresaNueva = '/EmpresaNueva';
+  static String UsuarioNuevo = '/UsuarioNuevo';
+  static String FiltrosUsuario = '/UsuarioNuevo/FiltrosUsuario';
+  static String OpcionesSesion = '/Sesion';
+  static String Configuracion = '/Configuracion';
+}
 
 extension ParseToString on Rutas {
-  String get str {
+  String get _ {
     var str = toString().split('.').last;
 
     return str.toLowerCase() == 'raiz' ? '/' : str;
@@ -136,8 +144,11 @@ class UsuarioNuevo extends PantallasMenu {
             wgt: token == null ? noLogin(context) : NuevoUsuario(token: token));
 }
 
-class Sesion extends Pantallas {
-  const Sesion({Key? key, required AppLocalizations traduce})
-      : super(const Text("Pardal groc"),
-            key: key, wgt: const YellowBird(), traduce: traduce);
+class OpcionesSesion extends PantallasMenu {
+  OpcionesSesion(Function(String?) hola, BuildContext context,
+      AppLocalizations traduce, String? token, {Key? key})
+      : super(Text(traduce.sesionActiva),
+            key: key,
+            traduce: traduce,
+            wgt: token == null ? noLogin(context) : SesionActiva());
 }

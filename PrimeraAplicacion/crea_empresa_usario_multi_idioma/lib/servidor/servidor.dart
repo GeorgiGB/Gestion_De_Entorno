@@ -1,13 +1,10 @@
-import 'package:crea_empresa_usario/pantallas/escoge_opciones.dart';
 import 'package:crea_empresa_usario/globales.dart' as globales;
-import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 
-import '../listado_empresas/empresa_future.dart';
 import 'sesion.dart';
 
 // Imports multi-idioma ---------------------
