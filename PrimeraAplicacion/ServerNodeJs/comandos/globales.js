@@ -21,6 +21,9 @@ async function peticiones(response, res){
 //  Función asincrona que añade un try cath para evitar errores
 //  y manda la peticion deseada
  function tryCath(x, req, res){
+    //  ctoken = bearer token
+    //  Esta linea recoge el token del usuario
+    req.body.ctoken = req.headers.authorization.split(' ')[1]
     try {
         //header(res).status(parseInt('hola')).json("asa")
         x(req.body).then(response => {
