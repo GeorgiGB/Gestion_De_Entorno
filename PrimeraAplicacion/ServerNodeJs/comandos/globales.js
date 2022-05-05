@@ -23,9 +23,14 @@ async function peticiones(response, res){
  function tryCath(x, req, res){
     //  ctoken = bearer token
     //  Esta linea recoge el token del usuario
-    req.body.ctoken = req.headers.authorization.split(' ')[1]
+    
+    
     try {
         //header(res).status(parseInt('hola')).json("asa")
+        let authorization = req.headers.authorization
+        if(authorization){
+            req.body.ctoken = authorization.split(' ')[1]
+        }
         x(req.body).then(response => {
             peticiones(response, res)
         })
