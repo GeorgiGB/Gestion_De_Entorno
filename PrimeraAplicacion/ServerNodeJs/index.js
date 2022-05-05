@@ -44,7 +44,7 @@ globales.msg("Servidor ok");
     Iniciar sesión con el usuario
 */
 app.post('/login', (req, res) => {
-    globales.tryCath(verificar, req, res)
+    globales.lanzarPeticion(verificar, req, res)
 });
 
 /*
@@ -53,7 +53,7 @@ app.post('/login', (req, res) => {
     Crearemos una empresa y un usuario predeterminado con la contraseña de la misma
 */
 app.post('/crear_empresa', (req, res) => {
-    globales.tryCath(crear_emp, req, res)
+    globales.lanzarPeticion(crear_emp, req, res)
 });
 
 /*
@@ -62,7 +62,7 @@ app.post('/crear_empresa', (req, res) => {
 */
 
 app.post('/crear_usuarios_telemetria', (req, res) => {
-    globales.tryCath(crear_ute, req, res)
+    globales.lanzarPeticion(crear_ute, req, res)
 });
 
 /*
@@ -71,7 +71,7 @@ app.post('/crear_usuarios_telemetria', (req, res) => {
     haremos una petición al servidor el cual se mostrara en un desplegabe de la aplicación.
 */
 app.post('/listado_empresas', (req, res) => {
-    globales.tryCath(obtener_lista, req, res)
+    globales.lanzarPeticion(obtener_lista, req, res)
 });
 
 /*
@@ -81,5 +81,5 @@ app.post('/listado_empresas', (req, res) => {
     el cual cambiara al estado de 'false' y no se volvera a utilizar.
 */
 app.post('/cerrar_sesion', (req, res) => {
-    globales.tryCath(cerrar_sesion, req, res)
+    globales.lanzarPeticion(cerrar_sesion, req, res)
 });

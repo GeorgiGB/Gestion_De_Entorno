@@ -23,8 +23,6 @@ async function peticiones(response, res){
  function lanzarPeticion(x, req, res){
     //  ctoken = bearer token
     //  Esta linea recoge el token del usuario
-    
-    
     try {
         //header(res).status(parseInt('hola')).json("asa")
         let authorization = req.headers.authorization
@@ -59,5 +57,5 @@ function registrarErr(msgerr){
 module.exports = {
     msg:msg,
     peticiones:peticiones,
-    tryCath:lanzarPeticion
+    lanzarPeticion:lanzarPeticion
 }
