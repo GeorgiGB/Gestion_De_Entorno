@@ -1,4 +1,5 @@
 import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
+import 'package:crea_empresa_usario/main.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/preferencias/preferencias.dart'
     as Preferencias;
@@ -47,7 +48,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
         isChecked = value == null
             ? false
             : value.isNotEmpty && value == Preferencias.guardar;
-        _guardaSesion(isChecked);
+        MyApp.guardaSesion(isChecked ? widget.token : null);
       });
     });
   }
@@ -125,7 +126,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
                     isChecked = value!;
                     Preferencias.setPreferencias(Preferencias.mantenSesion,
                         isChecked ? Preferencias.guardar : '');
-                    _guardaSesion(isChecked);
+                    MyApp.guardaSesion(isChecked ? widget.token : null);
                   });
                 }),
             // Fina guardar sesión
@@ -135,7 +136,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
             ElevatedButton(
               child: Text(traducciones.cerrarSesion),
               onPressed: () {
-                _cerrarSesion();
+                MyApp.cierraSesion(context);
               },
             ),
           ],
@@ -210,7 +211,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
       );*/
     }
   }
-
+/*
   void _guardaSesion(bool guarda) {
     Preferencias.setPreferencias(
         Preferencias.claveSesion, guarda ? widget.token : '');
@@ -227,5 +228,5 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
       Servidor.cerrarSesion(context, token: widget.token)
           .whenComplete(() => aLogin(context, traducciones));
     }
-  }
+  }*/
 }

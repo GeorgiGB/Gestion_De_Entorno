@@ -1,23 +1,15 @@
-import 'package:crea_empresa_usario/pantallas/escoge_opciones.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
-import 'package:crea_empresa_usario/pantallas/filtros_usuario.dart';
-import 'package:crea_empresa_usario/pantallas/nueva_empr.dart';
-import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
 import 'package:crea_empresa_usario/preferencias/preferencias.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
 
-import 'dart:convert';
-
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Constantes donde se guarda el idoma escogido y desde donde actualizamos
 // la configuración de la aplicación
 import 'config_regional/model/locale_constant.dart' as const_reg;
-import 'pantallas/login.dart';
-
 // Fin imports multi-idioma ----------------
 
 /// Cargamos preferencias y nos devuelve un Future con la sesion si ha sido guardada
@@ -48,15 +40,43 @@ class MyApp extends StatefulWidget {
 
   String? _token;
 
+  static setToken(BuildContext context, String token) {
+    MyApp mapp = context.findAncestorWidgetOfExactType<MyApp>() as MyApp;
+    mapp._token = token;
+  }
+
+  static bool _cerrandoSesion = false;
+  static guardaSesion(String? token) {
+    if (token == null) {
+      removePreferencias(claveSesion);
+    } else {
+      setPreferencias(claveSesion, token);
+    }
+  }
+
+  static void cierraSesion(BuildContext context) {
+    final AppLocalizations traduce = AppLocalizations.of(context)!;
+    MyApp mapp = context.findAncestorWidgetOfExactType<MyApp>() as MyApp;
+
+    guardaSesion(null);
+    if (_cerrandoSesion) {
+      EnCualquierLugar()
+          .muestraSnack(context, traduce.esperandoRespuestaServidor);
+    } else {
+      _cerrandoSesion = true;
+      Servidor.cerrarSesion(context, token: mapp._token!).whenComplete(() {
+        _cerrandoSesion = false;
+        mapp._token = null;
+        aLogin(context);
+      });
+    }
+  }
+
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  // funcio utilizada per a recibir el token que servirá para poder trabajar con
-  // el servidor
-  void _setToken(String? value) => widget._token = value;
-
   Locale? _locale = null;
   late AppLocalizations _traduce;
 
@@ -108,24 +128,32 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
 
-      initialRoute: '/',
+      initialRoute: Rutas.Identificate,
       routes: {
         // La ruta raíz (/) es la primera pantalla
-        Rutas.Raiz: (context) =>
-            Identificate(_setToken, traduce: _traduce), //Login(_traducc),
-        Rutas.Opciones: (context) => Opciones(_setToken, context,
-            traduce: _traduce, token: widget._token),
-        Rutas.EmpresaNueva: (context) =>
-            EmpresaNueva(context, traduce: _traduce, token: widget._token),
-        Rutas.UsuarioNuevo: (context) =>
-            UsuarioNuevo(context, traduce: _traduce, token: widget._token),
+        Rutas.Identificate: (context) =>
+            Identificate(traduce: _traduce), //Login(_traducc),
+        Rutas.Opciones: (context) => widget._token == null
+            ? noLogin(context)
+            : Opciones(context, traduce: _traduce, token: widget._token),
+        Rutas.EmpresaNueva: (context) => widget._token == null
+            ? noLogin(context)
+            : EmpresaNueva(context, traduce: _traduce, token: widget._token),
+        Rutas.UsuarioNuevo: (context) => widget._token == null
+            ? noLogin(context)
+            : UsuarioNuevo(context, traduce: _traduce, token: widget._token),
 
         // A esta ruta, Rutas.FiltrosUsuario no se puede acceder por aquí,
         // se tiene que acceder a través de la pantalla de Nuevo usuario
         //Rutas.FiltrosUsuario: (context) =>
 
-        Rutas.OpcionesSesion: (context) =>
-            OpcionesSesion(_setToken, context, _traduce, widget._token),
+        Rutas.OpcionesSesion: (context) => widget._token == null
+            ? noLogin(context)
+            : OpcionesSesion(context, _traduce, widget._token),
+
+        Rutas.Configuracion: (context) => widget._token == null
+            ? noLogin(context)
+            : OpcionesConfig(context, _traduce, widget._token),
       },
 
       //home:

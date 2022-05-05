@@ -71,7 +71,8 @@ class Servidor {
   ///
   static Future<http.Response?> enviaPeticionAlservidor(
       BuildContext context, String url, String json,
-      {bool relanzaClientException = false,
+      {String? token,
+      bool relanzaClientException = false,
       bool relanzaOtrasExcepciones = false,
       bool muestraEspera = true}) async {
     url = globales.servidor + url;
@@ -88,12 +89,23 @@ class Servidor {
 
     http.Response? response;
     try {
+      // Headers de la peticion
+      final Map<String, String> headers = {
+        'Content-Type': 'application/json; charset=UTF-8'
+      };
+
+      // Añadimos el token a la cabecera?
+      if (token != null) {
+        headers['Authorization'] = 'Bearer ' + token;
+      }
+
+      // Lanzamos la petrición
       response = await http.post(
         Uri.parse(url),
-        // Cabecera para enviar JSON con una autorizacion token
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
+
+        // Cabeceras
+        headers: headers,
+
         // Adjuntamos al body los datos en formato JSON
         body: json,
       );
@@ -167,13 +179,17 @@ class Servidor {
       {required String token}) async {
     AppLocalizations traducciones = AppLocalizations.of(context)!;
 
-    var json = jsonEncode(<String, String>{
+    var json = '';
+    /* jsonEncode(<String, String>{
       'ctoken': token,
-    });
+    });*/
     var url = '/cerrar_sesion';
 
+    globales.debug(token);
+
     // Lanzamos la peticion Post al servidor, no capturamos excepciones
-    http.Response? response = await enviaPeticionAlservidor(context, url, json);
+    http.Response? response =
+        await enviaPeticionAlservidor(context, url, json, token: token);
     return response != null;
   }
 
@@ -182,12 +198,13 @@ class Servidor {
   /// [json] la información a enviar al servidor en formato json.
   /// Devuelve un int con el código de error que el tratamiento lo realiza la funcion
   /// que ha realizado la llamada.
-  static Future<int> anyade(BuildContext context, String url,
+  static Future<int> anyade(BuildContext context, String url, String token,
       {required String json}) async {
     AppLocalizations traducciones = AppLocalizations.of(context)!;
 
     // Lanzamos la peticion Post al servidor, no capturamos excepciones
-    var response = await enviaPeticionAlservidor(context, url, json);
+    var response =
+        await enviaPeticionAlservidor(context, url, json, token: token);
 
     // -1 significa error de servidor que es tratado al realizar la petición
     var codeError = -1;
@@ -218,7 +235,7 @@ class Servidor {
     try {
       //Creamos el json
       var json = jsonEncode(
-        <String, String>{'emp_busca': queBusco, 'ctoken': token},
+        <String, String>{'emp_busca': queBusco},
       );
       var url = '/listado_empresas';
 
@@ -226,6 +243,7 @@ class Servidor {
       // por tanto, no se van a mostrar los mensajes de excepciones, ya se encarga
       // la funcion que ha realizado la llamado
       var response = await enviaPeticionAlservidor(context, url, json,
+          token: token,
           relanzaClientException: true,
           relanzaOtrasExcepciones: true,
           muestraEspera: false);

@@ -169,6 +169,7 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
         Servidor.anyade(
           context,
           url,
+          widget.token,
           json: json,
         ).then((codigo) {
           esperandoFiltrado = false;
