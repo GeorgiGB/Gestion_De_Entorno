@@ -14,23 +14,21 @@ AS $BODY$
 --  Función que permite crear una empresa
 --  Solo el usuario principal con un token activo
 --  podrá insertar una nueva empresa la cual permite seguidamente
---	Si todo es correcto seguidamente se crea el usuario 'Admin'
---  con el filtro 'ute_empresa := 0' en la tabla usuarios_telemetria
---	la relación entre empresas y usuarios de telemetria es
+--	Si todo es correcto crear el usuario 'Admin'
+--	y la relación entre empresas y usuarios de telemetria es
 --	que cada empresa ha de tener mínimo un usuario de telemetria
 
 --  Consulta ejemplo --
 --	select * from crear_empresa('{"nombre":"pruebaempresaaa","pwd":"12333","auto_pwd":"false","ctoken":"a"}')
 
 --  Respuesta en jsonb correcta
---  [{"bOk": "true", "status": "200", "cod_error": "0"}]
+--  [{"bOk": "true", "cod_error": "200"}]
 
 --  Respuesta en jsonb error empresa existente --
 --  [
 --    {
 --      "bOk": "false",
---      "status": "200",
---      "cod_error": "-2",
+--      "cod_error": "-400",
 --      "msg_error": "llave duplicada viola restricción de unicidad «empresas_nombre_ukey»"
 --    }
 --  ]
@@ -39,8 +37,7 @@ AS $BODY$
 --  [
 --    {
 --      "bOk": "false",
---      "status": "500",
---      "cod_error": "-1",
+--      "cod_error": "-500",
 --      "msg_error": "el valor nulo en la columna «emp_nombre» de la relación «empresas» viola la restricción de no nulo"
 --    }
 --  ]
@@ -50,14 +47,12 @@ DECLARE
 	iemp_cod integer;
 	icod_error integer;
 	cError character varying;
-    statusHTML integer;
 
 BEGIN
 	bOk := false;
-	icod_error := 0;
+	icod_error := 200;
 	cError := '';
 	jresultado := '[]';
-    statusHTML := 200;
 
 	-- Consultamos si el token es válido
 	SELECT t.bok INTO bOk
@@ -103,39 +98,18 @@ BEGIN
 			
 	ELSE
 		--	Token no válido, usuario no validado.
-		statusHTML = 401;
+		icod_error = -401;
 	END IF;
 	
 	--	Añadimos la variable bOk i statusHTML al JSON jresultado
-	SELECT ('{"status":"' || statusHTML
-			|| '", "bOk":"' || bOk 
+	SELECT ('{"bOk":"' || bOk 
 			|| '", "cod_error":"' || icod_error || '"}')::jsonb || jresultado::jsonb into jresultado;
 
 
 	EXCEPTION
 	-- Códigos de error -> https://www.postgresql.org/docs/current/errcodes-appendix.html
 	WHEN OTHERS THEN
-		bOk = false;
-		cError := SQLERRM;
-		statusHTML := 500;
-		CASE
-			 --	El '23505' equivale a unique_violation
-			 --	si ponemos directamente unique_violation en lugar de '23505'
-			 --	da el siguiente error "ERROR:  no existe la columna «unique_violation»"
-			WHEN SQLSTATE = '23505' THEN
-				-- devolvemos status 200 porque en la aplicación cliente la tratamos
-				-- como respuesta valida ya que nos informa de que la empresa ya existe
-				statusHTML :=200;
-				icod_error := -2;
-			ELSE
-				icod_error := -1;		
-		END CASE;
-
-		SELECT ('{"status":"' || statusHTML 
-			|| '", "bOk":"' || false 
-			|| '", "cod_error":"' || icod_error 
-			|| '", "msg_error":"' || cError || '"}')::jsonb
-			|| jresultado::jsonb into jresultado;
+		select excepcion from control_excepciones(SQLSTATE, SQLERRM) into jresultado;
 	END;
 $BODY$;
 
