@@ -44,6 +44,7 @@
     "filtrosDeUsuario": "User filters",
     
     "generaContrasena": "Generate password",
+    "guardaSesion":"Save session",
 
     "hintContrasena": "Password",
     "hintTuNombre": "Your name",
@@ -64,7 +65,7 @@
     "nombreDeLaEmpresa": "Company name:",
     "nombreDelUsuario": "User name:",
     "noSeEncuentraEmpresasDadeAlta": "No companies are found in the DB.\nFirst, register a new company.",
-    "nuevaEmpresa": "Company new",
+    "nuevaEmpresa": "New company",
     "nuevoUsuario": "New user",
     "numeroDeCodigo": "Code number:",
 
@@ -82,7 +83,7 @@
     "seleccionaFiltroUsuario": "Select user filter",
     "seleccionaIdioma": "Select Language",
     "servidorNoDisponible": "Server not available",
-    "sesionActiva": "Active session",
+    "sesion": "Session",
     "siguiente": "Next",
 
     "usuario": "User",

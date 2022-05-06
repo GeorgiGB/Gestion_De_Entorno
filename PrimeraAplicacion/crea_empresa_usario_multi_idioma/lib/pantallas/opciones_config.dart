@@ -21,9 +21,8 @@ class ConfigOpciones extends StatefulWidget {
 }
 
 class _ConfigOpcionesState extends State<ConfigOpciones> {
-  late AppLocalizations traducciones;
-
-  bool isChecked = false;
+  late AppLocalizations traduce;
+  bool guardaSesion = false;
 
   // Lista de comandos
   List<List<Widget>> comandos = [[]];
@@ -32,18 +31,19 @@ class _ConfigOpcionesState extends State<ConfigOpciones> {
   void initState() {
     // Activamos el campo Guardar sesion?
     Preferencias.getSesion(Preferencias.mantenSesion).then((value) {
+      globales.debug(value ?? 'vacio');
       setState(() {
-        isChecked = value == null
+        guardaSesion = value == null
             ? false
             : value.isNotEmpty && value == Preferencias.guardar;
-        MyApp.guardaSesion(isChecked ? widget.token : null);
+        MyApp.guardaSesion(guardaSesion ? widget.token : null);
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    traducciones = AppLocalizations.of(context)!;
+    traduce = AppLocalizations.of(context)!;
 
     comandos.clear();
     creaComandos();
@@ -74,9 +74,31 @@ class _ConfigOpcionesState extends State<ConfigOpciones> {
   creaComandos() {
     //  Añadimos el comando del idioma
     creaComando2(
-      traducciones.idioma,
+      traduce.idioma,
       [
         LanguageDropDown().getDropDown(context),
+      ],
+    );
+    //  Añadimos el comando del idioma
+    creaComando2(
+      traduce.sesion,
+      [
+        // Guardamos Sesión?
+        LabeledCheckbox(
+          label: traduce.guardaSesion,
+          chekBoxIzqda: false,
+          textStyle: globales.estiloNegrita_16,
+          // Mientras este activo
+          // No permitira al usuario escribir una contraseña
+          value: guardaSesion,
+          onChanged: (bool? value) {
+            setState(() {
+              guardaSesion = value!;
+              // Guardamos sesión?
+              MyApp.guardaSesion(guardaSesion ? widget.token : null);
+            });
+          },
+        ),
       ],
     );
   }

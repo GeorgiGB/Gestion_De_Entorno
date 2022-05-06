@@ -3,6 +3,7 @@ import 'package:crea_empresa_usario/pantallas/escoge_opciones.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/preferencias/preferencias.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
+import 'package:crea_empresa_usario/widgets/labeled_checkbox.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import '../globales.dart' as globales;
@@ -25,6 +26,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   late AppLocalizations traduce;
 
+  bool guardaSesion = false;
+
   // Creamos el controlador campo de usuario
   final TextEditingController _usuario = TextEditingController();
 
@@ -44,8 +47,8 @@ class _LoginState extends State<Login> {
     //traduce = AppLocalizations.of(context)!;
     // TODO poner información en blanco
     // informacion predeterminada que luego se borrara mas adelante
-    //_usuario.text = "Joselito";
-    //_pwd.text = "1234";
+    _usuario.text = "Joselito";
+    _pwd.text = "1234";
 
     return Scaffold(
       /*appBar: AppBar(
@@ -90,12 +93,40 @@ class _LoginState extends State<Login> {
               },
             ),
             SizedBox(height: 30),
-            // Botón para realizar el login
-            ElevatedButton(
-              child: Text(AppLocalizations.of(context)!.acceso),
-              onPressed: () {
-                _login();
-              },
+
+            // Boton acceso y guardar sessión
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                // Botón para realizar el login
+                ElevatedButton(
+                  child: Text(AppLocalizations.of(context)!.acceso),
+                  onPressed: () {
+                    _login();
+                  },
+                ),
+
+                // Separación
+                const SizedBox(
+                  width: 20,
+                ),
+
+                // Guardamos Sesión?
+                LabeledCheckbox(
+                  label: traduce.guardaSesion,
+                  chekBoxIzqda: false,
+                  textStyle: globales.estiloNegrita_16,
+                  // Mientras este activo
+                  // No permitira al usuario escribir una contraseña
+                  value: guardaSesion,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      guardaSesion = value!;
+                    });
+                  },
+                ),
+              ],
             ),
           ],
         ),
@@ -117,8 +148,6 @@ class _LoginState extends State<Login> {
         globales.muestraDialogo(context, traduce.primerRellenaCampos);
       } else {
         esperandoLogin = true;
-        // URL del servidor
-        String url = globales.servidor + '/login';
 
         Servidor.login(context, nombre, pwd).then((response) {
           if (response != null && response.statusCode == Servidor.ok) {
@@ -126,11 +155,16 @@ class _LoginState extends State<Login> {
                 jsonDecode(response.body).cast<Map<String, dynamic>>();
 
             var token = parsed[0]['token'];
+
+            // Guardamos sesion?
+            MyApp.guardaSesion(guardaSesion ? token : null);
+
+            // Establecmos el token para uso de la aplicación
             MyApp.setToken(context, token);
 
-            aOpciones(context);
+            aEmpresaNueva(context);
           }
-        }).whenComplete(() => esperandoLogin = false);
+        }).whenComplete(() { esperandoLogin = false;});
       }
     }
   }

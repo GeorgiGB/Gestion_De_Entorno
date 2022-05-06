@@ -19,7 +19,7 @@ void main() {
     globales.debug('inicio: ' + (value ?? 'nada'));
     sesion = value;
   }).whenComplete(() {
-    globales.debug("sesion: " + (sesion == null).toString());
+    globales.debug("sesion:" + (sesion == null).toString());
     runApp(MyApp(token: sesion == null || sesion!.isEmpty ? null : sesion));
   });
 }
@@ -45,15 +45,18 @@ class MyApp extends StatefulWidget {
     mapp._token = token;
   }
 
-  static bool _cerrandoSesion = false;
   static guardaSesion(String? token) {
+    globales.debug(token ?? " elimnado token");
     if (token == null) {
       removePreferencias(claveSesion);
+      removePreferencias(mantenSesion);
     } else {
       setPreferencias(claveSesion, token);
+      setPreferencias(mantenSesion, guardar);
     }
   }
 
+  static bool _cerrandoSesion = false;
   static void cierraSesion(BuildContext context) {
     final AppLocalizations traduce = AppLocalizations.of(context)!;
     MyApp mapp = context.findAncestorWidgetOfExactType<MyApp>() as MyApp;
@@ -133,9 +136,9 @@ class _MyAppState extends State<MyApp> {
         // La ruta raíz (/) es la primera pantalla
         Rutas.Identificate: (context) =>
             Identificate(traduce: _traduce), //Login(_traducc),
-        Rutas.Opciones: (context) => widget._token == null
+        /*Rutas.Opciones: (context) => widget._token == null
             ? noLogin(context)
-            : Opciones(context, traduce: _traduce, token: widget._token),
+            : Opciones(context, traduce: _traduce, token: widget._token),*/
         Rutas.EmpresaNueva: (context) => widget._token == null
             ? noLogin(context)
             : EmpresaNueva(context, traduce: _traduce, token: widget._token),

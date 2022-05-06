@@ -179,8 +179,7 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
                   traducciones.elUsuarioHaSidoDadoDeAlta(widget.nombre),
                   duration: Duration(milliseconds: 1250), onHide: () {
                 // Cargamos pantalla de escoger opciones
-                Navegacion.vaciaNavegacionYCarga(context,
-                    builder: (context) => NuevoUsuario(token: widget.token));
+                Navegacion.aUsuarioNuevo(context);
               });
               break;
             case -2:

@@ -1,3 +1,4 @@
+import 'package:crea_empresa_usario/globales.dart';
 import 'package:crea_empresa_usario/pantallas/escoge_opciones.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart' as Navegacion;
 import 'package:crea_empresa_usario/servidor/servidor.dart';
@@ -11,11 +12,23 @@ import '../main.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
-class NuevaEmpresa extends StatefulWidget {
-  const NuevaEmpresa({Key? key, required this.token}) : super(key: key);
+class NuevaEmpresa extends StatefulWidget
+    implements Navegacion.MenuLatIntericie {
+  NuevaEmpresa({Key? key, required this.token}) : super(key: key);
   final String token;
+  late BuildContext? _context;
+
   @override
   State<NuevaEmpresa> createState() => _NuevaEmpresaState();
+
+  @override
+  bool abreUnaVez(bool ahora) {
+    if (!ahora && _context != null) {
+      Scaffold.of(_context!).openDrawer();
+    }
+    return false;
+  }
+
 }
 
 class _NuevaEmpresaState extends State<NuevaEmpresa> {
@@ -40,7 +53,16 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
   }
 
   @override
+  void dispose() {
+    _contraVisible = false;
+    _emp_pwd_auto = true;
+    widget._context = null;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    widget._context = context;
+    debug('--> B');
     traducciones = AppLocalizations.of(context)!;
 
     return Scaffold(

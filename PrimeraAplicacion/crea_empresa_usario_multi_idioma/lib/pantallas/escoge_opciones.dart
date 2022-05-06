@@ -28,7 +28,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
   // Lista de comandos
   List<List<Widget>> comandos = [[]];
 
-  @override
+  /*@override
   void initState() {
     // Activamos el campo Guardar sesion?
     Preferencias.getSesion(Preferencias.mantenSesion).then((value) {
@@ -39,7 +39,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
         MyApp.guardaSesion(isChecked ? widget.token : null);
       });
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +95,7 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
 
     //  Añadimos el comando de cerrar sessión
     creaComando2(
-      traducciones.sesionActiva,
+      traducciones.sesion,
       [
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,

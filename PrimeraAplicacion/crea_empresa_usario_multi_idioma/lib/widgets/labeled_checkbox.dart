@@ -4,34 +4,19 @@ class LabeledCheckbox extends StatelessWidget {
   const LabeledCheckbox({
     Key? key,
     required this.label,
-    required this.padding,
     required this.value,
     required this.onChanged,
+    this.padding = const EdgeInsets.fromLTRB(4, 4, 4, 4),
+    this.chekBoxIzqda = true,
+    this.textStyle,
   }) : super(key: key);
 
   final String label;
   final EdgeInsets padding;
   final bool value;
   final ValueChanged<bool> onChanged;
-
-/*
-
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text(traducciones.generaContrasena),
-                  Checkbox(
-                      // Mientras este activo
-                      // No permitira al usuario escribir una contraseña
-                      value: _emp_pwd_auto,
-                      focusNode: _auto_contrasenaFocus,
-                      onChanged: (bool? value) {
-                        autoCheckBox(value!);
-                      }),
-                ],
-              ),
-*/
+  final bool chekBoxIzqda;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -41,20 +26,29 @@ class LabeledCheckbox extends StatelessWidget {
       },
       child: Padding(
         padding: padding,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Text(label),
-            Checkbox(
-              value: value,
-              onChanged: (bool? newValue) {
-                onChanged(newValue!);
-              },
-            ),
-          ],
+        child: Wrap(
+          // crossAxisAlignment: ,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: _getWidgets(context),
         ),
       ),
     );
+  }
+
+  List<Widget> _getWidgets(BuildContext context) {
+    List<Widget> wdgt = [
+      Checkbox(
+        value: value,
+        onChanged: (bool? newValue) {
+          onChanged(newValue!);
+        },
+      ),
+      Text(label, style: textStyle),
+    ];
+
+    if (chekBoxIzqda) {
+      wdgt = wdgt.reversed.toList();
+    }
+    return wdgt;
   }
 }

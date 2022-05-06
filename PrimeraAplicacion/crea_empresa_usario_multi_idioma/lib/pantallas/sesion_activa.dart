@@ -74,28 +74,28 @@ class _SesionActivaState extends State<SesionActiva> {
   creaComandos() {
     //  Añadimos el comando de cerrar sessión
     creaComando2(
-      traducciones.sesionActiva,
+      traducciones.sesion,
       [
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             // Guardamos Sesión?
-            //Text("Guardar"),
             LabeledCheckbox(
-                label: "Guardar",
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                // Mientras este activo
-                // No permitira al usuario escribir una contraseña
-                value: isChecked,
-                onChanged: (bool? value) {
-                  setState(() {
-                    isChecked = value!;
-                    Preferencias.setPreferencias(Preferencias.mantenSesion,
-                        isChecked ? Preferencias.guardar : '');
-                    MyApp.guardaSesion(isChecked ? widget.token : null);
-                  });
-                }),
+              label: "Guardar",
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              // Mientras este activo
+              // No permitira al usuario escribir una contraseña
+              value: isChecked,
+              onChanged: (bool? value) {
+                setState(() {
+                  isChecked = value!;
+                  Preferencias.setPreferencias(Preferencias.mantenSesion,
+                      isChecked ? Preferencias.guardar : '');
+                  MyApp.guardaSesion(isChecked ? widget.token : null);
+                });
+              },
+            ),
             // Fina guardar sesión
             const SizedBox(
               width: 20,

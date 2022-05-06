@@ -72,6 +72,7 @@
     "filtrosDeUsuario": "Filtros de usuario",
 
     "generaContrasena": "Genera contraseña",
+    "guardaSesion":"Guarda sesión",
 
     "hintContrasena": "Contraseña",
     "hintTuNombre": "Tu nombre",
@@ -113,7 +114,7 @@
     "nombreDelUsuario": "Nombre del usuario:",
     "noSeEncuentraEmpresasDadeAlta": "No se encuentran empresas en la BBDD.\nPrimero da de alta una nueva empresa.",
     "nuevaEmpresa": "Nueva empresa",
-    "nuevoUsuario": "Usuario nuevo",
+    "nuevoUsuario": "Nuevo usuario",
     "numeroDeCodigo": "Número código:",
 
     "ok": "Ok",
@@ -129,7 +130,7 @@
     "seleccionaFiltroUsuario": "Selecciona filtro usuario",
     "seleccionaIdioma": "Selecciona Idioma",
     "servidorNoDisponible": "Servidor no disponible",
-    "sesionActiva": "Sesión activa",
+    "sesion": "Sesión",
     "siguiente": "Siguiente",
 
     "usuario": "Usuario:",

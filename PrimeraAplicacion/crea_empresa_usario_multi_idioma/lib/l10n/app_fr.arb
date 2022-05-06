@@ -43,6 +43,7 @@
   "filtrosDeUsuario": "User filters",
 
   "generaContrasena": "Générer le mot de passe",
+  "guardaSesion":"Sauver la session",
 
   "hintContrasena": "Mot de passe",
   "hintTuNombre": "Votre nom",
@@ -80,7 +81,7 @@
   "seleccionaFiltroUsuario": "Sélectionner le filtre utilisateur",
   "seleccionaIdioma": "Sélectionnez Langue",
   "servidorNoDisponible": "Serveur non disponible",
-  "sesionActiva": "Session active",
+  "sesion": "Session",
   "siguiente": "Suivant",
 
   "usuario": "Utilisateur",
