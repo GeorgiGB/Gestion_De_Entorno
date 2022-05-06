@@ -23,18 +23,6 @@ class EscogeOpciones extends StatefulWidget {
 class _EscogeOpcionesState extends State<EscogeOpciones> {
   late AppLocalizations traducciones;
 
-  /*Color getColor(Set<MaterialState> states) {
-    const Set<MaterialState> interactiveStates = <MaterialState>{
-      MaterialState.pressed,
-      MaterialState.hovered,
-      MaterialState.focused,
-    };
-    if (states.any(interactiveStates.contains)) {
-      return Colors.blue;
-    }
-    return Colors.red;
-  }*/
-
   bool isChecked = false;
 
   // Lista de comandos
@@ -189,44 +177,10 @@ class _EscogeOpcionesState extends State<EscogeOpciones> {
     globales.debug(widget.token);
     if (op == 0) {
       // Pantalla NuevaEmpresa
-      // EnCualquierLugar.muestraSnack(context, traducciones.cargandoEmpresa);
-      Navigator.of(context).pushNamed(Rutas.EmpresaNueva);
-      /*Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => NuevaEmpresa(
-                    token: widget.token,
-                  )));*/
+      aEmpresaNueva(context);
     } else if (op == 1) {
       // Pantalla NuevoUsuario
-      // EnCualquierLugar.muestraSnack(context, traducciones.cargandoUsuario);
-      Navigator.of(context).pushNamed(Rutas.UsuarioNuevo);
-      /*Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => NuevoUsuario(
-            token: widget.token,
-          ),
-        ),
-      );*/
+      aUsuarioNuevo(context);
     }
   }
-/*
-  void _guardaSesion(bool guarda) {
-    Preferencias.setPreferencias(
-        Preferencias.claveSesion, guarda ? widget.token : '');
-  }
-
-  bool cerrandoSesion = false;
-  void _cerrarSesion() {
-    _guardaSesion(false);
-    if (cerrandoSesion) {
-      EnCualquierLugar()
-          .muestraSnack(context, traducciones.esperandoRespuestaServidor);
-    } else {
-      cerrandoSesion = true;
-      Servidor.cerrarSesion(context, token: widget.token)
-          .whenComplete(() => aLogin(context, traducciones));
-    }
-  }*/
 }

@@ -3,6 +3,7 @@ import 'package:crea_empresa_usario/pantallas/escoge_opciones.dart';
 import 'package:crea_empresa_usario/pantallas/login.dart';
 import 'package:crea_empresa_usario/pantallas/nueva_empr.dart';
 import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
+import 'package:crea_empresa_usario/pantallas/opciones_config.dart';
 import 'package:crea_empresa_usario/pantallas/sesion_activa.dart';
 import 'package:crea_empresa_usario/widgets/esperando_servidor.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class Rutas {
   static String EmpresaNueva = '/EmpresaNueva';
   static String UsuarioNuevo = '/UsuarioNuevo';
   static String FiltrosUsuario = '/UsuarioNuevo/FiltrosUsuario';
-  static String OpcionesSesion = '/Sesion';
+  static String SesionActiva = '/SesionActiva';
   static String Configuracion = '/Configuracion';
 }
 
@@ -52,6 +53,10 @@ aLogin(BuildContext context) {
 
 aEmpresaNueva(BuildContext context) {
   vesA(Rutas.EmpresaNueva, context);
+}
+
+aUsuarioNuevo(BuildContext context) {
+  vesA(Rutas.UsuarioNuevo, context);
 }
 
 aOpciones(BuildContext context) {
@@ -143,16 +148,16 @@ class UsuarioNuevo extends PantallasMenu {
             key: key, token: token, wgt: NuevoUsuario(token: token));
 }
 
-class OpcionesSesion extends PantallasMenu {
-  OpcionesSesion(BuildContext context, AppLocalizations traduce, String? token,
-      {Key? key})
+class SesionAtcv extends PantallasMenu {
+  SesionAtcv(BuildContext context, AppLocalizations traduce,
+      {Key? key, required token})
       : super(Text(traduce.sesionActiva),
-            key: key, token: token, wgt: SesionActiva());
+            key: key, token: token, wgt: SesionActiva(token: token));
 }
 
 class OpcionesConfig extends PantallasMenu {
-  OpcionesConfig(BuildContext context, AppLocalizations traduce, String? token,
-      {Key? key})
-      : super(Text('Configuración'),
-            key: key, token: token, wgt: SesionActiva());
+  OpcionesConfig(BuildContext context, AppLocalizations traduce,
+      {Key? key, required token})
+      : super(Text(traduce.configuracion),
+            key: key, token: token, wgt: ConfigOpciones(token: token));
 }
