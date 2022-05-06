@@ -15,17 +15,15 @@ DECLARE
 	bOk boolean;
 	cToken character varying;
 	cError character varying;
-	iCoderror integer;
-	statusHTML integer;
+	icod_error integer;
 	
 BEGIN
 
 	--	Inicialización de las variables
 	bOk := false;
 	cToken := '';
+	icod_error := 200;
 	cError := '';
-	iCoderror := 0;
-	statusHTML := 200;
 	jresultado := '[]';
 	
 	--	Creación de una tabla temporal para manipular los datos
@@ -57,20 +55,13 @@ BEGIN
 	END IF;
 
 	-- añadimos el resultado a la salida jresultado
-	SELECT ('{"status":"' || statusHTML
+	SELECT ('{"status":"' || icod_error
 			|| '", "bOk":"' || bOk
 			|| '", "token":"' ||cToken||'"}')::jsonb || jresultado ::jsonb INTO jresultado;
 
 
 	EXCEPTION WHEN OTHERS THEN
-		statusHTML := 500;
-		iCoderror := -1;
-		cError := SQLERRM;
-
-		SELECT ('{"status":"' || statusHTML
-			|| '", "cod_error":"' || iCoderror
-			|| '", "msg_error":"' || cError || '"}')::jsonb
-			|| jresultado::jsonb into jresultado;
+		select excepcion from control_excepciones(SQLSTATE, SQLERRM) into jresultado;
 	END;
 $BODY$;
 

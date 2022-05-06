@@ -25,16 +25,14 @@ AS $BODY$
     DECLARE
         bOk boolean;
         iemp_cod integer;
-        icod_error integer;
+        icod_error character varying;
         cError character varying;
-        statusHTML integer;
 
     BEGIN
         bOk := false;
-        icod_error := 0;
+        icod_error := '0';
         cError := '';
         jresultado := '[]';
-        statusHTML := 200;
 		
         -- Consultamos si el token es válido
         SELECT t.bok INTO bOk
@@ -90,35 +88,16 @@ AS $BODY$
 			
 		ELSE
 			--	Token no válido, usuario no validado.
-			statusHTML = 401;
+			icod_error = '-404';
         END IF;
 		
-			--	Añadimos la variable bOk i statusHTML al JSON jresultado
-			SELECT ('{"status":"' ||statusHTML 
-					||'", "cod_error":"' || icod_error || '"}')::jsonb || jresultado::jsonb into jresultado;
+		--	Añadimos la variable bOk i statusHTML al JSON jresultado
+		SELECT ('{"bOk":"' ||bOk 
+				||'", "cod_error":"' || icod_error || '"}')::jsonb || jresultado::jsonb into jresultado;
 
-		EXCEPTION
-			--	Códigos de error -> https://www.postgresql.org/docs/current/errcodes-appendix.html
-			WHEN OTHERS THEN
-				cError := SQLERRM;
-                statusHTML := 500;
-				CASE
-					 --	El '23505' equivale a unique_violation
-					 --	si ponemos directamente unique_violation en lugar de '23505'
-					 --	da el siguiente error "ERROR:  no existe la columna «unique_violation»"
-					WHEN SQLSTATE = '23505' THEN
-                        statusHTML :=200;
-						icod_error := -2;
-					ELSE
-						icod_error := -1;		
-				END CASE;
-				
-				SELECT ('{"status":"' || statusHTML
-					|| '", "cod_error":"' || icod_error
-					|| '", "msg_error":"' || cError || '"}')::jsonb
-					|| jresultado::jsonb into jresultado;
-        END;
-    
+		EXCEPTION WHEN OTHERS THEN
+		select excepcion from control_excepciones(SQLSTATE, SQLERRM) into jresultado;
+    END;
 $BODY$;
 
 ALTER FUNCTION public.crear_usuarios_telemetria(jsonb)

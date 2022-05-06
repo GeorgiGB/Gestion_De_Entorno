@@ -11,7 +11,31 @@ function msg(message){
 
 //  Función asincrona que permite la petición a la base de datos con la información solicitada
 async function peticiones(response, res){
-    let status = parseInt(response[0].status)
+    msg(response)
+    let responseErr = response[0].cod_error
+    let status = 500
+    switch (responseErr){
+        case '0':
+            status = 200
+            break;
+
+        case '-23505':
+            status = 401
+            break;
+
+        case '-23503':
+            status = 400
+            break;
+
+        case '-404':
+            status = 404
+            break;
+            
+        default:
+            status = 500;
+        }
+
+    status = Math.abs(status)
     if(status == 500){
         registrarErr(JSON.stringify(response[0]))
     }

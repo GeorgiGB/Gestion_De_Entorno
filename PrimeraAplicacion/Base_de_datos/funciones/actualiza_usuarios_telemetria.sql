@@ -16,11 +16,10 @@ AS $BODY$
         icod_error integer;
         cError character varying;
 		iemp_cod integer;
-        statusHTML integer;
 		
     BEGIN
         bOk := false;
-        icod_error := 0;
+        icod_error := 200;
         cError := '';
         jresultado := '[]';
 		
@@ -95,27 +94,16 @@ AS $BODY$
 			
 		ELSE
 			--	Token no válido, usuario no validado.
-			statusHTML = 401;
+			icod_error = 401;
         END IF;
 		
 			--	Añadimos la variable bOk i statusHTML al JSON jresultado
-			SELECT ('{"status":"' ||statusHTML
-					||'", "bOk":"' || false 
+			SELECT ('{"bOk":"' || false 
 					||'", "cod_error":"' || icod_error || '"}')::jsonb || jresultado::jsonb INTO jresultado;
 
         EXCEPTION WHEN OTHERS THEN
-			bOk = false;
-			cError := SQLERRM;
-            icod_error := -1;
-			statusHTML := 500;
-				
-			SELECT ('{"status":"' || statusHTML
-				|| '", "bOk":"' || false
-				|| '", "cod_error":"' || icod_error
-				|| '", "msg_error":"' || cError || '"}')::jsonb
-				|| jresultado::jsonb INTO jresultado;
+			select excepcion from control_excepciones(SQLSTATE, SQLERRM) into jresultado;
         END;
-    
 $BODY$;
 
 ALTER FUNCTION public.actualiza_usuarios_telemetria(jsonb)

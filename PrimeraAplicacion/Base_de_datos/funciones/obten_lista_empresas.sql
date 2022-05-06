@@ -18,14 +18,12 @@ DECLARE
 	bOk boolean;
 	cError character varying;
 	icod_error integer;
-    statusHTML integer;
 
 BEGIN
 	jresultado :='[]';
 	bOk := false;
 	cError := '';
-	icod_error := 0;
-    statusHTML := 200;
+	icod_error := 200;
 		
 	--  Consultamos si el token es válido			
 	SELECT t.bok INTO bOk FROM public.validar_token(jleer::jsonb) t;
@@ -48,23 +46,15 @@ BEGIN
 		--  importante añadir COALESCE(jresultado, '{}') porque jresultado puede ser null
 		SELECT (COALESCE(jresultado, '[]'))::jsonb into jresultado;
 	ELSE
-		statusHTML := 401;
+		icod_error := 401;
 	END IF;
 				
-		SELECT ('{"status":"' ||statusHTML
-				||'", "bOk":"' || bOk 
+		SELECT ('{"bOk":"' || bOk
 				||'", "cod_error":"' || icod_error || '"}')::jsonb || jresultado ::jsonb INTO jresultado;
-	
 	
 
 	EXCEPTION WHEN OTHERS THEN
-		bOk := false;
-		statusHTML := 500;
-		icod_error := -1;
-		jresultado :='[{"status":"' ||statusHTML
-				||'", "bOk":"' || bOk 
-				||'", "cod_error":"' || icod_error
-				||'", "msg_error":"'|| SQLERRM ||'"}]';
+		select excepcion from control_excepciones(SQLSTATE, SQLERRM) into jresultado;
 		END;
 $BODY$;
 

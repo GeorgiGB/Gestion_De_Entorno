@@ -18,17 +18,14 @@ AS $BODY$
 DECLARE
 	bOk boolean;
 	iUsu_cod integer;
+	icod_error integer;
 	cError character varying;
-	iCoderror integer;
-	statusHTML integer;
 
 BEGIN
 	
 	bOk := false;
-	iUsu_cod := -1;
+	icod_error := 200;
 	cError := '';
-	iCoderror := 0;
-	statusHTML := 200;
 	jresultado := '[]';
 
 	-- Tabla temporal para leer el json enviado por el servidor
@@ -45,25 +42,20 @@ BEGIN
 	IF FOUND THEN
 		bOk := true;
 	ELSE
-		iUsu_cod := -1;
-		statusHTML := 404;
+		icod_error := -404;
 	END IF;
 	
 	-- Añadimos el resultado a la salida jresultado
 
-	SELECT ('{"status":"' || statusHTML
-		|| '", "cod":"' || iUsu_cod 
-		|| '", "bOk":"' || bOk||'"}')::jsonb || jresultado::jsonb into jresultado;
+	-- SELECT ('{"status":"' || icod_error
+	-- 	|| '", "cod":"' || iUsu_cod 
+	-- 	|| '", "bOk":"' || bOk||'"}')::jsonb || jresultado::jsonb into jresultado;
+
+	SELECT ('{"bOk":"' || bOk 
+			|| '", "cod_error":"' || icod_error || '"}')::jsonb || jresultado::jsonb into jresultado;
 
 	EXCEPTION WHEN OTHERS THEN
-		statusHTML := 500;
-		iCoderror := -1;
-		cError := SQLERRM;
-
-		SELECT ('{"status":"' || statusHTML
-			|| '", "cod_error":"' || iCoderror
-			|| '", "msg_error":"' || cError || '"}')::jsonb
-			|| jresultado::jsonb into jresultado;
+		select excepcion from control_excepciones(SQLSTATE, SQLERRM) into jresultado;
 		END;
 $BODY$;
 
