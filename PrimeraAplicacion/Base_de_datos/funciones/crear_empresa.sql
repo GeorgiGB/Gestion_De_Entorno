@@ -50,7 +50,7 @@ DECLARE
 
 BEGIN
 	bOk := false;
-	icod_error := 200;
+	icod_error := 0;
 	cError := '';
 	jresultado := '[]';
 
