@@ -49,8 +49,8 @@
     "hintContrasena": "Password",
     "hintTuNombre": "Your name",
 
-    "identifica":"Login",
     "idioma":"Language",
+    "iniciaSesion":"Login",
     "introduceElNombre": "Enter your name",
     "introContraDesmarcaCasilla": "To enter the password, uncheck the box",
     "introduceLaContrasena": "Introduce your contraseña",
@@ -93,7 +93,7 @@
     
     "valorInvalidoEnEsteCampo":"Invalid value in this field!",
     
-    "codError401": "Unknown user",
-    "codErrorLogin404": "User not found",
-    "codError500": "Server error"
+    "status_401": "Unknown user",
+    "status_404": "Resource not found",
+    "status_500": "Server error"
 }

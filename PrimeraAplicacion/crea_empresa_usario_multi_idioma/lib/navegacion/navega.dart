@@ -19,7 +19,6 @@ import '../globales.dart';
 
 class Rutas {
   static String Identificate = '/';
-  //static String Opciones = '/Opciones';
   static String EmpresaNueva = '/EmpresaNueva';
   static String UsuarioNuevo = '/UsuarioNuevo';
   static String FiltrosUsuario = '/UsuarioNuevo/FiltrosUsuario';
@@ -61,10 +60,6 @@ aEmpresaNueva(BuildContext context) {
 aUsuarioNuevo(BuildContext context) {
   vesA(Rutas.UsuarioNuevo, context);
 }
-/*
-aOpciones(BuildContext context) {
-  vesA(Rutas.Opciones, context);
-}*/
 
 vesA(String ruta, BuildContext context) {
   Navigator.of(context).pushNamedAndRemoveUntil(ruta, (route) => false);
@@ -80,11 +75,6 @@ popAndPush(BuildContext context,
   Navigator.push(context, MaterialPageRoute(builder: builder));
 }
 
-abstract class MenuLatIntericie {
-  //
-  bool abreUnaVez(bool ahora);
-}
-
 /// Clase abstracta que sirve de base para todas las pantalla muestren o no el
 /// menú lateral [menuLateral].
 /// Si se muestra el [menuLateral] y no añadimos un token lanzará un error.
@@ -92,22 +82,20 @@ abstract class MenuLatIntericie {
 class PantallasMenu extends StatelessWidget {
   PantallasMenu(Widget this.titulo,
       {Key? key, this.token, required this.wgt, this.menuLateral = true})
-      : assert(() {
-          debug("---> " + (wgt is MenuLatIntericie).toString());
-          if (menuLateral && !(wgt is MenuLatIntericie)) {
-            throw ExceptionMenuLateral('La clase "' +
-                wgt.runtimeType.toString() +
-                '" debe implementar la interficie [MenuLatIntericie]' +
-                ' del package:crea_empresa_usario/navegacion/navega.dart\n');
-          } else if (wgt is MenuLatIntericie) {
-            WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-              abierto = (wgt as MenuLatIntericie).abreUnaVez(abierto);
-              debug('--> A');
-            });
-          }
-          return true;
-        }()),
-        super(key: key);
+      : super(key: key) {
+    // Añadimos una llamada para que al final del último frame
+    // se ejecute
+    WidgetsBinding.instance?.addPostFrameCallback(
+      (timeStamp) {
+        // La primera vez que se carga cualquier pantalla después de identificarnos
+        // se mostrará el menú abierto
+        if (menuLateral && !abierto && _scaffoldKey.currentState != null) {
+          abierto = true;
+          _scaffoldKey.currentState!.openDrawer();
+        }
+      },
+    );
+  }
 
   /// Titulo a mostrar en el [AppBar]
   final Widget titulo;
@@ -122,46 +110,41 @@ class PantallasMenu extends StatelessWidget {
   final bool menuLateral;
 
   static bool abierto = false;
-  MainDrawer? _menu;
 
-  bool estoyCargado = false;
+  // esta clave és necesaria para poder abrir el menú lateral
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     // Es la base para las traducciones de los textos localizados
     final AppLocalizations traduce = AppLocalizations.of(context)!;
-    _menu = menuLateral ? MainDrawer(traduce, token!) : null;
-    // Constuctor del widget
+
     return Scaffold(
-      drawer: _menu,
+      key: _scaffoldKey,
+      drawer: menuLateral ? MainDrawer(token!) : null,
       appBar: AppBar(
         title: titulo,
       ),
       //  Separamos el contenido principal en otro widget
       body: wgt,
     );
+    ;
   }
 }
 
-/// Clase abstracta que extiende [PantallasMenu] y sirve de base para las
-/// pantallas sin menú lateral. Al no tener menú lateral
-/*abstract class Pantallas extends PantallasMenu {
-  const Pantallas(Widget titulo, {Key? key, required Widget wgt})
-      : super(titulo, key: key, wgt: wgt, menuLateral: false);
-}*/
-
-/*
-class Opciones extends PantallasMenu {
-  Opciones(BuildContext context,
-      {Key? key, required AppLocalizations traduce, required token})
-      : super(Text(traduce.escogeOpcion),
-            key: key, token: token, wgt: EscogeOpciones(token: token));
-}*/
-
 class Identificate extends PantallasMenu {
   Identificate({Key? key, required AppLocalizations traduce})
-      : super(Text(traduce.identifica),
-            key: key, menuLateral: false, wgt: Login());
+      : super(
+            Wrap(
+              children: [
+                Text(traduce.iniciaSesion),
+                SizedBox(width: 10),
+                Icon(Icons.login_rounded),
+              ],
+            ),
+            key: key,
+            menuLateral: false,
+            wgt: Login());
 }
 
 class EmpresaNueva extends PantallasMenu {

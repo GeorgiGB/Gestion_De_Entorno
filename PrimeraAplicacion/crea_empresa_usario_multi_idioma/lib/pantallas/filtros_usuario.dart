@@ -175,14 +175,17 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
           esperandoFiltrado = false;
           switch (codigo) {
             case 0:
-              EnCualquierLugar().muestraSnack(context,
-                  traducciones.elUsuarioHaSidoDadoDeAlta(widget.nombre),
-                  duration: Duration(milliseconds: 1250), onHide: () {
-                // Cargamos pantalla de escoger opciones
-                Navegacion.aUsuarioNuevo(context);
-              });
+              EnCualquierLugar().muestraSnack(
+                context,
+                traducciones.elUsuarioHaSidoDadoDeAlta(widget.nombre),
+                duration: Duration(milliseconds: 1250),
+                onHide: () {
+                  // Cargamos pantalla de escoger opciones
+                  Navegacion.aUsuarioNuevo(context);
+                },
+              );
               break;
-            case -2:
+            case -23505:
               globales.muestraDialogo(context,
                   traducciones.elUsuarioYaEstaRegistrado(widget.nombre));
               break;

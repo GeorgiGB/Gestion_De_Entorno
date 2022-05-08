@@ -134,7 +134,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Future<void> _login() async {
+  _login()  {
     if (esperandoLogin) {
       EnCualquierLugar().muestraSnack(context, traduce.esperandoAlServidor);
     } else {
@@ -157,14 +157,16 @@ class _LoginState extends State<Login> {
             var token = parsed[0]['token'];
 
             // Guardamos sesion?
-            MyApp.guardaSesion(guardaSesion ? token : null);
+            MyApp.mantenLaSesion(guardaSesion);
 
             // Establecmos el token para uso de la aplicación
             MyApp.setToken(context, token);
 
             aEmpresaNueva(context);
           }
-        }).whenComplete(() { esperandoLogin = false;});
+        }).whenComplete(() {
+          esperandoLogin = false;
+        });
       }
     }
   }

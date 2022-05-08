@@ -1,6 +1,6 @@
 -- FUNCTION: public.crear_empresa(jsonb)
 
--- DROP FUNCTION IF EXISTS public.crear_empresa(jsonb);
+DROP FUNCTION IF EXISTS public.crear_empresa(jsonb);
 
 CREATE OR REPLACE FUNCTION public.crear_empresa(
 	jleer jsonb,
@@ -22,7 +22,7 @@ AS $BODY$
 --	select * from crear_empresa('{"nombre":"pruebaempresaaa","pwd":"12333","auto_pwd":"false","ctoken":"a"}')
 
 --  Respuesta en jsonb correcta
---  [{"bOk": "true", "cod_error": "200"}]
+--  [{"bOk": "true", "cod_error": "0"}]
 
 --  Respuesta en jsonb error empresa existente --
 --  [
@@ -50,7 +50,7 @@ DECLARE
 
 BEGIN
 	bOk := false;
-	icod_error := 200;
+	icod_error := 0;
 	cError := '';
 	jresultado := '[]';
 

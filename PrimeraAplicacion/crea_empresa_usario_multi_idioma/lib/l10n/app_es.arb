@@ -77,8 +77,8 @@
     "hintContrasena": "Contraseña",
     "hintTuNombre": "Tu nombre",
 
-    "identifica":"Identifícate",
     "idioma":"Idioma",
+    "iniciaSesion":"Inicia sesión",
     "introduceElNombre": "Introduce el nombre",
     "introContraDesmarcaCasilla": "Para introducir la contraseña desmarca la casilla.",
     "introduceLaContrasena": "Introduce la contraseña",
@@ -139,7 +139,7 @@
 
     "valorInvalidoEnEsteCampo":"Valor no válido en este campo.",
     
-    "codError401": "Usuario no identificado",
-    "codErrorLogin404": "Usuario no encontrado",
-    "codError500": "Error de servidor"
+    "status_401": "Usuario no identificado",
+    "status_404": "Recurso no encontrado",
+    "status_500": "Error de servidor"
 }

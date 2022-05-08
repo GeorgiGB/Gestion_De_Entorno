@@ -21,7 +21,7 @@ class Servidor {
   static const int usuarioNoAutenticado = 401;
 
   /// El usuario no se encuentra en la BBDD
-  static const int usuarioNoEncontrado = 404;
+  static const int recursoNoEncontrado = 404;
 
   /// Eror de servidor,500
   static const int errorServidor = 500;
@@ -76,14 +76,14 @@ class Servidor {
       bool relanzaOtrasExcepciones = false,
       bool muestraEspera = true}) async {
     url = globales.servidor + url;
-    AppLocalizations traducciones = AppLocalizations.of(context)!;
+    AppLocalizations traduce = AppLocalizations.of(context)!;
 
     // Mostramos un SnackBar si tarda más de dos segundos en responmder el servidor
     Future.delayed(Duration(seconds: 2), () {
       //Si pasan más de 2 segundos
       if (muestraEspera) {
         EnCualquierLugar()
-            .muestraSnack(context, traducciones.esperandoRespuestaServidor);
+            .muestraSnack(context, traduce.esperandoRespuestaServidor);
       }
     });
 
@@ -109,34 +109,15 @@ class Servidor {
         // Adjuntamos al body los datos en formato JSON
         body: json,
       );
-      // Hay que tener en cuenta si la contraseña es autogenerada
-      // Adjuntar el token en la peticion.
-      int status = response.statusCode;
-      switch (status) {
-        case Servidor.ok:
-          break;
-        case Servidor.usuarioNoAutenticado:
-          // Mostramos Alerta avisando del error y redirige
-          noEstoyAutenticado(context);
-          break;
-        case Servidor.usuarioNoEncontrado:
-          // Mostramos Alerta avisando del error
-          noEncontrado(context);
-          break;
-        case Servidor.errorServidor:
-          // Muestra SnackBar
-          error500Servidor(context);
-          break;
-        default:
-          globales.debug(response.body);
-      }
+
+      _gestionInicialResponse(context, response);
 
       //Errores de conexión del cliente u otros no especificados
     } on http.ClientException {
       if (relanzaClientException)
         rethrow;
       else
-        globales.muestraDialogo(context, traducciones.servidorNoDisponible);
+        globales.muestraDialogo(context, traduce.servidorNoDisponible);
     } on Exception catch (e) {
       // Error no especificado
       if (relanzaOtrasExcepciones)
@@ -146,6 +127,57 @@ class Servidor {
     }
     muestraEspera = false;
     return response;
+  }
+
+  static void _gestionInicialResponse(
+      BuildContext context, http.Response response) {
+    AppLocalizations traduce = AppLocalizations.of(context)!;
+    int status = response.statusCode;
+    globales.debug('status: ' + status.toString());
+    globales.debug(response.body + '\n -------- \n');
+    switch (status) {
+      case Servidor.ok:
+        // El que llama gestiona la acción
+        break;
+      case Servidor.usuarioNoAutenticado:
+        // Mostramos Alerta avisando del error y redirige
+        noEstoyAutenticado(context);
+        break;
+
+      // Aquí podemos encontrar diferentes respuestas
+      // unas las trataremos aquí otras no
+      case Servidor.recursoNoEncontrado:
+        final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
+        switch (parsed[0]['msg_error']) {
+
+          // No se encuetra
+          case 'user_or_pwd_not_found':
+            // Mostramos Alerta avisando del error
+            usuarioContrasenyaNoValido(context);
+            break;
+
+          // Elemento ya contenido en la BBDD
+          case 'unique_violation':
+            // El que llama se encarga del aviso
+            break;
+
+          // Para todos los demas Recurso no encontrado
+          default:
+            globales.muestraDialogo(context, traduce.status_404);
+            break;
+        }
+        break;
+
+      // 
+      case Servidor.errorServidor:
+        // Muestra SnackBar
+        error500Servidor(context);
+        break;
+
+      // Otros errores no contemplado y que no se deberían producir
+      default:
+        globales.debug(response.body);
+    }
   }
 
   /// Llamamos a la función con el BuildContext[context] correspondiente, el [usuario]
@@ -177,7 +209,7 @@ class Servidor {
   /// Devuelve booleano -> response == null
   static Future<bool> cerrarSesion(BuildContext context,
       {required String token}) async {
-    AppLocalizations traducciones = AppLocalizations.of(context)!;
+    AppLocalizations traduce = AppLocalizations.of(context)!;
 
     var json = '';
     /* jsonEncode(<String, String>{
@@ -185,7 +217,7 @@ class Servidor {
     });*/
     var url = '/cerrar_sesion';
 
-    globales.debug(token);
+    // globales.debug(token);
 
     // Lanzamos la peticion Post al servidor, no capturamos excepciones
     http.Response? response =
@@ -200,7 +232,7 @@ class Servidor {
   /// que ha realizado la llamada.
   static Future<int> anyade(BuildContext context, String url, String token,
       {required String json}) async {
-    AppLocalizations traducciones = AppLocalizations.of(context)!;
+    AppLocalizations traduce = AppLocalizations.of(context)!;
 
     // Lanzamos la peticion Post al servidor, no capturamos excepciones
     var response =
@@ -210,16 +242,14 @@ class Servidor {
     var codeError = -1;
 
     // Pero si controlamos si response es null
+    globales.debug('response: ' + (response != null).toString());
     if (response != null) {
       int status = response.statusCode;
 
       final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
-      // status correcto?
-      if (status == Servidor.ok) {
-        // Obtenemos el codigo de erro
-        codeError = int.parse(parsed[0]['cod_error']);
-        return codeError;
-      }
+
+      codeError = int.parse(parsed[0]['cod_error']);
+      return codeError;
     }
     return codeError;
   }

@@ -22,7 +22,7 @@ BEGIN
 	--	Inicialización de las variables
 	bOk := false;
 	cToken := '';
-	icod_error := 200;
+	icod_error := 0;
 	cError := '';
 	jresultado := '[]';
 	
@@ -55,7 +55,7 @@ BEGIN
 	END IF;
 
 	-- añadimos el resultado a la salida jresultado
-	SELECT ('{"status":"' || icod_error
+	SELECT ('{"cod_error":"' || icod_error
 			|| '", "bOk":"' || bOk
 			|| '", "token":"' ||cToken||'"}')::jsonb || jresultado ::jsonb INTO jresultado;
 

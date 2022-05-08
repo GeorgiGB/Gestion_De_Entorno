@@ -23,7 +23,7 @@ BEGIN
 	jresultado :='[]';
 	bOk := false;
 	cError := '';
-	icod_error := 200;
+	icod_error := 0;
 		
 	--  Consultamos si el token es válido			
 	SELECT t.bok INTO bOk FROM public.validar_token(jleer::jsonb) t;

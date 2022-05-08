@@ -1,6 +1,6 @@
 -- FUNCTION: public.login(json)
 
--- DROP FUNCTION IF EXISTS public.login(jsonb);
+DROP FUNCTION IF EXISTS public.login(jsonb);
 
 CREATE OR REPLACE FUNCTION public.login(
 	jleer jsonb,
@@ -24,7 +24,8 @@ DECLARE
 BEGIN
 	
 	bOk := false;
-	icod_error := 200;
+	iUsu_cod :=-1;
+	icod_error := 0;
 	cError := '';
 	jresultado := '[]';
 
@@ -42,8 +43,11 @@ BEGIN
 	IF FOUND THEN
 		bOk := true;
 	ELSE
+		iUsu_cod := COALESCE(iUsu_cod, -1);
 		icod_error := -404;
+		cError := 'user_or_pwd_not_found';
 	END IF;
+	
 	
 	-- Añadimos el resultado a la salida jresultado
 
@@ -51,8 +55,14 @@ BEGIN
 	-- 	|| '", "cod":"' || iUsu_cod 
 	-- 	|| '", "bOk":"' || bOk||'"}')::jsonb || jresultado::jsonb into jresultado;
 
+	-- esto no es correcto
+	-- SELECT ('{"bOk":"' || bOk 
+	--		|| '", "cod_error":"' || icod_error || '"}')::jsonb || jresultado::jsonb into jresultado;
+	
 	SELECT ('{"bOk":"' || bOk 
-			|| '", "cod_error":"' || icod_error || '"}')::jsonb || jresultado::jsonb into jresultado;
+		 	|| '", "cod":"' || iUsu_cod 
+			|| '", "cod_error":"' || icod_error
+			|| '", "msg_error":"' || cError || '"}')::jsonb || jresultado::jsonb into jresultado;
 
 	EXCEPTION WHEN OTHERS THEN
 		select excepcion from control_excepciones(SQLSTATE, SQLERRM) into jresultado;

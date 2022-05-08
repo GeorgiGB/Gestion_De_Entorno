@@ -15,16 +15,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 noEstoyAutenticado(BuildContext context) async {
   var traduce = AppLocalizations.of(context)!;
   globales
-      .muestraDialogo(context, traduce.codError401)
+      .muestraDialogo(context, traduce.status_401)
       .whenComplete(() => aLogin(context));
 }
 
 error500Servidor(BuildContext context) async {
   EnCualquierLugar()
-      .muestraSnack(context, AppLocalizations.of(context)!.codError500);
+      .muestraSnack(context, AppLocalizations.of(context)!.status_500);
 }
 
-noEncontrado(BuildContext context) async {
-  globales.muestraDialogo(
-      context, AppLocalizations.of(context)!.codErrorLogin404);
+usuarioContrasenyaNoValido(BuildContext context) async {
+  globales.muestraDialogo(context, AppLocalizations.of(context)!.status_404);
 }

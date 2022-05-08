@@ -16,10 +16,10 @@ import 'config_regional/model/locale_constant.dart' as const_reg;
 void main() {
   String? sesion;
   cargaPreferencia().then((value) {
-    globales.debug('inicio: ' + (value ?? 'nada'));
+    // globales.debug('inicio: ' + (value ?? 'nada'));
     sesion = value;
   }).whenComplete(() {
-    globales.debug("sesion:" + (sesion == null).toString());
+    // globales.debug("sesion:" + (sesion == null).toString());
     runApp(MyApp(token: sesion == null || sesion!.isEmpty ? null : sesion));
   });
 }
@@ -41,18 +41,21 @@ class MyApp extends StatefulWidget {
   String? _token;
 
   static setToken(BuildContext context, String token) {
+    // globales.debug("token es nulo " + (token == null).toString());
     MyApp mapp = context.findAncestorWidgetOfExactType<MyApp>() as MyApp;
     mapp._token = token;
+    setPreferencias(claveSesion, token);
   }
 
-  static guardaSesion(String? token) {
-    globales.debug(token ?? " elimnado token");
-    if (token == null) {
-      removePreferencias(claveSesion);
-      removePreferencias(mantenSesion);
-    } else {
-      setPreferencias(claveSesion, token);
+  static mantenLaSesion(bool si) {
+    if (si) {
       setPreferencias(mantenSesion, guardar);
+    } else {
+      // borro la clave de sesión
+      removePreferencias(claveSesion);
+
+      // y desactivamos el checkbox de mantener sesión
+      removePreferencias(mantenSesion);
     }
   }
 
@@ -61,7 +64,7 @@ class MyApp extends StatefulWidget {
     final AppLocalizations traduce = AppLocalizations.of(context)!;
     MyApp mapp = context.findAncestorWidgetOfExactType<MyApp>() as MyApp;
 
-    guardaSesion(null);
+    //guardaSesion(null);
     if (_cerrandoSesion) {
       EnCualquierLugar()
           .muestraSnack(context, traduce.esperandoRespuestaServidor);
@@ -70,6 +73,10 @@ class MyApp extends StatefulWidget {
       Servidor.cerrarSesion(context, token: mapp._token!).whenComplete(() {
         _cerrandoSesion = false;
         mapp._token = null;
+
+        // Ponemos a false para que cuando una vez nos volvamos a identificar
+        // se muestre el menú lateral
+        PantallasMenu.abierto = false;
         aLogin(context);
       });
     }

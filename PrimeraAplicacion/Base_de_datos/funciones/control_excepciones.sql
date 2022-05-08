@@ -29,7 +29,7 @@ AS $BODY$
 					
 					-- Otros posibles errores no contemplados
 					ELSE
-					
+					cod_error := '-' || cod_error;
 				END CASE;
 				
 				excepcion :='[{"cod_error":"' || cod_error || '", "msg_error":"' || cerror || '"}]';

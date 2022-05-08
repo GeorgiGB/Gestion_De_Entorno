@@ -1,4 +1,5 @@
 const conexion = require('../config/db.config');
+const { msg } = require('./globales');
 /*
   Función asincrona que permite la creación de un usuario de telemetria
   Estos usuarios son creados por el usuario principal

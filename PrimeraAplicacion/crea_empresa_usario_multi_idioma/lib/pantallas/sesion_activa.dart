@@ -36,7 +36,7 @@ class _SesionActivaState extends State<SesionActiva> {
         isChecked = value == null
             ? false
             : value.isNotEmpty && value == Preferencias.guardar;
-        MyApp.guardaSesion(isChecked ? widget.token : null);
+        MyApp.mantenLaSesion(isChecked);
       });
     });
   }
@@ -92,7 +92,7 @@ class _SesionActivaState extends State<SesionActiva> {
                   isChecked = value!;
                   Preferencias.setPreferencias(Preferencias.mantenSesion,
                       isChecked ? Preferencias.guardar : '');
-                  MyApp.guardaSesion(isChecked ? widget.token : null);
+                  MyApp.mantenLaSesion(isChecked);
                 });
               },
             ),
@@ -146,7 +146,7 @@ class _SesionActivaState extends State<SesionActiva> {
 
   /// Al pulsar en un botón lo que hará es mostrar el formulario que hayamos seleccionado
   _cargaOpcion(int op) {
-    globales.debug(widget.token);
+    // globales.debug(widget.token);
     if (op == 0) {
       // Pantalla NuevaEmpresa
       aEmpresaNueva(context);

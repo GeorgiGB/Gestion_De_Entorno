@@ -41,11 +41,11 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
 
             .onError(
             (error, stackTrace) {
-              globales.debug("-> Estoy en error: " + error.toString());
+              // globales.debug("-> Estoy en error: " + error.toString());
               if (error is ExceptionServidor) {
                 if (error.codError == Servidor.usuarioNoAutenticado) {
                   // No estoy auternticado
-                  msgErr = AppLocalizations.of(cntxt)!.codError401;
+                  msgErr = AppLocalizations.of(cntxt)!.status_401;
                   // noEstoyAutenticado(cntxt);
                 } else {
                   msgErr = AppLocalizations.of(cntxt)!
@@ -68,12 +68,12 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
     // varios intentos antes de llamar a este método anónimo y crear los widgets a mostrar
     builder: (context, datos) {
       if (datos.hasError) {
-        globales.debug("Te pille: " + msgErr);
+        // globales.debug("Te pille: " + msgErr);
         // en caso de error
         bool autenticado = (datos.error is ExceptionServidor) &&
             (datos.error as ExceptionServidor).codError !=
                 Servidor.usuarioNoAutenticado;
-        globales.debug("Me pillaste");
+        // globales.debug("Me pillaste");
 
         if (autenticado && msgErr.isNotEmpty) {
           // tenemos que darle un retraso ya que mostrar el diálogo
@@ -227,7 +227,7 @@ List<EmpresCod> _parseEmpresas(http.Response? response) {
 
       // ha ido correcto?
       case Servidor.ok:
-        globales.debug("hola");
+        // globales.debug("hola");
         final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
         // Eliminamos el primer elemento que contiene la información de si todo es correcto
         // Pues la lista de empresas empieza después del primer elemento

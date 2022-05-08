@@ -31,12 +31,12 @@ class _ConfigOpcionesState extends State<ConfigOpciones> {
   void initState() {
     // Activamos el campo Guardar sesion?
     Preferencias.getSesion(Preferencias.mantenSesion).then((value) {
-      globales.debug(value ?? 'vacio');
+      // globales.debug(value ?? 'vacio');
       setState(() {
         guardaSesion = value == null
             ? false
             : value.isNotEmpty && value == Preferencias.guardar;
-        MyApp.guardaSesion(guardaSesion ? widget.token : null);
+        MyApp.mantenLaSesion(guardaSesion);
       });
     });
   }
@@ -94,8 +94,12 @@ class _ConfigOpcionesState extends State<ConfigOpciones> {
           onChanged: (bool? value) {
             setState(() {
               guardaSesion = value!;
+
+              // Mantenemos sesión?
+              MyApp.mantenLaSesion(guardaSesion);
+
               // Guardamos sesión?
-              MyApp.guardaSesion(guardaSesion ? widget.token : null);
+              if (guardaSesion) MyApp.setToken(context, widget.token);
             });
           },
         ),
@@ -137,7 +141,7 @@ class _ConfigOpcionesState extends State<ConfigOpciones> {
 
   /// Al pulsar en un botón lo que hará es mostrar el formulario que hayamos seleccionado
   _cargaOpcion(int op) {
-    globales.debug(widget.token);
+    // globales.debug(widget.token);
     if (op == 0) {
       // Pantalla NuevaEmpresa
       aEmpresaNueva(context);

@@ -48,8 +48,8 @@
   "hintContrasena": "Mot de passe",
   "hintTuNombre": "Votre nom",
 
-  "identifica":"Connexion",
   "idioma":"Langue",
+  "iniciaSesion":"Connexion",
   "introduceElNombre": "Entrez le nom",
   "introContraDesmarcaCasilla":  "Pour saisir le mot de passe, décochez la case.",
   "introduceLaContrasena": "Entrez le mot de passe",
@@ -91,7 +91,7 @@
   
   "valorInvalidoEnEsteCampo":"Valeur non valide pour ce champ",
     
-  "codError401": "Utilisateur non identifié",
-  "codErrorLogin404": "Utilisateur non trouvé",
-  "codError500": "Erreur de serveur"
+  "status_401": "Utilisateur non identifié",
+  "status_404": "Ressource non trouvée",
+  "status_500": "Erreur de serveur"
 }

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:crea_empresa_usario/config_regional/model/language_data.dart';
 import 'package:crea_empresa_usario/config_regional/model/locale_constant.dart';
+import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
 import 'package:crea_empresa_usario/globales.dart';
 import 'package:crea_empresa_usario/main.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ Future<String?> cargaPreferencia() async {
   // Obtenemos locale
   await getLocale();
   // Obtenemos LenguageData
-  await getLenguajeData();
+  LanguageDropDown.languageData =  await getLenguajeData();
   // Obtenemos la session y la devolvemos
   return getSesion(claveSesion);
 }

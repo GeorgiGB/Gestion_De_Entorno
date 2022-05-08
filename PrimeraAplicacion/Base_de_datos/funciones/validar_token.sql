@@ -44,6 +44,7 @@ BEGIN
 	END IF;
 	
 	EXCEPTION WHEN OTHERS THEN
+		-- relanzar error!
 		iCoderror := -1;
 		cerror := SQLERRM;
 		END;

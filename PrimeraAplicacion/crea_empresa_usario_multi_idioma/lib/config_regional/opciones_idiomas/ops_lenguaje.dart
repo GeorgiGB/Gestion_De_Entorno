@@ -7,26 +7,13 @@ import '../model/language_data.dart';
 import '../model/locale_constant.dart';
 
 class LanguageDropDown {
-  /*void setLocale(Locale? locale) {
-    setState(() {
-      _locale = locale;
-    });
-  }*/
+  static LanguageData? languageData;
+
   DropdownButton getDropDown(BuildContext context) {
     return DropdownButton<LanguageData>(
       elevation: 15,
       iconSize: 15,
       hint: _getHint(context),
-      /*Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Text(
-                    LanguageData.lenguage!.bandera,
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  Text(LanguageData.lenguage!.idioma),
-                ],
-              ),*/
       onChanged: (LanguageData? language) {
         changeLanguage(context, language!);
       },
@@ -51,7 +38,7 @@ class LanguageDropDown {
   }
 
   Widget _getHint(BuildContext context) {
-    LanguageData? ld = LanguageData.lenguage;
+    LanguageData? ld = LanguageData.lenguage ?? languageData;
     return ld == null
         ? Text(AppLocalizations.of(context)!.seleccionaIdioma)
         : Row(
