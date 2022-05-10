@@ -38,18 +38,19 @@ class LanguageDropDown {
   }
 
   Widget _getHint(BuildContext context) {
-    LanguageData? ld = LanguageData.lenguage ?? languageData;
+    LanguageData? ld = LanguageDropDown.languageData;
+    ld ??= LanguageData.getLanguageData(dimeLocal(context).languageCode.toString());
     return ld == null
         ? Text(AppLocalizations.of(context)!.seleccionaIdioma)
         : Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Text(
-                LanguageData.lenguage!.bandera,
+                ld.bandera,
                 style: TextStyle(fontSize: 20),
               ),
               /*Text(' '),
-              Text(LanguageData.lenguage!.idioma),*/
+              Text(ld.idioma),*/
             ],
           );
   }

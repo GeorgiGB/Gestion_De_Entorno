@@ -1,4 +1,5 @@
 import 'package:crea_empresa_usario/navegacion/navega.dart';
+import 'package:crea_empresa_usario/pantallas/login.dart';
 import 'package:crea_empresa_usario/preferencias/preferencias.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
@@ -14,14 +15,7 @@ import 'config_regional/model/locale_constant.dart' as const_reg;
 
 /// Cargamos preferencias y nos devuelve un Future con la sesion si ha sido guardada
 void main() {
-  String? sesion;
-  cargaPreferencia().then((value) {
-    // globales.debug('inicio: ' + (value ?? 'nada'));
-    sesion = value;
-  }).whenComplete(() {
-    // globales.debug("sesion:" + (sesion == null).toString());
-    runApp(MyApp(token: sesion == null || sesion!.isEmpty ? null : sesion));
-  });
+  runApp(MyApp());
 }
 
 // Necesitamos que el Widget sea stateful para mantener los cambios de idiomas
@@ -44,11 +38,13 @@ class MyApp extends StatefulWidget {
     // globales.debug("token es nulo " + (token == null).toString());
     MyApp mapp = context.findAncestorWidgetOfExactType<MyApp>() as MyApp;
     mapp._token = token;
-    setPreferencias(claveSesion, token);
   }
 
-  static mantenLaSesion(bool si) {
+  //static
+
+  static mantenLaSesion(bool si, String? token) {
     if (si) {
+      if (token != null) setPreferencias(claveSesion, token);
       setPreferencias(mantenSesion, guardar);
     } else {
       // borro la clave de sesión
@@ -74,9 +70,6 @@ class MyApp extends StatefulWidget {
         _cerrandoSesion = false;
         mapp._token = null;
 
-        // Ponemos a false para que cuando una vez nos volvamos a identificar
-        // se muestre el menú lateral
-        PantallasMenu.abierto = false;
         aLogin(context);
       });
     }
@@ -84,6 +77,16 @@ class MyApp extends StatefulWidget {
 
   @override
   _MyAppState createState() => _MyAppState();
+
+  static void rutaSinToken(BuildContext context) {
+    MyApp mapp = context.findAncestorWidgetOfExactType<MyApp>() as MyApp;
+    if (mapp._token != null) {
+      vesA(ModalRoute.of(context)!.settings.name!, context,
+          arguments: ArgumentsToken(mapp._token!));
+    } else {
+      aLogin(context);
+    }
+  }
 }
 
 class _MyAppState extends State<MyApp> {
@@ -109,75 +112,82 @@ class _MyAppState extends State<MyApp> {
     super.didChangeDependencies();
   }
 
+  String rutaInicial = Rutas.rutas['IniciaLogin']!;
+
   // Widget raíz de la aplicación
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      // Establecemos la configuración regional del widget raíz
-      //que afecta todos los descendientes
-      locale: _locale,
+    //widget._token;
+    return FutureBuilder(
+      // Cargamos las preferencias de sesión
+      future: cargaPreferencia().then((value) {
+        //PantallasMenu.abierto = false;
 
-      // indicamos las diferentes localizaciónes disponibles
-      // se encuentran en: 'package:flutter_gen/gen_l10n/app_localizations.dart'
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+        // si el token no se guarda el valor es nulo
+        // pero si existe el token lo debemos pasar
+        widget._token = value != null ? value : widget._token;
+      }),
 
-      // hasta aquí 'package:flutter_gen/gen_l10n/app_localizations.dart'
+      builder: (context, datos) {
+        //sesion = datos.hasData? datos.data as String:null;
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          // Establecemos la configuración regional del widget raíz
+          //que afecta todos los descendientes
+          locale: _locale,
 
-      // Si queremos que el título de la aplicación realice el cambio
-      // de idioma, la aplicación del nombre la debemos realizar
-      // en este momento ya que si lo hacemos a traves de
-      // title:traducciones.appName,
-      // genera un error porque el objeto AppLocalizations devuelto es nulo
-      onGenerateTitle: (BuildContext context) {
-        _traduce = AppLocalizations.of(context)!;
-        return _traduce.nombreApp;
-      },
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          // indicamos las diferentes localizaciónes disponibles
+          // se encuentran en: 'package:flutter_gen/gen_l10n/app_localizations.dart'
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
 
-      initialRoute: Rutas.Identificate,
-      routes: {
-        // La ruta raíz (/) es la primera pantalla
-        Rutas.Identificate: (context) =>
-            Identificate(traduce: _traduce), //Login(_traducc),
-        /*Rutas.Opciones: (context) => widget._token == null
-            ? noLogin(context)
-            : Opciones(context, traduce: _traduce, token: widget._token),*/
-        Rutas.EmpresaNueva: (context) => widget._token == null
-            ? noLogin(context)
-            : EmpresaNueva(context, traduce: _traduce, token: widget._token),
-        Rutas.UsuarioNuevo: (context) => widget._token == null
-            ? noLogin(context)
-            : UsuarioNuevo(context, traduce: _traduce, token: widget._token),
+          // hasta aquí 'package:flutter_gen/gen_l10n/app_localizations.dart'
 
-        // A esta ruta, Rutas.FiltrosUsuario no se puede acceder por aquí,
-        // se tiene que acceder a través de la pantalla de Nuevo usuario
-        //Rutas.FiltrosUsuario: (context) =>
+          // Si queremos que el título de la aplicación realice el cambio
+          // de idioma, la aplicación del nombre la debemos realizar
+          // en este momento ya que si lo hacemos a traves de
+          // title:traducciones.appName,
+          // genera un error porque el objeto AppLocalizations devuelto es nulo
+          onGenerateTitle: (BuildContext context) {
+            _traduce = AppLocalizations.of(context)!;
+            return _traduce.nombreApp;
+          },
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          initialRoute: Rutas.rutas['IniciaLogin']!,
+          routes: {
+            Rutas.rutas['IniciaLogin']!: (context) => Identificate(_traduce),
+            Rutas.rutas['EmpresaNueva']!: (context) =>
+                EmpresaNueva(context, _traduce),
+            Rutas.rutas['UsuarioNuevo']!: (context) =>
+                UsuarioNuevo(context, _traduce),
+            Rutas.rutas['Configuracion']!: (context) =>
+                OpcionesConfig(context, _traduce),
+          },
 
-        Rutas.SesionActiva: (context) => widget._token == null
-            ? noLogin(context)
-            : SesionAtcv(context, _traduce, token: widget._token),
+          // La ruta inicial es Login  y la hacemos sin transición
+          /*onGenerateRoute: (settings) {
+              if (settings.name == rutaInicial) {
+                return PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => Login(token: widget._token),
+                );
+              }
 
-        Rutas.Configuracion: (context) => widget._token == null
-            ? noLogin(context)
-            : OpcionesConfig(context, _traduce, token: widget._token),
-      },
+              return null;
+            }*/
+          //home:
+          //    widget.token == null ? Login() : EscogeOpciones(token: widget.token!),
 
-      //home:
-      //    widget.token == null ? Login() : EscogeOpciones(token: widget.token!),
+          //home: Sesion(traducciones: AppLocalizations.of(context)!),
+          //home: getPreferencia(MyApp.claveGuardaSesion).whenComplete(() => Login()),
 
-      //home: Sesion(traducciones: AppLocalizations.of(context)!),
-      //home: getPreferencia(MyApp.claveGuardaSesion).whenComplete(() => Login()),
-
-      //home: EscogeOpciones(token: 'a'),
+          //home: EscogeOpciones(token: 'a'),
 
 /*
       home: NuevaEmpresa(token: 'k'),
 */
-      /*
+          /*
       home: const NuevoUsuario(token: "k"),
       /*
       */
@@ -190,6 +200,10 @@ class _MyAppState extends State<MyApp> {
           pwd: "wwwwwwwwwww",
           auto_pwd: true),
       */
+        );
+      },
+
+      /**/
     );
   }
 }

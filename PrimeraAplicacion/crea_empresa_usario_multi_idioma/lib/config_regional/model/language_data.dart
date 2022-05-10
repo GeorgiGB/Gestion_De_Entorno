@@ -27,14 +27,14 @@ class LanguageData {
     if (insignia == null) {
       ld = languageList.first;
     } else {
-      if (insignia != null) {
-        for (var bd in languageList) {
-          if (bd.bandera == insignia || bd.lenguajeCodigo == insignia) {
-            ld = bd;
-            break;
-          }
+      //if (insignia != null) {
+      for (var bd in languageList) {
+        if (bd.bandera == insignia || bd.lenguajeCodigo == insignia) {
+          ld = bd;
+          break;
         }
       }
+      //}
       return ld;
     }
   }

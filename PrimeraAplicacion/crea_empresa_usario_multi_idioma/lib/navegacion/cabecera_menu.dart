@@ -5,8 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
-class CabeceraMenuLat extends StatelessWidget {
-  CabeceraMenuLat({
+/// Este widget crea la cabecera del menú
+/// Muestra un título, el icono para cerrar el menu y un desplegable para
+/// cambiar de idioma
+///
+/// El título lo obtiene a partir de la funcion anónima [traduce]
+/// que se pasa como parámetro un [AppLocalizations]. De esta forma podemos poner el
+/// título que queramos desde el lugar que lo integremos.
+///
+/// Ejemplo para crear la cabecera lateral:
+/// ```dart
+/// CabeceraMenuLat(traduce: (traduce) {
+///      return traduce.nombreApp;
+///    })
+/// ```
+class CabeceraMenu extends StatelessWidget {
+  CabeceraMenu({
     Key? key,
     required this.traduce,
   }) : super(key: key);

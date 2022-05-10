@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Esperando {
-  static esperandoA(String label) {
+  static esperandoA(
+    String label, {
+    Key? key,
+  }) {
     return Center(
+      key: key,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,

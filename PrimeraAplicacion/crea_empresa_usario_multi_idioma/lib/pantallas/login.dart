@@ -1,7 +1,5 @@
 import 'package:crea_empresa_usario/main.dart';
-import 'package:crea_empresa_usario/pantallas/escoge_opciones.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
-import 'package:crea_empresa_usario/preferencias/preferencias.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/labeled_checkbox.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
@@ -13,12 +11,10 @@ import 'dart:convert';
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Widget DropdownButton para selecionar idioma
-import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
 // Fin imports multi-idioma ----------------
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
-
+  Login({Key? key}) : super(key: key) {}
   @override
   State<Login> createState() => _LoginState();
 }
@@ -134,7 +130,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-  _login()  {
+  _login() {
     if (esperandoLogin) {
       EnCualquierLugar().muestraSnack(context, traduce.esperandoAlServidor);
     } else {
@@ -157,12 +153,12 @@ class _LoginState extends State<Login> {
             var token = parsed[0]['token'];
 
             // Guardamos sesion?
-            MyApp.mantenLaSesion(guardaSesion);
+            MyApp.mantenLaSesion(guardaSesion, token);
 
             // Establecmos el token para uso de la aplicación
             MyApp.setToken(context, token);
 
-            aEmpresaNueva(context);
+            aEmpresaNueva(context, arguments: ArgumentsToken(token));
           }
         }).whenComplete(() {
           esperandoLogin = false;

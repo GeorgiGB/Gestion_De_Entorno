@@ -3,6 +3,8 @@ import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/pantallas/nueva_empr.dart';
 import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
+import 'package:crea_empresa_usario/widgets/aviso_accion.dart';
+import 'package:crea_empresa_usario/widgets/dropdownfield.dart';
 import 'package:crea_empresa_usario/widgets/esperando_servidor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,45 +16,44 @@ import 'dart:convert';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
-import '../globales.dart' as globales;
-import '../widgets/dropdownfield.dart';
+import '../../globales.dart' as globales;
 
 // Qué empresa ha sido seleccionada?
 EmpresCod? get empreCod => ListaEmpresas._empresaSeleccionada;
 
 /// Función utilizada para obtener la lista de empresas del servidor
-/// En caso de no haber empresas dadas de alta  muestra un mensaje y la opción
+/// En caso de no haber empresas dadas de alta muestra un mensaje y la opción
 /// de dar de alta una empresa o volver atrás
 /// Si falla la conexión muestra un mensaje y un botón para volver atrás
 /// Una vez se muestran los campos de formulario esta función no se volverá a ejecutar.
+/// Necesita la referencia del Widget [NuevoUsuarioState] donde se encuetra para
 FutureBuilder<List<EmpresCod>> dropDownEmpresas(
-    String queBusco, NuevoUsuarioState ns) {
+    String queBusco, NuevoUsuarioState ns, BuildContext context, String token) {
   late String msgErr = '';
-  BuildContext cntxt = ns.context;
-  NuevoUsuario widget = ns.widget;
+  BuildContext _context = context;
+  AppLocalizations traduce = AppLocalizations.of(_context)!;
+  final String _token = token;
 
   return FutureBuilder<List<EmpresCod>>(
     // Future que gestiona la petición del listado de empresas al servidor
     future: ns.muestraFormulario.visible
         ? null
-        : Servidor.buscaEmpresas(queBusco, widget.token, cntxt)
+        : Servidor.buscaEmpresas(queBusco, _token, _context)
 
             // En caso de error en el servidor capturamos el mensaje pertinente.
-
             .onError(
             (error, stackTrace) {
-              // globales.debug("-> Estoy en error: " + error.toString());
               if (error is ExceptionServidor) {
                 if (error.codError == Servidor.usuarioNoAutenticado) {
                   // No estoy auternticado
-                  msgErr = AppLocalizations.of(cntxt)!.status_401;
+                  msgErr = traduce.status_401;
                   // noEstoyAutenticado(cntxt);
                 } else {
-                  msgErr = AppLocalizations.of(cntxt)!
+                  msgErr = traduce
                       .errNoEspecificado(': ' + error.codError.toString());
                 }
               } else {
-                msgErr = AppLocalizations.of(cntxt)!.servidorNoDisponible;
+                msgErr = traduce.servidorNoDisponible;
               }
               throw error!;
             },
@@ -68,12 +69,10 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
     // varios intentos antes de llamar a este método anónimo y crear los widgets a mostrar
     builder: (context, datos) {
       if (datos.hasError) {
-        // globales.debug("Te pille: " + msgErr);
         // en caso de error
         bool autenticado = (datos.error is ExceptionServidor) &&
             (datos.error as ExceptionServidor).codError !=
                 Servidor.usuarioNoAutenticado;
-        // globales.debug("Me pillaste");
 
         if (autenticado && msgErr.isNotEmpty) {
           // tenemos que darle un retraso ya que mostrar el diálogo
@@ -84,37 +83,25 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
           //globales.muestraToast(context, msgOk);
         }
 
+        // En caso de error mostramos un aviso acción para recargar página
         return AvisoAccion(
           autenticado: autenticado,
-          aviso: msgErr.isEmpty
-              ? AppLocalizations.of(cntxt)!.esperandoRespuestaServidor
-              : msgErr,
-          msg: AppLocalizations.of(cntxt)!.recarga,
+          aviso: msgErr.isEmpty ? traduce.esperandoRespuestaServidor : msgErr,
+          msg: traduce.recarga,
           icon: const Icon(Icons.refresh_rounded),
           // Recargamos la página de NuevoUsuario
-          accion: () => {ns.recarga()},
+          accion: () => aUsuarioNuevo(context),
         );
       } else if (datos.hasData) {
         // Tenemos datos?
         if (datos.data!.isEmpty) {
           // No hay empresas en los datos recibidos por el servidor
           return AvisoAccion(
-            aviso: AppLocalizations.of(cntxt)!.noSeEncuentraEmpresasDadeAlta,
-            msg: AppLocalizations.of(cntxt)!.anyadeEmpresa,
+            // No hay empresas dadas de alta -> cargamos la pantalla de EmpresNueva
+            accion: () => {aEmpresaNueva(context)},
+            aviso: traduce.noSeEncuentraEmpresasDadeAlta,
+            msg: traduce.anyadeEmpresa,
             icon: const Icon(Icons.add_business_rounded),
-            accion: () => {
-              popAndPush(context,
-                  builder: (context) => NuevaEmpresa(token: widget.token)),
-              // Eliminamos la página actual del historial de Navigator
-              /*if (Navigator.canPop(context)) {Navigator.pop(context)},
-              // Cargamos la página de NuevaEmpresa
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NuevaEmpresa(token: widget.token),
-                ),
-              )*/
-            },
           );
         } else {
           // Tenemos datos y
@@ -131,88 +118,6 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
       }
     },
   );
-}
-
-/// Widget utilizado para mostrar avisos y generar acciones
-/// Tiene un widget que se muestra si hay posibilidad de ir atrás en la navegación
-class AvisoAccion extends StatelessWidget {
-  AvisoAccion(
-      {Key? key,
-      this.autenticado = true,
-      required this.aviso, // mensaje de aviso
-      required this.msg, // mensaje a mostrar en la acción a realizar
-      required this.icon, // icono  a mostrar en la acción a realizar
-      this.accion}) // Función que será llamada al pulsar el widget acccion
-      : super(key: key);
-  final bool autenticado;
-  final String aviso;
-  final String msg;
-  final Icon icon;
-  final Function? accion;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          // Muestro Icono + aviso
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.warning_amber_rounded,
-                color: Colors.red,
-              ),
-              Text(
-                aviso,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                    fontSize: 14.0),
-              ),
-            ],
-          ),
-          // Genero los widgets con la accion pasada
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: getWidgets(context),
-          ),
-        ],
-      ),
-    );
-  }
-
-  List<Widget> getWidgets(BuildContext context) {
-    List<Widget> widgets = [];
-    if (autenticado) {
-      // widget atrás en navegación
-      if (Navigator.canPop(context)) {
-        widgets.add(
-          TextButton.icon(
-            label: Text(AppLocalizations.of(context)!.atras),
-            icon: const BackButtonIcon(),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        );
-      }
-
-      // Widget accion
-      widgets.add(
-        TextButton.icon(
-          label: Text(msg),
-          icon: icon,
-          onPressed: () {
-            if (accion != null) accion!();
-          },
-        ),
-      );
-    }
-
-    return widgets;
-  }
 }
 
 // Funcion utilizada para convertir el cuerpo de la resuesta enviada

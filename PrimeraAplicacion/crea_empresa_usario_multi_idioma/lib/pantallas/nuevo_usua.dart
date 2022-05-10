@@ -1,17 +1,21 @@
 //import 'package:crea_empresa_usario/drop_down/empresa.dart';
 
-import 'package:crea_empresa_usario/listado_empresas/empresa_future.dart' as ef;
+import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:flutter/material.dart';
 import '../globales.dart' as globales;
 import 'filtros_usuario.dart';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'listado_empresas/empresa_future.dart';
 // Fin imports multi-idioma ----------------
 
 class NuevoUsuario extends StatefulWidget {
-  const NuevoUsuario({Key? key, required this.token}) : super(key: key);
-  final String token;
+  NuevoUsuario({Key? key, required token}) : super(key: key) {
+    _token = token;
+  }
+  late String _token;
 
   @override
   State<NuevoUsuario> createState() => NuevoUsuarioState();
@@ -47,6 +51,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
 
   @override
   void initState() {
+    super.initState();
     _contraVisible = false;
     _pwd_auto = true;
   }
@@ -71,7 +76,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
           children: <Widget>[
             // Para poder mostrar el formulario tienen que haber empresas dadas
             // de alta y así poder seleccionar una empresa y asociarla al nuevo usuario
-            ef.dropDownEmpresas('', this),
+            dropDownEmpresas('', this, context, widget._token),
             // la función está preparada para pasar un string que buscará en el servidor
             SizedBox(height: 30),
             // Widget que contiene los controles de formulario
@@ -95,11 +100,11 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
   }
 
   // Recargamos la página desde el estado de inicial
-  recarga() {
+  /*recarga() {
     setState(() {
       _visible = false;
     });
-  }
+  }*/
 
   avisoContraManual(bool hasFocus) {
     // Si la casilla de contraseña auto generada está marcada no permitirá
@@ -123,24 +128,18 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
     */
 
     // obtenemos la empresa seleccionada
-    ef.EmpresCod? empCod = ef.empreCod;
+    EmpresCod? empCod = empreCod;
 
     if (_nombre.text.isNotEmpty &&
         (_pwd.text.isNotEmpty || _pwd_auto) &&
         empCod != null) {
-      // Este if no hace falta simplemente pasamos los datos a filtros
-      // usuarios
-      /*if (esperandoNuevoUsuario) {
-        globales.muestraToast(context, traducciones.esperandoAlServidor);
-      } else {*/
-      //globales.muestraToast(context, traducciones.comprobandoDatos);
+      // Pasamos los datos a la pantalla FiltrosUsuario
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => FiltrosUsuario(
-              token: widget.token,
-              empCod: empCod.toString(),
-              emp_cod: empCod.empCod,
+              token: widget._token,
+              empCod: empCod,
               nombre: _nombre.text,
               pwd: _pwd.text,
               auto_pwd: _pwd_auto),

@@ -13,8 +13,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Constantes donde se guarda el idoma escogido y desde donde actualizamos
 
 class ConfigOpciones extends StatefulWidget {
-  const ConfigOpciones({Key? key, required this.token}) : super(key: key);
-  final String token;
+  ConfigOpciones({Key? key, token}) : super(key: key) {
+    _token = token;
+  }
+  late final String? _token;
 
   @override
   State<ConfigOpciones> createState() => _ConfigOpcionesState();
@@ -29,6 +31,7 @@ class _ConfigOpcionesState extends State<ConfigOpciones> {
 
   @override
   void initState() {
+    super.initState();
     // Activamos el campo Guardar sesion?
     Preferencias.getSesion(Preferencias.mantenSesion).then((value) {
       // globales.debug(value ?? 'vacio');
@@ -36,7 +39,7 @@ class _ConfigOpcionesState extends State<ConfigOpciones> {
         guardaSesion = value == null
             ? false
             : value.isNotEmpty && value == Preferencias.guardar;
-        MyApp.mantenLaSesion(guardaSesion);
+        MyApp.mantenLaSesion( guardaSesion, widget._token);
       });
     });
   }
@@ -88,6 +91,7 @@ class _ConfigOpcionesState extends State<ConfigOpciones> {
           label: traduce.guardaSesion,
           chekBoxIzqda: false,
           textStyle: globales.estiloNegrita_16,
+          enabled: widget._token != null,
           // Mientras este activo
           // No permitira al usuario escribir una contraseña
           value: guardaSesion,
@@ -96,10 +100,11 @@ class _ConfigOpcionesState extends State<ConfigOpciones> {
               guardaSesion = value!;
 
               // Mantenemos sesión?
-              MyApp.mantenLaSesion(guardaSesion);
+              MyApp.mantenLaSesion(guardaSesion, widget._token);
 
               // Guardamos sesión?
-              if (guardaSesion) MyApp.setToken(context, widget.token);
+              if (guardaSesion && widget._token != null)
+                MyApp.setToken(context, widget._token!);
             });
           },
         ),
@@ -127,7 +132,6 @@ class _ConfigOpcionesState extends State<ConfigOpciones> {
                 ],
               ),
               const SizedBox(height: 15),
-              //  Botones Empresa y Usuarios
               Align(
                 alignment: Alignment.centerLeft,
                 child: Wrap(spacing: 15, children: lista),
@@ -137,17 +141,5 @@ class _ConfigOpcionesState extends State<ConfigOpciones> {
         ),
       )
     ]);
-  }
-
-  /// Al pulsar en un botón lo que hará es mostrar el formulario que hayamos seleccionado
-  _cargaOpcion(int op) {
-    // globales.debug(widget.token);
-    if (op == 0) {
-      // Pantalla NuevaEmpresa
-      aEmpresaNueva(context);
-    } else if (op == 1) {
-      // Pantalla NuevoUsuario
-      aUsuarioNuevo(context);
-    }
   }
 }

@@ -1,11 +1,10 @@
-import 'package:crea_empresa_usario/pantallas/escoge_opciones.dart';
+
 import 'package:crea_empresa_usario/navegacion/navega.dart' as Navegacion;
-import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
+import 'package:crea_empresa_usario/pantallas/listado_empresas/empresa_future.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import '../globales.dart' as globales;
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 // Imports multi-idioma ---------------------
@@ -17,14 +16,12 @@ class FiltrosUsuario extends StatefulWidget {
       {Key? key,
       required this.token,
       required this.empCod,
-      required this.emp_cod,
       required this.nombre,
       required this.pwd,
       required this.auto_pwd})
       : super(key: key);
   final String token;
-  final String empCod;
-  final int emp_cod;
+  final EmpresCod empCod;
   final String nombre;
   final String pwd;
   final bool auto_pwd;
@@ -45,6 +42,7 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
 
   @override
   void initState() {
+    super.initState();
     _users = _creaFiltro();
   }
 
@@ -67,7 +65,8 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
             children: <Widget>[
               Row(
                 children: [
-                  campoValor(traducciones.empresa + ": ", widget.empCod)
+                  campoValor(
+                      traducciones.empresa + ": ", widget.empCod.toString())
                 ],
               ),
               SizedBox(height: 10),
@@ -157,7 +156,7 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
         esperandoFiltrado = true;
         String json = jsonEncode(<String, String>{
           'ctoken': widget.token,
-          'emp_cod': widget.emp_cod.toString(),
+          'emp_cod': widget.empCod.empCod.toString(),
           'nombre': widget.nombre,
           'pwd': widget.pwd,
           'auto_pwd': widget.auto_pwd.toString(),

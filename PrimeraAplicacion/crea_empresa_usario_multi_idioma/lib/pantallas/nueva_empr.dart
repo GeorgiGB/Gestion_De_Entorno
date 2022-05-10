@@ -1,20 +1,20 @@
-import 'package:crea_empresa_usario/globales.dart';
-import 'package:crea_empresa_usario/pantallas/escoge_opciones.dart';
+import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart' as Navegacion;
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import '../globales.dart' as globales;
 import 'dart:convert';
-import '../main.dart';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
 class NuevaEmpresa extends StatefulWidget {
-  const NuevaEmpresa({Key? key, required this.token}) : super(key: key);
-  final String token;
+  NuevaEmpresa({Key? key, required token}) : super(key: key) {
+    _token = token;
+  }
+  late final String _token;
 
   @override
   State<NuevaEmpresa> createState() => _NuevaEmpresaState();
@@ -197,14 +197,14 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
           'nombre': nom_empresa,
           'pwd': emp_pwd,
           'auto_pwd': _emp_pwd_auto.toString(),
-          'ctoken': widget.token
+          'ctoken': widget._token
         });
 
         //Enviamos al servidor
         Servidor.anyade(
           context,
           url,
-          widget.token,
+          widget._token,
           json: json,
         ).then((codigo) {
           esperandoNuevaEmpresa = false;
