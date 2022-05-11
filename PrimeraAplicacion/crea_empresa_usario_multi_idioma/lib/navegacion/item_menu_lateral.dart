@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:crea_empresa_usario/colores.dart';
 // Fin imports multi-idioma ----------------
 
 /// Clase que crea un item del menu con un icono a partir un IconData [iconData]
@@ -46,12 +47,16 @@ class ItemMenu extends StatelessWidget {
     Key? key,
     required this.funcionTraduce,
     this.necesitaToken = true,
+    this.colorActivo = const Color.fromARGB(255, 218, 243, 255),
+    this.colorSeleccionado = PaletaColores.colorVerde,
   }) : super(key: key);
 
   final IconData iconData;
   final String Function(AppLocalizations) funcionTraduce;
   final dynamic accion;
   final necesitaToken;
+  final Color colorActivo;
+  final Color colorSeleccionado;
 
   bool _seleccionat = false;
 
@@ -81,11 +86,14 @@ class ItemMenu extends StatelessWidget {
     // que tiene que abrir o si necesita token i se ha obtenido el _token
     bool enabled = !necesitaToken || necesitaToken && itemTieneToken;
     return Card(
-      // Color de fondo en funció de si se encuetra activo o no o seleccionado
+      // Color de fondo en funció de si se encuetra activo o no seleccionado
       color: enabled
           ? _seleccionat
-              ? Colors.amber[100]
-              : Color.fromARGB(255, 218, 243, 255)
+              //  Color Seleccionado
+              ? colorSeleccionado
+              //  Color Activo
+              : colorActivo
+          //  Color deshabilitado
           : Colors.grey[100],
       child: ListTile(
         enabled: enabled,

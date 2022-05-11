@@ -158,12 +158,9 @@ class _MyAppState extends State<MyApp> {
           initialRoute: Rutas.rutas['IniciaLogin']!,
           routes: {
             Rutas.rutas['IniciaLogin']!: (context) => Identificate(context),
-            Rutas.rutas['EmpresaNueva']!: (context) =>
-                EmpresaNueva(context),
-            Rutas.rutas['UsuarioNuevo']!: (context) =>
-                UsuarioNuevo(context),
-            Rutas.rutas['Configuracion']!: (context) =>
-                OpcionesConfig(context),
+            Rutas.rutas['EmpresaNueva']!: (context) => EmpresaNueva(context),
+            Rutas.rutas['UsuarioNuevo']!: (context) => UsuarioNuevo(context),
+            Rutas.rutas['Configuracion']!: (context) => OpcionesConfig(context),
           },
 
           // La ruta inicial es Login  y la hacemos sin transición

@@ -5,7 +5,7 @@ import 'package:crea_empresa_usario/navegacion/cabecera_menu.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/navegacion/item_menu_lateral.dart';
 import 'package:flutter/material.dart';
-
+import 'package:crea_empresa_usario/colores.dart';
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------

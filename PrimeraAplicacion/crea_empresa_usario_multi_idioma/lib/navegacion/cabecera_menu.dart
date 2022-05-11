@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:crea_empresa_usario/colores.dart';
 // Fin imports multi-idioma ----------------
 
 /// Este widget crea la cabecera del menú
@@ -31,11 +32,12 @@ class CabeceraMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 100,
+      // Barra lateral
       child: DrawerHeader(
         padding: const EdgeInsets.fromLTRB(8.0, 16.0, 16.0, 8.0),
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-        ),
+        //  En un BoxDecoration indicamos los colores personalizados que queremos que tenga el programa
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(colors: PaletaColores.listaColores1)),
         margin: EdgeInsets.zero,
         child: Stack(children: [
           Positioned(
@@ -43,13 +45,13 @@ class CabeceraMenu extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .headline6!
-                      .copyWith(color: Colors.white))),
+                      .copyWith(color: PaletaColores.colorGrisOscuro))),
           Positioned(
               top: -10,
               right: -10,
               child: IconButton(
                   icon: Icon(Icons.close),
-                  color: Colors.white,
+                  color: PaletaColores.colorGrisOscuro,
                   onPressed: () => Navigator.of(context).pop())),
           Positioned(
             bottom: 0,

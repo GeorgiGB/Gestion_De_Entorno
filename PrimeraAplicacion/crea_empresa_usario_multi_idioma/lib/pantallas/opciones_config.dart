@@ -39,7 +39,7 @@ class _ConfigOpcionesState extends State<ConfigOpciones> {
         guardaSesion = value == null
             ? false
             : value.isNotEmpty && value == Preferencias.guardar;
-        MyApp.mantenLaSesion( guardaSesion, widget._token);
+        MyApp.mantenLaSesion(guardaSesion, widget._token);
       });
     });
   }
@@ -58,7 +58,7 @@ class _ConfigOpcionesState extends State<ConfigOpciones> {
       body: ListView.builder(
         //  Construimos la lista de widgets dinámicamente
         //  Aquí viene los diferetes botones de comandos
-        padding: EdgeInsets.only(top: 5),
+        padding: const EdgeInsets.only(top: 5),
         itemCount: comandos.length,
         itemBuilder: (context, index) {
           return Column(

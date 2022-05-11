@@ -1,3 +1,4 @@
+import 'package:crea_empresa_usario/colores.dart';
 import 'package:crea_empresa_usario/main.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
@@ -57,7 +58,7 @@ class _LoginState extends State<Login> {
           ]),*/
       body: SingleChildScrollView(
         //Previene BOTTOM OVERFLOWED
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           mainAxisSize: MainAxisSize.min,
@@ -72,7 +73,7 @@ class _LoginState extends State<Login> {
                 FocusScope.of(context).requestFocus(_contrasenaFocus);
               },
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
 
             TextFormField(
               decoration: InputDecoration(
@@ -88,7 +89,7 @@ class _LoginState extends State<Login> {
                 _login();
               },
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
 
             // Boton acceso y guardar sessión
             Row(
@@ -101,8 +102,9 @@ class _LoginState extends State<Login> {
                   onPressed: () {
                     _login();
                   },
+                  style: ElevatedButton.styleFrom(
+                      primary: PaletaColores.colorMorado),
                 ),
-
                 // Separación
                 const SizedBox(
                   width: 20,

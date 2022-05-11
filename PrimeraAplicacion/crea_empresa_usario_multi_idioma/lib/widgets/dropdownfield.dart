@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:crea_empresa_usario/colores.dart';
 // Fin imports multi-idioma ----------------
 
 ///DropDownField has customized autocomplete text field functionality
@@ -126,7 +127,7 @@ class DropDownField extends FormField<String> {
                 icon: icon,
                 suffixIcon: IconButton(
                     icon: const Icon(Icons.arrow_drop_down,
-                        size: 30.0, color: Colors.black),
+                        size: 30.0, color: PaletaColores.colorMorado),
                     onPressed: () {
                       ddfState.toggleDropDownVisibility();
                     }),
