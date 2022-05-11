@@ -27,7 +27,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 ///    }),
 /// ```
 ///
-/// Ejemplo para crear un ItemMenu que ejecuta solo accion, en este caso necesita de token
+/// Ejemplo para crear un ItemMenu que ejecuta solo accion, en este caso no necesita el token
 ///
 /// ```dart
 ///    // Cierra sesion
@@ -96,7 +96,6 @@ class ItemMenu extends StatelessWidget {
                 color: enabled ? null : Theme.of(context).disabledColor)),
         selected: _seleccionat,
         onTap: () {
-          print(2222);
           if (_seleccionat) {
             // Cerramos el menu abierto
             Navigator.pop(context);
@@ -108,7 +107,6 @@ class ItemMenu extends StatelessWidget {
                   // Pasamos los argumentos
                   arguments: objArgs);
             } else {
-              print('pasando accion');
               // o la acción que se pase
               accion(context);
             }
