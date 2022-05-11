@@ -1,4 +1,3 @@
-
 import 'package:crea_empresa_usario/navegacion/navega.dart' as Navegacion;
 import 'package:crea_empresa_usario/pantallas/listado_empresas/empresa_future.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
@@ -165,15 +164,14 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
         });
 
         // Enviamos al servidor
-        Servidor.anyade(
-          context,
-          url,
-          widget.token,
-          json: json,
-        ).then((codigo) {
-          esperandoFiltrado = false;
+        Servidor.anyade(context, url, widget.token,
+            json: json,
+            gestionoErrores: [
+              BBDD.uniqueViolation,
+              BBDD.invalidTextRepresentation
+            ]).then((codigo) {
           switch (codigo) {
-            case 0:
+            case '0':
               EnCualquierLugar().muestraSnack(
                 context,
                 traducciones.elUsuarioHaSidoDadoDeAlta(widget.nombre),
@@ -184,12 +182,16 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
                 },
               );
               break;
-            case -23505:
+            case BBDD.uniqueViolation:
               globales.muestraDialogo(context,
                   traducciones.elUsuarioYaEstaRegistrado(widget.nombre));
               break;
+            case BBDD.invalidTextRepresentation:
+              globales.muestraDialogo(
+                  context, traducciones.numeroNoValido(_codigo_filtro.text));
+              break;
           }
-        });
+        }).whenComplete(() => esperandoFiltrado = false);
       }
     }
   }

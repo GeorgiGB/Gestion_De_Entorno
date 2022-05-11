@@ -25,5 +25,6 @@ error500Servidor(BuildContext context) async {
 }
 
 usuarioContrasenyaNoValido(BuildContext context) async {
-  globales.muestraDialogo(context, AppLocalizations.of(context)!.status_404);
+  globales.muestraDialogo(
+      context, AppLocalizations.of(context)!.usarioOContrasenyaNoValido);
 }

@@ -27,7 +27,7 @@
     "crear": "Crear",
 
 
-    "elUsuarioHaSidoDadoDeAlta": "El usuario {usuario} ha sido dado de alta.",
+    "elUsuarioHaSidoDadoDeAlta": "El usuario «{usuario}» ha sido dado de alta.",
     "@elUsuarioHaSidoDadoDeAlta": {
         "description": "Usuario registrado",
         "placeholders": {
@@ -39,7 +39,7 @@
     },
     "dimeElCodigoDeFiltro": "Dime el código del filtro:",
 
-    "elUsuarioYaEstaRegistrado": "El usuario {usuario} ya está registrado",
+    "elUsuarioYaEstaRegistrado": "El usuario «{usuario}» ya está registrado",
     "@elUsuarioYaEstaRegistrado": {
         "description": "Usuario ya está registrado",
         "placeholders": {
@@ -52,7 +52,7 @@
     "empresa": "Empresa",
     "empresaCreadaCorrectamente": "Empresa creada correctamente",
     "empresaNueva": "Empresa nueva",
-    "errNoEspecificado": "Error no especificado {error}",
+    "errNoEspecificado": "Error no especificado «{error}»",
     "@errNoEspecificado": {
         "description": "Error sin especificar",
         "placeholders": {
@@ -86,7 +86,7 @@
     "jefeDeArea": "Jefe de Área",
 
 
-    "laEmpresaHaSidoDadoDeAlta": "La empresa {empresa} ha sido dado de alta.",
+    "laEmpresaHaSidoDadoDeAlta": "La empresa «{empresa}» ha sido dado de alta.",
     "@laEmpresaHaSidoDadoDeAlta": {
         "description": "Empresa registrada",
         "placeholders": {
@@ -97,7 +97,7 @@
         }
     },
 
-    "laEmpresaYaEstaregistrada": "La empresa {empresa} ya está registrada",
+    "laEmpresaYaEstaregistrada": "La empresa «{empresa}» ya está registrada",
     "@laEmpresaYaEstaregistrada": {
         "description": "La empresa ya está registrada",
         "placeholders": {
@@ -116,6 +116,18 @@
     "nuevaEmpresa": "Nueva empresa",
     "nuevoUsuario": "Nuevo usuario",
     "numeroDeCodigo": "Número código:",
+    
+
+    "numeroNoValido": "El numero introducido «{numero}» es incorrecto",
+    "@numeroNoValido": {
+        "description": "Numero no válido",
+        "placeholders": {
+            "numero": {
+                "type": "String",
+                "example": "-w"
+            }
+        }
+    },
 
     "ok": "Ok",
     
@@ -135,6 +147,7 @@
 
     "usuario": "Usuario:",
     "usuarioAnyadido": "Usuario añadido",
+    "usarioOContrasenyaNoValido": "Usuario o contraseña no válidos",
     "usuNoIdentificado": "Usuario no identificado",
 
     "valorInvalidoEnEsteCampo":"Valor no válido en este campo.",

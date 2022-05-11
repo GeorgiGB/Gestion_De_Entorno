@@ -201,15 +201,10 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
         });
 
         //Enviamos al servidor
-        Servidor.anyade(
-          context,
-          url,
-          widget._token,
-          json: json,
-        ).then((codigo) {
-          esperandoNuevaEmpresa = false;
+        Servidor.anyade(context, url, widget._token,
+            json: json, gestionoErrores: [BBDD.uniqueViolation]).then((codigo) {
           switch (codigo) {
-            case 0:
+            case '0':
               EnCualquierLugar().muestraSnack(
                 context,
                 traducciones.laEmpresaHaSidoDadoDeAlta(nom_empresa),
@@ -221,11 +216,11 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
               break;
             //globales.muestraDialogo(context, msgOk);
             // volvemos a escoger opció
-            case -23505:
+            case BBDD.uniqueViolation:
               globales.muestraDialogo(
                   context, traducciones.laEmpresaYaEstaregistrada(nom_empresa));
           }
-        });
+        }).whenComplete(() => esperandoNuevaEmpresa = false);
       }
     }
   }

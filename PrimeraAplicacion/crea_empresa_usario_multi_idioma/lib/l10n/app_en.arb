@@ -28,8 +28,8 @@
     
     "dimeElCodigoDeFiltro": "Filter code:",
 
-    "elUsuarioHaSidoDadoDeAlta": "The user {usuario} has been added",
-    "elUsuarioYaEstaRegistrado": "The user {usuario} is already registered",
+    "elUsuarioHaSidoDadoDeAlta": "The user «{usuario}» has been added",
+    "elUsuarioYaEstaRegistrado": "The user «{usuario}» is already registered",
     "empresa": "Company",
     "empresaNueva": "New company",
     "empresaCreadaCorrectamente": "Company set up ok",
@@ -57,8 +57,8 @@
 
     "jefeDeArea": "Area manager",
 
-    "laEmpresaHaSidoDadoDeAlta": "The enterprise {empresa} has been added",
-    "laEmpresaYaEstaregistrada": "The enterprise {empresa} is already registered",
+    "laEmpresaHaSidoDadoDeAlta": "The enterprise «{empresa}» has been added",
+    "laEmpresaYaEstaregistrada": "The enterprise «{empresa}» is already registered",
 
     "nohayEmpresasenlaBBDD": "There are no companies in the database",
     "nombre": "Name",
@@ -68,6 +68,7 @@
     "nuevaEmpresa": "New company",
     "nuevoUsuario": "New user",
     "numeroDeCodigo": "Code number:",
+    "numeroNoValido": "The number entered {numero} is incorrect",
 
     "ok": "Ok",
     
@@ -88,6 +89,7 @@
 
     "usuario": "User",
     "usuarioAnyadido": "User added",
+    "usarioOContrasenyaNoValido": "Invalid login or password",
     "usuNoIdentificado": "Unidentified use",
 
     
