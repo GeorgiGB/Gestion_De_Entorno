@@ -11,7 +11,7 @@ String defaultLocale = Platform.localeName;
 const String _servidor = 'http://localhost:8080';
 String get servidor => _servidor;
 
-bool _debug = true;
+bool _debug = false;
 
 debug(Object? msg) {
   if (_debug) {

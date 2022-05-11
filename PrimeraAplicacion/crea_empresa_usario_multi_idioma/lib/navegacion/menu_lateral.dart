@@ -4,6 +4,7 @@ import 'package:crea_empresa_usario/main.dart';
 import 'package:crea_empresa_usario/navegacion/cabecera_menu.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/navegacion/item_menu_lateral.dart';
+import 'package:crea_empresa_usario/navegacion/rutas.dart';
 import 'package:flutter/material.dart';
 import 'package:crea_empresa_usario/colores.dart';
 // Imports multi-idioma ---------------------
@@ -56,19 +57,19 @@ class MenuLateral extends StatelessWidget {
     }),
 
     // Añade empresa
-    ItemMenu(Icons.add_business_rounded, Rutas.rutas['EmpresaNueva']!,
+    ItemMenu(Icons.add_business_rounded, Ruta.rutas['EmpresaNueva']!,
         funcionTraduce: (traduce) {
       return traduce.anyadeEmpresa;
     }),
 
     // Añade usuario
-    ItemMenu(Icons.account_circle_rounded, Rutas.rutas['UsuarioNuevo']!,
+    ItemMenu(Icons.account_circle_rounded, Ruta.rutas['UsuarioNuevo']!,
         funcionTraduce: (traduce) {
       return traduce.nuevoUsuario;
     }),
 
     // Configuración
-    ItemMenu(Icons.settings_rounded, Rutas.rutas['Configuracion']!,
+    ItemMenu(Icons.settings_rounded, Ruta.rutas['Configuracion']!,
         funcionTraduce: (traduce) {
       return traduce.configuracion;
     }),

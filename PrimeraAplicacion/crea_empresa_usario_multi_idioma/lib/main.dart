@@ -1,4 +1,6 @@
+import 'package:crea_empresa_usario/navegacion/clases_constructoras.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
+import 'package:crea_empresa_usario/navegacion/rutas.dart';
 import 'package:crea_empresa_usario/pantallas/login.dart';
 import 'package:crea_empresa_usario/preferencias/preferencias.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
@@ -112,7 +114,7 @@ class _MyAppState extends State<MyApp> {
     super.didChangeDependencies();
   }
 
-  String rutaInicial = Rutas.rutas['IniciaLogin']!;
+  String rutaInicial = Ruta.rutas['IniciaLogin']!;
 
   // Widget raíz de la aplicación
   @override
@@ -155,12 +157,12 @@ class _MyAppState extends State<MyApp> {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          initialRoute: Rutas.rutas['IniciaLogin']!,
+          initialRoute: Ruta.rutas['IniciaLogin']!,
           routes: {
-            Rutas.rutas['IniciaLogin']!: (context) => Identificate(context),
-            Rutas.rutas['EmpresaNueva']!: (context) => EmpresaNueva(context),
-            Rutas.rutas['UsuarioNuevo']!: (context) => UsuarioNuevo(context),
-            Rutas.rutas['Configuracion']!: (context) => OpcionesConfig(context),
+            Ruta.rutas['IniciaLogin']!: (context) => Identificate(context),
+            Ruta.rutas['EmpresaNueva']!: (context) => EmpresaNueva(context),
+            Ruta.rutas['UsuarioNuevo']!: (context) => UsuarioNuevo(context),
+            Ruta.rutas['Configuracion']!: (context) => OpcionesConfig(context),
           },
 
           // La ruta inicial es Login  y la hacemos sin transición

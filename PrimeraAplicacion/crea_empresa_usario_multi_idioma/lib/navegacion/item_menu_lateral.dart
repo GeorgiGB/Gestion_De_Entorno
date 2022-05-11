@@ -76,8 +76,6 @@ class ItemMenu extends StatelessWidget {
       _token = args.token;
     }
 
-    print(_token);
-
     final _seleccionat = this.accion == rutaActual;
 
     final bool itemTieneToken = _token != null;
