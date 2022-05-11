@@ -29,23 +29,21 @@ Rutas.constructoresWidgets[Rutas.rutas['EmpresaNueva']!]= (token) => NuevaEmpres
 ///
 /// Por defecto le decimos que incluya un menu lateral y que requiere de [_token]
 ///
-/// Necesita el parámetro [AppLocalizations]traduce para poner la traducción adecuada del título
-///
 class EmpresaNueva extends PantallasMenu {
-  EmpresaNueva(BuildContext context, AppLocalizations traduce, {Key? key})
+  EmpresaNueva(BuildContext context,  {Key? key})
       : super(Text(traduce.nuevaEmpresa),
             key: key, claveConstructor: Rutas.rutas['EmpresaNueva']!);
 }
 ```
 
-5. Una vez hechos los pasos anteriores solo queda añadir la ruta en el parametro routes de la clase [MaterialApp] que se encuetra en el archivo main.dart. Esta ruta ha de pasr todos los parámetros que necesita el constructor de PantallasMenu:
+5. Una vez hechos los pasos anteriores solo queda añadir la ruta en el parametro routes de la clase [MaterialApp] que se encuentra en el archivo main.dart. Esta ruta ha de pasr todos los parámetros que necesita el constructor de PantallasMenu:
 
 ```dart
     MaterialApp(
         ...
         routes: {
         ...,
-        Rutas.rutas['EmpresaNueva']!: (context) => EmpresaNueva(context, _traduce),...
+        Rutas.rutas['EmpresaNueva']!: (context) => EmpresaNueva(context),...
         },
         ...
     )

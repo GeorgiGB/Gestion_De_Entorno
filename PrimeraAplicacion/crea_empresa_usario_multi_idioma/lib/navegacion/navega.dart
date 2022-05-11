@@ -208,15 +208,12 @@ class Rutas {
 /// con un widget para el título de la [AppBar].
 ///
 /// Necesita el parámetro [AppLocalizations]traduce para poner la traducción adecuada del título
-///
-/// Aunque no indiquemos en el parámetro opcional [PantallasMenu.conToken]
-/// esta pantalla siempre se carga
 class Identificate extends PantallasMenu {
-  Identificate(AppLocalizations traduce, {Key? key})
+  Identificate(BuildContext context, {Key? key})
       : super(
             Wrap(
               children: [
-                Text(traduce.iniciaSesion),
+                Text(AppLocalizations.of(context)!.iniciaSesion),
                 SizedBox(width: 10),
                 Icon(Icons.login_rounded),
               ],
@@ -232,12 +229,9 @@ class Identificate extends PantallasMenu {
 /// con un widget [Text] para el título
 ///
 /// Por defecto le decimos que incluya un menu lateral y que requiere de [_token]
-///
-/// Necesita el parámetro [AppLocalizations]traduce para poner la traducción adecuada del título
-///
 class EmpresaNueva extends PantallasMenu {
-  EmpresaNueva(BuildContext context, AppLocalizations traduce, {Key? key})
-      : super(Text(traduce.nuevaEmpresa),
+  EmpresaNueva(BuildContext context, {Key? key})
+      : super(Text(AppLocalizations.of(context)!.nuevaEmpresa),
             key: key, claveConstructor: Rutas.rutas['EmpresaNueva']!);
 }
 
@@ -246,12 +240,9 @@ class EmpresaNueva extends PantallasMenu {
 /// con un widget [Text] para el título
 ///
 /// Por defecto le decimos que incluya un menu lateral y que requiere de [_token]
-///
-/// Necesita el parámetro [AppLocalizations]traduce para poner la traducción adecuada del título
-///
 class UsuarioNuevo extends PantallasMenu {
-  UsuarioNuevo(BuildContext context, AppLocalizations traduce, {Key? key})
-      : super(Text(traduce.nuevoUsuario),
+  UsuarioNuevo(BuildContext context, {Key? key})
+      : super(Text(AppLocalizations.of(context)!.nuevoUsuario),
             key: key, claveConstructor: Rutas.rutas['UsuarioNuevo']!);
 }
 
@@ -260,11 +251,8 @@ class UsuarioNuevo extends PantallasMenu {
 /// con un widget [Text] para el título
 ///
 /// Por defecto le decimos que incluya un menu lateral y que requiere de [_token]
-///
-/// Necesita el parámetro [AppLocalizations]traduce para poner la traducción adecuada del título
-///
 class OpcionesConfig extends PantallasMenu {
-  OpcionesConfig(BuildContext context, AppLocalizations traduce, {Key? key})
-      : super(Text(traduce.configuracion),
+  OpcionesConfig(BuildContext context, {Key? key})
+      : super(Text(AppLocalizations.of(context)!.configuracion),
             key: key, claveConstructor: Rutas.rutas['Configuracion']!);
 }
