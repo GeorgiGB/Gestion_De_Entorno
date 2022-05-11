@@ -27,8 +27,8 @@
   
   "dimeElCodigoDeFiltro": "Dites-moi le code du filtre :",
 
-  "elUsuarioHaSidoDadoDeAlta": "L'utilisateur {usuario} a été ajouté",
-  "elUsuarioYaEstaRegistrado": "L'utilisateur {usuario} est déjà enregistré",
+  "elUsuarioHaSidoDadoDeAlta": "L'utilisateur «{usuario}» a été ajouté",
+  "elUsuarioYaEstaRegistrado": "L'utilisateur «{usuario}» est déjà enregistré",
   "empresa": "Compagnie",
   "empresaNueva": "Entreprise nouvelle",
   "empresaCreadaCorrectamente": "L'entreprise a été correctement créée",
@@ -56,8 +56,8 @@
 
   "jefeDeArea": "Chef de zone",
 
-  "laEmpresaHaSidoDadoDeAlta": "L'entreprise {empresa} a été ajoutée",
-  "laEmpresaYaEstaregistrada": "L'entreprise {empresa} est déjà enregistrée.",
+  "laEmpresaHaSidoDadoDeAlta": "L'entreprise «{empresa}» a été ajoutée",
+  "laEmpresaYaEstaregistrada": "L'entreprise «{empresa}» est déjà enregistrée.",
   
   "nohayEmpresasenlaBBDD": "Il n'y a pas d'entreprises dans la base de données",
   "nombre": "Nom",
@@ -67,6 +67,8 @@
   "nuevaEmpresa": "Nouvelle entreprise",
   "nuevoUsuario": "Nouveau utilisateur",
   "numeroDeCodigo": "Numéro de code:",
+
+  "numeroNoValido": "Le numéro saisi «{numero}» est incorrect",
 
   "ok": "Ok",
 
@@ -86,6 +88,7 @@
 
   "usuario": "Utilisateur",
   "usuarioAnyadido": "Utilisateur ajouté",
+  "usarioOContrasenyaNoValido": "Login ou mot de passe invalide",
   "usuNoIdentificado": "Utilisateur non identifié",
 
   

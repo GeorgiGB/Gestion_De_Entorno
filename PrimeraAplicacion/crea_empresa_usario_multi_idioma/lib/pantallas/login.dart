@@ -43,8 +43,8 @@ class _LoginState extends State<Login> {
     //traduce = AppLocalizations.of(context)!;
     // TODO poner información en blanco
     // informacion predeterminada que luego se borrara mas adelante
-    _usuario.text = "Joselito";
-    _pwd.text = "1234";
+    //_usuario.text = "Joselito";
+    //_pwd.text = "1234";
 
     return Scaffold(
       /*appBar: AppBar(

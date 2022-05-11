@@ -11,6 +11,19 @@ import 'sesion.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
+class BBDD {
+  /// Uusario o contraseña encontrado o no válido
+  static const userOrPwdNotFound = '-404';
+
+  /// Elemento ya contenido en la BBDD
+  static const uniqueViolation = '-23505';
+
+  static const foreignKeyViolation = '-23503';
+
+  /// Elemento con caracters no válidos
+  static const invalidTextRepresentation = '-22P02';
+}
+
 /// Classe que contiene los diferentes tipos de código de respuesta
 /// manejados en la aplicación: 200, 401, 404, 500
 class Servidor {
@@ -74,7 +87,8 @@ class Servidor {
       {String? token,
       bool relanzaClientException = false,
       bool relanzaOtrasExcepciones = false,
-      bool muestraEspera = true}) async {
+      bool muestraEspera = true,
+      List<String> gestionoErrores = const []}) async {
     url = globales.servidor + url;
     AppLocalizations traduce = AppLocalizations.of(context)!;
 
@@ -110,7 +124,8 @@ class Servidor {
         body: json,
       );
 
-      _gestionInicialResponse(context, response);
+      _gestionInicialResponse(context, response,
+          gestionoErrores: gestionoErrores);
 
       //Errores de conexión del cliente u otros no especificados
     } on http.ClientException {
@@ -130,7 +145,8 @@ class Servidor {
   }
 
   static void _gestionInicialResponse(
-      BuildContext context, http.Response response) {
+      BuildContext context, http.Response response,
+      {List<String> gestionoErrores = const []}) {
     AppLocalizations traduce = AppLocalizations.of(context)!;
     int status = response.statusCode;
     globales.debug('status: ' + status.toString());
@@ -148,27 +164,37 @@ class Servidor {
       // unas las trataremos aquí otras no
       case Servidor.recursoNoEncontrado:
         final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
-        switch (parsed[0]['msg_error']) {
+        final strErr = parsed[0]['msg_error'];
+        final codErr = parsed[0]['cod_error'];
 
-          // No se encuetra
-          case 'user_or_pwd_not_found':
-            // Mostramos Alerta avisando del error
-            usuarioContrasenyaNoValido(context);
-            break;
-
-          // Elemento ya contenido en la BBDD
-          case 'unique_violation':
-            // El que llama se encarga del aviso
-            break;
-
-          // Para todos los demas Recurso no encontrado
-          default:
-            globales.muestraDialogo(context, traduce.status_404);
-            break;
+        // Miro si es un error gestionado
+        bool gestionado = false;
+        for (var error in gestionoErrores) {
+          gestionado = error == codErr;
+          if (gestionado) break;
         }
+
+        // Si no está gestionado muestro la alerta correspondiente
+        print(gestionado.toString() + ', ' + codErr);
+        if (!gestionado) {
+          switch (codErr) {
+
+            // No se encuetra
+            case BBDD.userOrPwdNotFound:
+              // Mostramos Alerta avisando del error
+              usuarioContrasenyaNoValido(context);
+              break;
+
+            // Para todos los demas Recurso no encontrado
+            default:
+              globales.muestraDialogo(context, traduce.status_404);
+              break;
+          }
+        }
+
         break;
 
-      // 
+      //
       case Servidor.errorServidor:
         // Muestra SnackBar
         error500Servidor(context);
@@ -230,16 +256,16 @@ class Servidor {
   /// [json] la información a enviar al servidor en formato json.
   /// Devuelve un int con el código de error que el tratamiento lo realiza la funcion
   /// que ha realizado la llamada.
-  static Future<int> anyade(BuildContext context, String url, String token,
-      {required String json}) async {
+  static Future<String> anyade(BuildContext context, String url, String token,
+      {required String json, List<String> gestionoErrores = const []}) async {
     AppLocalizations traduce = AppLocalizations.of(context)!;
 
     // Lanzamos la peticion Post al servidor, no capturamos excepciones
-    var response =
-        await enviaPeticionAlservidor(context, url, json, token: token);
+    var response = await enviaPeticionAlservidor(context, url, json,
+        token: token, gestionoErrores: gestionoErrores);
 
     // -1 significa error de servidor que es tratado al realizar la petición
-    var codeError = -1;
+    var codeError = '-1';
 
     // Pero si controlamos si response es null
     globales.debug('response: ' + (response != null).toString());
@@ -248,7 +274,7 @@ class Servidor {
 
       final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
 
-      codeError = int.parse(parsed[0]['cod_error']);
+      codeError = parsed[0]['cod_error'];
       return codeError;
     }
     return codeError;

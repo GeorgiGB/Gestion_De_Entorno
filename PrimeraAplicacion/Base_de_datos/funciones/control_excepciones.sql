@@ -20,19 +20,23 @@ AS $BODY$
 					 --	si ponemos directamente unique_violation en lugar de '23505'
 					 --	da el siguiente error "ERROR:  no existe la columna «unique_violation»"
 					WHEN cod_error = '23505' THEN
-                        cod_error :='-23505';
+                        --cod_error :='-23505';
 						cerror := 'unique_violation';
 						
 					WHEN cod_error = '23503' THEN
-					cod_error :='-23503';
-					cerror := 'foreign_key_violation';
+						--cod_error :='-23503';
+						cerror := 'foreign_key_violation';
+						
+					WHEN cod_error = '22P02' THEN
+						--cod_error :='-22P02';
+						cerror := 'invalid_text_representation';
 					
 					-- Otros posibles errores no contemplados
 					ELSE
-					cod_error := '-' || cod_error;
+						--cod_error := '-' || cod_error;
 				END CASE;
 				
-				excepcion :='[{"cod_error":"' || cod_error || '", "msg_error":"' || cerror || '"}]';
+				excepcion :='[{"cod_error":"' || '-' || cod_error || '", "msg_error":"' || cerror || '"}]';
 			END;
 $BODY$;
 

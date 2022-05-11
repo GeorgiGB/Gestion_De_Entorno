@@ -2,6 +2,22 @@ let _debug = true;
 const header = require('./cabecera');
 var fs = require('fs');
 
+const RespuestasBBDD = {
+    ok : '0',
+    userOrPwdNotFound: '-404',
+    userNotAuth: '-401',
+    uniqueViolation: '-23505',
+    foreignKeyViolation: '-23503',
+    invalidTextRepresentation: '-22P02',
+}
+
+const CodigosServidor ={
+    ok : 200,
+    recursoNoEncontrado: 404,
+    userNotAuth: 401,
+    error:500
+}
+
 //  Función que utilizaremos para mandar mensajes por pantalla y comprobar errores
 function msg(message){
     if(_debug){
@@ -13,37 +29,36 @@ function msg(message){
 // Esta función no és asíncrona
 /*async */function peticiones(response, res){
 
-    let responseErr = response[0].cod_error
-    let status = 500
-    switch (responseErr){
-        case '0':
-            status = 200
-            break;
+    let responseErr = response[0].cod_error;
+    let status = ErrorServidor.error;
+    with(RespuestasBBDD){
+        switch (responseErr){
+            case ok:
+                status = CodigosServidor.ok;
+                break;
 
-        case '-401':
-            status = 401
-            break;
+            case userNotAuth:
+                status = CodigosServidor.userNotAuth;
+                break;
 
-        case '-23505':
-            // status = 401
-            // break;
+            case uniqueViolation:
 
-        case '-23503':
-            // status = 400
-            // break;
+            case foreignKeyViolation:
 
-            
-        case '-404':
-            status = 404
-            break;
-            
-        default:
-            status = 500;
+            case invalidTextRepresentation:
+                
+            case userOrPwdNotFound:
+                status = ErrorServidor.recursoNoEncontrado
+                break;
+                
+            default:
+                status = ErrorServidor.error;
         }
+    }
 
-    status = Math.abs(status)
+   // status =status
     // Errores de la BBDD
-    if(status == 500){
+    if(status == CodigosServidor.error){
         registrarErr(JSON.stringify(response[0]))
     }
 
@@ -73,10 +88,10 @@ function msg(message){
 }
 
 function errorDeServidor(res, err){
-    let msg_error = {status : 500,
+    let msg_error = {status : ErrorServidor.error,
         cod_error: -1,
         msg_error: err.name + ': '+ err.message}
-    header(res).status(500).json(msg_error)
+    header(res).status(ErrorServidor.error).json(msg_error)
     registrarErr(JSON.stringify(msg_error))
 }
 
