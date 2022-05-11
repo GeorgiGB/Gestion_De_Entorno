@@ -11,8 +11,8 @@ class Esperando {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CircularProgressIndicator(),
-          SizedBox(height: 15),
+          const CircularProgressIndicator(),
+          const SizedBox(height: 15),
           Text(
             label,
             style: const TextStyle(

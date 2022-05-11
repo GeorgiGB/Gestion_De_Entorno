@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:crea_empresa_usario/colores.dart';
 
 class LabeledCheckbox extends StatelessWidget {
   const LabeledCheckbox(
@@ -42,6 +43,7 @@ class LabeledCheckbox extends StatelessWidget {
   List<Widget> _getWidgets(BuildContext context) {
     List<Widget> wdgt = [
       Checkbox(
+        activeColor: PaletaColores.colorMorado,
         value: value,
         onChanged: enabled
             ? (bool? newValue) {

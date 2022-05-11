@@ -9,6 +9,10 @@ class PaletaColores {
   static const MaterialColor colorVerde =
       MaterialColor(0xFF37EDB6, <int, Color>{});
 
+  //  Color verde Oscuro
+  static const MaterialColor colorMorado =
+      MaterialColor(0xFF7600ff, <int, Color>{});
+
   //  Color rojo
   static const MaterialColor colorRojo =
       MaterialColor(0xFFFF5C68, <int, Color>{});
@@ -22,6 +26,7 @@ class PaletaColores {
       MaterialColor(0xFFC6C6C6, <int, Color>{});
 
   static const List<Color> listaColores = [colorAzulOscuro, colorVerde];
+  static const List<Color> listaColores1 = [colorVerde, colorAzulOscuro];
 }
 
 PreferredSizeWidget appBarColoreada(String titulo) {

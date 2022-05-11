@@ -1,3 +1,4 @@
+import 'package:crea_empresa_usario/colores.dart';
 import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
 import 'package:crea_empresa_usario/widgets/esperando_servidor.dart';
 import 'package:flutter/material.dart';
@@ -129,6 +130,11 @@ class _PantallasMenuState extends State<PantallasMenu> {
               actions: routeSettings.name == Rutas.rutas['IniciaLogin']
                   ? [LanguageDropDown().getDropDown(context)]
                   : null,
+              flexibleSpace: Container(
+                decoration: const BoxDecoration(
+                    gradient:
+                        LinearGradient(colors: PaletaColores.listaColores1)),
+              ),
             ),
 
             //  Separamos el contenido principal en otro widget
@@ -214,8 +220,8 @@ class Identificate extends PantallasMenu {
             Wrap(
               children: [
                 Text(AppLocalizations.of(context)!.iniciaSesion),
-                SizedBox(width: 10),
-                Icon(Icons.login_rounded),
+                const SizedBox(width: 10),
+                const Icon(Icons.login_rounded),
               ],
             ),
             conToken: false,
