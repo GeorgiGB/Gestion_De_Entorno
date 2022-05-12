@@ -1,5 +1,5 @@
 {
-  "nombreApp": "Gestion des utilisateurs",
+  "nombreApp": "Gestion des Utilisateurs",
   
 
 
@@ -7,9 +7,11 @@
   "acceso": "Accès",
   "anyade": "Ajouter",
   "anyadeEmpresa": "Ajouter une compagnie",
+  "anyadeUsuario": "Ajouter utilisateur",
   "atras": "Arrière",
   "aviso": "Avis",
   "autoGenerada": "auto-généré",
+
 
   "cargando": "Chargement",
   "cargandoEmpresa": "Chargement Compagnie",
@@ -27,6 +29,7 @@
   
   "dimeElCodigoDeFiltro": "Dites-moi le code du filtre :",
 
+  "ejemploCambiaNombre": "Exemple changement nom",
   "elUsuarioHaSidoDadoDeAlta": "L'utilisateur «{usuario}» a été ajouté",
   "elUsuarioYaEstaRegistrado": "L'utilisateur «{usuario}» est déjà enregistré",
   "empresa": "Compagnie",

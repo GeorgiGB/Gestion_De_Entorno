@@ -4,7 +4,7 @@ import 'package:crea_empresa_usario/main.dart';
 import 'package:crea_empresa_usario/navegacion/cabecera_menu.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/navegacion/item_menu_lateral.dart';
-import 'package:crea_empresa_usario/navegacion/rutas.dart';
+import 'package:crea_empresa_usario/navegacion/rutas_pantallas.dart';
 import 'package:flutter/material.dart';
 import 'package:crea_empresa_usario/colores.dart';
 // Imports multi-idioma ---------------------
@@ -33,7 +33,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 ///    }),
 ///
 ///    // Añade item
-///    ItemMenu(Icons.add_business_rounded, Rutas.rutas['EmpresaNueva']!,
+///    ItemMenu(Icons.add_business_rounded, Rutas..getRuta('EmpresaNueva'),
 ///        traduce: (traduce) {
 ///      return traduce.anyadeEmpresa;
 ///    }),
@@ -57,22 +57,22 @@ class MenuLateral extends StatelessWidget {
     }),
 
     // Añade empresa
-    ItemMenu(Icons.add_business_rounded, Ruta.rutas['EmpresaNueva']!,
+    /*ItemMenu(Icons.add_business_rounded, Ruta.getRuta('EmpresaNueva'),
         funcionTraduce: (traduce) {
       return traduce.anyadeEmpresa;
-    }),
-
+    }),*/
+    /*
     // Añade usuario
-    ItemMenu(Icons.account_circle_rounded, Ruta.rutas['UsuarioNuevo']!,
+    ItemMenu(Icons.account_circle_rounded, Ruta.getRuta('UsuarioNuevo'),
         funcionTraduce: (traduce) {
       return traduce.nuevoUsuario;
     }),
 
     // Configuración
-    ItemMenu(Icons.settings_rounded, Ruta.rutas['Configuracion']!,
+    ItemMenu(Icons.settings_rounded, Ruta.getRuta('Configuracion'),
         funcionTraduce: (traduce) {
       return traduce.configuracion;
-    }),
+    }),*/
     // Cierra sesion
     ItemMenu(Icons.logout_rounded, MyApp.cierraSesion, necesitaToken: false,
         funcionTraduce: (traduce) {
@@ -81,7 +81,7 @@ class MenuLateral extends StatelessWidget {
   ];
 
   static anyadeItem(ItemMenu itemMenu) {
-    _items.add(itemMenu);
+    _items.insert(_items.length - 1, itemMenu);
   }
 
   @override

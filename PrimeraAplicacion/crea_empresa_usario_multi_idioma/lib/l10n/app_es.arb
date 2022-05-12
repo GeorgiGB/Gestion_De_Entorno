@@ -1,5 +1,5 @@
 {
-    "nombreApp": "Gestión usuarios",
+    "nombreApp": "Gestión Usuarios",
     "@nombreApp": {
       "description": "Nombre de la Aplicación."
     },
@@ -7,6 +7,7 @@
     "acceso": "Acceso",
     "anyade": "Añade",
     "anyadeEmpresa": "Añade empresa",
+    "anyadeUsuario": "Añade usuario",
     "atras": "Atrás",
     "autoGenerada": "Auto-Generada",
     "aviso": "Aviso",
@@ -27,6 +28,10 @@
     "crear": "Crear",
 
 
+
+    "dimeElCodigoDeFiltro": "Dime el código del filtro:",
+
+    "ejemploCambiaNombre":"Ejemplo cambia nombre",
     "elUsuarioHaSidoDadoDeAlta": "El usuario «{usuario}» ha sido dado de alta.",
     "@elUsuarioHaSidoDadoDeAlta": {
         "description": "Usuario registrado",
@@ -37,7 +42,6 @@
             }
         }
     },
-    "dimeElCodigoDeFiltro": "Dime el código del filtro:",
 
     "elUsuarioYaEstaRegistrado": "El usuario «{usuario}» ya está registrado",
     "@elUsuarioYaEstaRegistrado": {

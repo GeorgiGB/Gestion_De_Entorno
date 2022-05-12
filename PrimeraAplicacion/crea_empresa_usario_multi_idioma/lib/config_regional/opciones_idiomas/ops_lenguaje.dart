@@ -39,7 +39,8 @@ class LanguageDropDown {
 
   Widget _getHint(BuildContext context) {
     LanguageData? ld = LanguageDropDown.languageData;
-    ld ??= LanguageData.getLanguageData(dimeLocal(context).languageCode.toString());
+    ld ??= LanguageData.getLanguageData(
+        dimeLocal(context).languageCode.toString());
     return ld == null
         ? Text(AppLocalizations.of(context)!.seleccionaIdioma)
         : Row(

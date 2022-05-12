@@ -7,9 +7,11 @@
     "acceso": "Login",
     "anyade": "Add",
     "anyadeEmpresa": "Add company",
+    "anyadeUsuario": "Add user",
     "atras": "Back",
     "autoGenerada": "Auto-generated",
     "aviso": "Warning",
+
 
     "cargando": "Loading",
     "cargandoEmpresa": "Loading Company",
@@ -28,6 +30,7 @@
     
     "dimeElCodigoDeFiltro": "Filter code:",
 
+    "ejemploCambiaNombre":"Example, change name",
     "elUsuarioHaSidoDadoDeAlta": "The user «{usuario}» has been added",
     "elUsuarioYaEstaRegistrado": "The user «{usuario}» is already registered",
     "empresa": "Company",
