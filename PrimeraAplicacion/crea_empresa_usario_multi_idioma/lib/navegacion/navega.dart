@@ -5,15 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 
 import 'package:crea_empresa_usario/main.dart';
-import 'package:crea_empresa_usario/navegacion/menu_lateral.dart';
 import 'package:crea_empresa_usario/pantallas/login.dart';
-import 'package:crea_empresa_usario/pantallas/nueva_empr.dart';
-import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
-import 'package:crea_empresa_usario/pantallas/opciones_config.dart';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
+
+import 'rutas.dart';
+import 'menu_lateral.dart';
 
 /// Clase abstracta que sirve de base para todas las pantalla muestren o no el
 /// menú lateral [menuLateral]. Todas las pantallas mostrarán un [AppBar]
@@ -47,7 +46,6 @@ class PantallasMenu extends StatefulWidget {
 
   /// Necesario si la pantalla a cargar necesita token
   /// por defecto es null
-  //final String? token;
 
   /// Indica si se va a mostrar el menú lateral.
   /// Por defecto true
@@ -127,20 +125,20 @@ class _PantallasMenuState extends State<PantallasMenu> {
             drawer: widget.menuLateral ? MenuLateral() : null,
             appBar: AppBar(
               title: widget.titulo,
-              actions: routeSettings.name == Rutas.rutas['IniciaLogin']
+              actions: routeSettings.name == Ruta.rutas['IniciaLogin']
                   ? [LanguageDropDown().getDropDown(context)]
                   : null,
               flexibleSpace: Container(
                 decoration: const BoxDecoration(
                     gradient:
-                        LinearGradient(colors: PaletaColores.listaColores1)),
+                        LinearGradient(colors: PaletaColores.listaColores)),
               ),
             ),
 
             //  Separamos el contenido principal en otro widget
             body:
                 // Obtenemos el constructor de wiggets y le llamamos
-                Rutas.constructoresWidgets[widget.claveConstructor]!(_tok),
+                Ruta.constructoresWidgets[widget.claveConstructor]!(_tok),
           );
   }
 }
@@ -157,21 +155,21 @@ class ArgumentsToken {
 /// utilizando el método [vesA]
 aLogin(BuildContext context, {Object? arguments}) {
   //PantallasMenu.abierto = false;
-  return vesA(Rutas.rutas['IniciaLogin']!, context, arguments: arguments);
+  return vesA(Ruta.rutas['IniciaLogin']!, context, arguments: arguments);
 }
 
 /// Cómo su nombre indica cargará la pantalla de [EmpresaNueva]
 /// utilizando el método [vesA]
 Future<T?> aEmpresaNueva<T extends Object?>(BuildContext context,
     {Object? arguments}) {
-  return vesA(Rutas.rutas['EmpresaNueva']!, context, arguments: arguments);
+  return vesA(Ruta.rutas['EmpresaNueva']!, context, arguments: arguments);
 }
 
 /// Cómo su nombre indica cargará la pantalla de [UsuarioNuevo]
 /// utilizando el método [vesA]
 Future<T?> aUsuarioNuevo<T extends Object?>(BuildContext context,
     {Object? arguments}) {
-  return vesA(Rutas.rutas['UsuarioNuevo']!, context, arguments: arguments);
+  return vesA(Ruta.rutas['UsuarioNuevo']!, context, arguments: arguments);
 }
 
 /// Metodo que cargará la ruta indicada y vaciará el historial anterior
@@ -180,85 +178,4 @@ Future<T?> vesA<T extends Object?>(String ruta, BuildContext context,
     {Object? arguments}) {
   return Navigator.of(context)
       .pushNamedAndRemoveUntil(ruta, (route) => false, arguments: arguments);
-}
-
-/// Clase que contiene las diferentes rutas de las pantallas que vamos a presentar
-/// Junto con los [constructoresWidgets] que será utilizados parar cargar
-/// las diferentes pantallas de la aplicación
-class Rutas {
-  static final Map<String, String> rutas = <String, String>{
-    'IniciaLogin': '/Login',
-    'EmpresaNueva': '/EmpresaNueva',
-    'UsuarioNuevo': '/UsuarioNuevo',
-    'Configuracion': 'Configuracion/'
-  };
-
-  /// Mapa compuesto por una cadena que identifia a la función constructora de widgets
-  /// que se mostraran la pantalla
-  ///
-  /// ejemplo tomado de: https://github.com/flutter/flutter/issues/17766
-  static Map<String, Widget Function(String?)> constructoresWidgets =
-      <String, Widget Function(String?)>{
-    Rutas.rutas['IniciaLogin']!: (token) => Login(),
-    Rutas.rutas['EmpresaNueva']!: (token) => NuevaEmpresa(
-          token: token!,
-        ),
-    Rutas.rutas['UsuarioNuevo']!: (token) => NuevoUsuario(
-          token: token!,
-        ),
-    Rutas.rutas['Configuracion']!: (token) => ConfigOpciones(token: token!),
-  };
-}
-
-/// Clase utilizada para mostrar la Pantalla de [Login] extiende a la clase [PantallasMenu]
-/// con un widget para el título de la [AppBar].
-///
-/// Necesita el parámetro [AppLocalizations]traduce para poner la traducción adecuada del título
-class Identificate extends PantallasMenu {
-  Identificate(BuildContext context, {Key? key})
-      : super(
-            Wrap(
-              children: [
-                Text(AppLocalizations.of(context)!.iniciaSesion),
-                const SizedBox(width: 10),
-                const Icon(Icons.login_rounded),
-              ],
-            ),
-            conToken: false,
-            menuLateral: false,
-            key: key,
-            claveConstructor: Rutas.rutas['IniciaLogin']!);
-}
-
-/// Clase utilizada para mostrar la Pantalla de [NuevaEmpresa] extiende a la clase [PantallasMenu]
-/// Cargará la pantalla de [NuevaEmpresa] porque asi lo indicamos en [claveConstructor]
-/// con un widget [Text] para el título
-///
-/// Por defecto le decimos que incluya un menu lateral y que requiere de [_token]
-class EmpresaNueva extends PantallasMenu {
-  EmpresaNueva(BuildContext context, {Key? key})
-      : super(Text(AppLocalizations.of(context)!.nuevaEmpresa),
-            key: key, claveConstructor: Rutas.rutas['EmpresaNueva']!);
-}
-
-/// Clase utilizada para mostrar la Pantalla de [NuevoUsuario] extiende a la clase [PantallasMenu]
-/// Cargará la pantalla de [NuevoUsuario] porque asi lo indicamos en [claveConstructor]
-/// con un widget [Text] para el título
-///
-/// Por defecto le decimos que incluya un menu lateral y que requiere de [_token]
-class UsuarioNuevo extends PantallasMenu {
-  UsuarioNuevo(BuildContext context, {Key? key})
-      : super(Text(AppLocalizations.of(context)!.nuevoUsuario),
-            key: key, claveConstructor: Rutas.rutas['UsuarioNuevo']!);
-}
-
-/// Clase utilizada para mostrar la Pantalla de [ConfigOpciones] extiende a la clase [PantallasMenu]
-/// Cargará la pantalla de [ConfigOpciones] porque asi lo indicamos en [claveConstructor]
-/// con un widget [Text] para el título
-///
-/// Por defecto le decimos que incluya un menu lateral y que requiere de [_token]
-class OpcionesConfig extends PantallasMenu {
-  OpcionesConfig(BuildContext context, {Key? key})
-      : super(Text(AppLocalizations.of(context)!.configuracion),
-            key: key, claveConstructor: Rutas.rutas['Configuracion']!);
 }

@@ -175,7 +175,6 @@ class Servidor {
         }
 
         // Si no está gestionado muestro la alerta correspondiente
-        print(gestionado.toString() + ', ' + codErr);
         if (!gestionado) {
           switch (codErr) {
 
