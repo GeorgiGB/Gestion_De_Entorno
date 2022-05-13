@@ -2,7 +2,7 @@
 
 ## 1. Prearación del servidor
 
-Para poder empezar a configurar el servidor, lo primero que tenemos que hacer sera instalar los npm necesarios para el correcto funcionamiento del programa.
+Crearemos una carpeta a la que llamaremos "Nodejs" y para poder empezar a configurar el servidor, lo primero que tenemos que hacer sera instalar los npm necesarios para el correcto funcionamiento del programa.
 
 ```node
 //  Necesarios
@@ -129,7 +129,25 @@ llaveSecreta:'llavedeprueba';
 
 ### Función para comparar tokens válidos y la conexión con la base de datos a través de un login
 
-Crearemos un nuevo archivo para poder permitir hacer un login en la app, una vez creado el archivo en el index podremos inicializarlo.
+Crearemos un nuevo archivo al que llamaremos "login.js" en el cual desarrollaremos dos funciones, la primera constara de una función asincrona, al tener que hacer una petición y esperar una respuesta de la base de datos, la función asincrona nos da la capacidad de poder diferir la ejecución de una función y que espere hasta completar la operación.
+
+La segunda función firmara un token el cual ira enlazado al usuario que se haya iniciado sesión y verificara si el token es válido.
+
+La estructura que se nos tiene que quedar es la siguiente.
+
+---
+
+├── Nodejs
+│   ├── middleware
+│   │   ├── verificarJWT.js
+│   ├── config
+│   │   ├── cors.config.js
+│   │   ├── db.config.js
+│   ├── login.js
+│   ├── index.js
+|   ├── package.json
+
+---
 
 ```js
 const conexion = require('../config/db.config')// Accedera a la base de datos
