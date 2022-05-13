@@ -1,6 +1,6 @@
-import 'package:crea_empresa_usario/ejemplo_pantalla.dart';
+import 'package:crea_empresa_usario/navegacion/item_menu_lateral.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
-import 'package:crea_empresa_usario/navegacion/rutas_pantallas.dart';
+import 'package:crea_empresa_usario/navegacion/pantalla.dart';
 import 'package:crea_empresa_usario/pantallas/login.dart';
 import 'package:crea_empresa_usario/pantallas/nueva_empr.dart';
 import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
@@ -19,32 +19,94 @@ import 'config_regional/model/locale_constant.dart' as const_reg;
 // Fin imports multi-idioma ----------------
 
 void main() {
-  // Preparamos  la estructur
-
-  // el orden de inicialización se corresponde con el orden
-  // de aparición en le menú lateral
-
-  PantallaNuevaEmpresa.preparaNavegacion('NuevaEmpresa');
-  PantallaLogin.preparaNavegacion('Login',
-      conToken: false, menuLateral: false, conItemMenu: false);
-  PantallaNuevoUsuario.preparaNavegacion('NuevoUsuario');
-  PantallaConfigAplicacion.preparaNavegacion('ConfigOpciones');
-
+  // Preparamos  la estructura de navegación
+  _inicializaNavegacion();
   runApp(MyApp());
+}
+
+/// Aquí és donde debemos añadir el código de inicialización de la ruta de la
+/// pantalla que queramos añadir a la estructura de la aplicación
+///
+/// El orden de inicialización se corresponde con el orden
+/// de aparición en le menú lateral
+///
+/// Mas información en el archivo ***[ComoCrearRutas.md]***
+void _inicializaNavegacion() {
+  // Inicializamos Login
+  MyApp._addruta(Navega(
+    Login.id,
+    titulo: (AppLocalizations traduce) {
+      return traduce.iniciaSesion;
+    },
+    constructor: (String? token) => Login(),
+    conToken: false,
+    menuLateral: false,
+  ));
+
+  // Inicializamos NuevaEmpresa
+  MyApp._addruta(Navega(NuevaEmpresa.id,
+      titulo: (AppLocalizations traduce) {
+        return traduce.nuevaEmpresa;
+      },
+      constructor: (token) => NuevaEmpresa(token: token!),
+      itemMenu: IconTraduce.iconData(
+        Icons.add_business_rounded,
+        traduce: (traduce) {
+          return traduce.anyadeEmpresa;
+        },
+      )));
+
+  // Inicializamos NuevoUsuario
+  MyApp._addruta(Navega(NuevoUsuario.id,
+      titulo: (AppLocalizations traduce) {
+        return traduce.nuevoUsuario;
+      },
+      constructor: (token) => NuevoUsuario(token: token!),
+      itemMenu: IconTraduce.iconData(
+        Icons.add_business_rounded,
+        traduce: (traduce) {
+          return traduce.anyadeUsuario;
+        },
+      )));
+
+  // Inicializamos pantalla de configuración
+  MyApp._addruta(Navega(ConfigAplicacion.id,
+      titulo: (AppLocalizations traduce) {
+        return traduce.configuracion;
+      },
+      constructor: (token) => ConfigAplicacion(token: token!),
+      itemMenu: IconTraduce.iconData(
+        Icons.add_business_rounded,
+        traduce: (traduce) {
+          return traduce.configuracion;
+        },
+      )));
 }
 
 // Necesitamos que el Widget sea stateful para mantener los cambios de idiomas
 // si se produce un cambio en la elección de idioma
 class MyApp extends StatefulWidget {
-  /// A qué página voy después de identificarme
-  static late final String despuesDeLoginVesA = PantallaNuevaEmpresa.ruta.hacia;
+  /// Al cargar por primera vez la siguiente pantalla a la [pantallaControl] o si
+  /// guardamos la sesión e iniciamos la aplicación el [MenuLateral] se mostrará abierto
   static const bool menuAbierto = true;
+
+  /// Pantalla que se cargará cuando se inicia la aplicación y no se ha guardado
+  /// la sesión o cuando se cierra la sesión
+  static Navega get pantallaControl => Navega.navegante(Login.id);
+
+  /// A qué página voy después de identificarme
+  static late final String despuesDeLoginVesA =
+      Navega.navegante(NuevaEmpresa.id).ruta.hacia;
+
+  /// variable Privada donde guardamos el token de sesión
   String? _token;
 
-  /// Constructor
-  MyApp({Key? key, String? token}) : super(key: key) {
-    _token = token;
-  }
+  /// boolean para evitar múltiples llamas al método [MyApp.cierraSesion] en el momento que esperamos
+  /// la contestación del servidor una vez llamado a este mismo método
+  static bool _cerrandoSesion = false;
+
+  /// Mapa de rutas utilizado por el parámetro [MaterialApp.routes]
+  static final Map<String, WidgetBuilder> _rutasPantalla = {};
 
   /// Método estático disponible para todos las classes y así realizar
   /// el cambio de idioma desde donde queramos
@@ -75,9 +137,6 @@ class MyApp extends StatefulWidget {
     }
   }
 
-  /// boolean para evitar que cuando estamos cerrando sesión se ignore una nueva llamada
-  static bool _cerrandoSesion = false;
-
   /// Cerramos sesion
   static void cierraSesion(BuildContext context) {
     final AppLocalizations traduce = AppLocalizations.of(context)!;
@@ -92,7 +151,7 @@ class MyApp extends StatefulWidget {
       Servidor.cerrarSesion(context, token: mapp._token!).whenComplete(() {
         _cerrandoSesion = false;
         mapp._token = null;
-        PantallaLogin.voy(context);
+        MyApp.pantallaControl.voy(context);
       });
     }
   }
@@ -105,8 +164,23 @@ class MyApp extends StatefulWidget {
       vesA(ModalRoute.of(context)!.settings.name!, context,
           arguments: ArgumentsToken(mapp._token!));
     } else {
-      PantallaLogin.voy(context);
+      Navega.navegante(Login.id).voy(context);
     }
+  }
+
+  /// Este método añade la clave ruta y el WidgetBuilder
+  /// al Mapa de [MaterialApp.routes]
+  static void _addruta(Navega navegante) {
+    String id = navegante.id;
+    // la ruta
+    _rutasPantalla[Navega.navegante(id).ruta.hacia] =
+        // el WidgetBuilder
+        (context) => Navega.navegante(id).muestraPantalla(context);
+  }
+
+  /// Constructor
+  MyApp({Key? key, String? token}) : super(key: key) {
+    _token = token;
   }
 
   @override
@@ -177,21 +251,25 @@ class _MyAppState extends State<MyApp> {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          initialRoute:
-              PantallaLogin.ruta.hacia, //Ruta.getRuta(PantallaLogin.id),
-          routes: {
-            PantallaConfigAplicacion.ruta.hacia: (context) =>
-                PantallaConfigAplicacion(context),
-            PantallaLogin.ruta.hacia: (context) => PantallaLogin(context),
-            PantallaNuevaEmpresa.ruta.hacia: (context) =>
-                PantallaNuevaEmpresa(context),
-            PantallaNuevoUsuario.ruta.hacia: (context) =>
-                PantallaNuevoUsuario(context),
-          },
+          initialRoute: Navega.navegante(Login.id)
+              .ruta
+              .hacia, //Ruta.getRuta(PantallaLogin.id),
+          routes: (() {
+            // creamos un mapa de rutas de forma
+            // que podamos añadir otro tipo de rutas
+            Map<String, WidgetBuilder> r = {
+              // Aquí podemos añadir otras rutas
+              // String: (context) => WidgetBuilder(context),
+            };
+
+            // Añadimos las rutas con pantalla
+            r.addAll(MyApp._rutasPantalla);
+
+            // Devolvemos el mapa de rutas
+            return r;
+          })(),
         );
       },
-
-      /**/
     );
   }
 }

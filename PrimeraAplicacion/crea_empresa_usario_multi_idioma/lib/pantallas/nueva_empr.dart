@@ -1,13 +1,14 @@
 import 'package:crea_empresa_usario/navegacion/item_menu_lateral.dart';
 import 'package:crea_empresa_usario/navegacion/menu_lateral.dart';
-import 'package:crea_empresa_usario/navegacion/navega.dart';
-import 'package:crea_empresa_usario/navegacion/navega.dart' as Navegacion;
+import 'package:crea_empresa_usario/navegacion/pantalla.dart';
+import 'package:crea_empresa_usario/navegacion/pantalla.dart' as Navegacion;
 import 'package:crea_empresa_usario/navegacion/rutas_pantallas.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import '../globales.dart' as globales;
 import 'dart:convert';
+import 'package:crea_empresa_usario/navegacion/navega.dart';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -15,58 +16,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../ejemplo_pantalla.dart';
 
-/// Clase encargad de preparar la navegación y estructura básica del wiget [NuevaEmpresa]
-///
-/// Más opciones en [PantallaCambiarNombre]
-class PantallaNuevaEmpresa extends PantallasMenu {
-  /// Cadena utilizada para crear las rutas de navegación
-  /// Debe ser única ya que puede entrar en conflicto con las demás pantallas
-  static late final Ruta ruta;
-  static late final PantallasConfig cfgPantalla;
-
-  ///añadir la ruta que será utilizada por el parámetro
-  /// routes de la clase [MaterialApp] que encontraremos en el fichero main.dart
-  /// Método encargado de preparar la navegación
-  /// - id: el identificador del elemento de Navegación, debe ser único. Obligatorio
-  /// - ruta: la cadena que identifica a la ruta, si no se pone se formará con el id
-  /// - conToken: indica si para acceder a esta pantalla necesita el token de sesión. Opcional -> true
-  /// - conItemMenu: nos pondrá un item de menú en lel menu lateral. Opcional -> true
-  /// - menuLateral: si aparece el menú lateral en la pantalla. Opcional -> true
-  static void preparaNavegacion(String id,
-      {String? nombreRuta,
-      bool conToken = true,
-      bool conItemMenu = true,
-      bool menuLateral = true}) {
-    //
-    ruta = Ruta(id, nombreRuta, (token) => NuevaEmpresa(token: token));
-    //Pasamos valores configuración de pantalla
-    cfgPantalla = PantallasConfig(
-        conToken: conToken,
-        conItemMenu: conItemMenu,
-        menuLateral: menuLateral,
-
-        // Añade Ejemplo, más opciones sobre [ItemMenu] en su archivo
-        // correspondiente
-        itemMenu: ItemMenu(Icons.add_business_rounded, ruta.hacia,
-            necesitaToken: conToken, funcionTraduce: (traduce) {
-          return traduce.anyadeEmpresa;
-        }));
-  }
-
-  static Future<T?> voy<T extends Object?>(BuildContext context,
-      {Object? arguments}) {
-    return vesA(ruta.hacia, context, arguments: arguments);
-  }
-
-  PantallaNuevaEmpresa(BuildContext context, {Key? key})
-      : super(Text(AppLocalizations.of(context)!.nuevaEmpresa), ruta.id,
-            key: key,
-            menuLateral: cfgPantalla.menuLateral,
-            conToken: cfgPantalla.conToken);
-}
-
 class NuevaEmpresa extends StatefulWidget {
-  NuevaEmpresa({Key? key, required token}) : super(key: key) {
+  static const String id = 'NuevaEmpresa';
+
+  NuevaEmpresa({Key? key, required String token}) : super(key: key) {
     _token = token;
   }
   late final String _token;
@@ -265,7 +218,7 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
                 traducciones.laEmpresaHaSidoDadoDeAlta(nom_empresa),
                 duration: Duration(milliseconds: 1250),
                 onHide: () {
-                  PantallaNuevaEmpresa.voy(context);
+                  Navega.navegante(NuevaEmpresa.id).voy(context);
                 },
               );
               break;

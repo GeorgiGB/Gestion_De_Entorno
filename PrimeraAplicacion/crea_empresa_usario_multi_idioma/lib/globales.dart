@@ -11,7 +11,7 @@ String defaultLocale = Platform.localeName;
 const String _servidor = 'http://localhost:8080';
 String get servidor => _servidor;
 
-bool _debug = false;
+bool _debug = true;
 
 debug(Object? msg) {
   if (_debug) {
@@ -28,8 +28,6 @@ TextStyle get estiloNegritaRoja_16 => const TextStyle(
 Locale dimeLocal(BuildContext context) {
   return Localizations.localeOf(context);
 }
-
-
 
 Future<void> muestraDialogo(BuildContext context, String msg,
     [String titulo = '']) async {

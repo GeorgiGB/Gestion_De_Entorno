@@ -1,6 +1,7 @@
 import 'package:crea_empresa_usario/globales.dart' as globales;
 import 'package:crea_empresa_usario/main.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
+import 'package:crea_empresa_usario/navegacion/pantalla.dart';
 import 'package:crea_empresa_usario/pantallas/login.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
@@ -17,7 +18,7 @@ noEstoyAutenticado(BuildContext context) async {
   var traduce = AppLocalizations.of(context)!;
   globales
       .muestraDialogo(context, traduce.status_401)
-      .whenComplete(() => PantallaLogin.voy(context));
+      .whenComplete(() => Navega.navegante(Login.id).voy(context));
 }
 
 error500Servidor(BuildContext context) async {

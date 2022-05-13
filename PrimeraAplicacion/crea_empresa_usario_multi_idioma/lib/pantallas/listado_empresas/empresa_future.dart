@@ -1,5 +1,6 @@
 import 'package:crea_empresa_usario/excepciones_personalizadas/excepciones.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
+import 'package:crea_empresa_usario/navegacion/pantalla.dart';
 import 'package:crea_empresa_usario/pantallas/nueva_empr.dart';
 import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
@@ -90,7 +91,8 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
           msg: traduce.recarga,
           icon: const Icon(Icons.refresh_rounded),
           // Recargamos la página de NuevoUsuario
-          accion: () => PantallaNuevoUsuario.voy(context),
+          accion: () => Navega.navegante(NuevoUsuario.id)
+              .voy(context), //PantallaNuevoUsuario.voy(context),
         );
       } else if (datos.hasData) {
         // Tenemos datos?
@@ -98,7 +100,7 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
           // No hay empresas en los datos recibidos por el servidor
           return AvisoAccion(
             // No hay empresas dadas de alta -> cargamos la pantalla de EmpresNueva
-            accion: () => {PantallaNuevaEmpresa.voy(context)},
+            accion: () => {Navega.navegante(NuevaEmpresa.id).voy(context)},
             aviso: traduce.noSeEncuentraEmpresasDadeAlta,
             msg: traduce.anyadeEmpresa,
             icon: const Icon(Icons.add_business_rounded),

@@ -2,7 +2,7 @@ import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaj
 import 'package:crea_empresa_usario/globales.dart';
 import 'package:crea_empresa_usario/main.dart';
 import 'package:crea_empresa_usario/navegacion/cabecera_menu.dart';
-import 'package:crea_empresa_usario/navegacion/navega.dart';
+import 'package:crea_empresa_usario/navegacion/pantalla.dart';
 import 'package:crea_empresa_usario/navegacion/item_menu_lateral.dart';
 import 'package:crea_empresa_usario/navegacion/rutas_pantallas.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +80,7 @@ class MenuLateral extends StatelessWidget {
     }),
   ];
 
-  static anyadeItem(ItemMenu itemMenu) {
+  static anyadeItem(Widget itemMenu) {
     _items.insert(_items.length - 1, itemMenu);
   }
 

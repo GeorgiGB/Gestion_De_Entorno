@@ -1,4 +1,5 @@
-import 'package:crea_empresa_usario/navegacion/navega.dart' as Navegacion;
+import 'package:crea_empresa_usario/navegacion/navega.dart';
+import 'package:crea_empresa_usario/navegacion/pantalla.dart' as Navegacion;
 import 'package:crea_empresa_usario/pantallas/listado_empresas/empresa_future.dart';
 import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
@@ -179,7 +180,8 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
                 duration: Duration(milliseconds: 1250),
                 onHide: () {
                   // Cargamos pantalla de escoger opciones
-                  PantallaNuevoUsuario.voy(context);
+                  Navega.navegante(NuevoUsuario.id).voy(context);
+                  //PantallaNuevoUsuario.voy(context);
                 },
               );
               break;

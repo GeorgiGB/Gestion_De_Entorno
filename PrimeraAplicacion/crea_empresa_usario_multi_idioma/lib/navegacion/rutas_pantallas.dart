@@ -46,17 +46,17 @@ class Ruta {
 
 class PantallasConfig {
   final bool conToken;
-  final bool conItemMenu;
+  //final bool conItemMenu;
   final bool menuLateral;
-  late final ItemMenu? itemMenu;
+  final Widget? itemMenu;
 
   PantallasConfig({
     this.conToken = true,
-    this.conItemMenu = true,
+    //this.conItemMenu = true,
     this.menuLateral = true,
     this.itemMenu,
   }) {
-    if (conItemMenu) {
+    if (itemMenu != null) {
       MenuLateral.anyadeItem(itemMenu!);
     }
   }

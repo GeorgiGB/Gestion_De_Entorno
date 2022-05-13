@@ -1,157 +1,111 @@
-import 'package:crea_empresa_usario/colores.dart';
-import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
-import 'package:crea_empresa_usario/widgets/esperando_servidor.dart';
+import 'package:crea_empresa_usario/navegacion/item_menu_lateral.dart';
+import 'package:crea_empresa_usario/navegacion/pantalla.dart';
+import 'package:crea_empresa_usario/navegacion/rutas_pantallas.dart';
 import 'package:flutter/material.dart';
-
-import 'package:crea_empresa_usario/main.dart';
-import 'package:crea_empresa_usario/pantallas/login.dart';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
-import 'rutas_pantallas.dart';
-import 'menu_lateral.dart';
+class IconTraduce {
+  /// [Icon]
+  late final Icon icon;
 
-/// Clase abstracta que sirve de base para todas las pantalla muestren o no el
-/// menú lateral [menuLateral]. Todas las pantallas mostrarán un [AppBar]
-/// En caso de necesitar un token y no pasarlo nos redirige a la pantalla [Login]
-///
-///
-/// La primera vez que se carga cualquier pantalla después de identificarnos
-/// se mostrará el menú abierto
-///
-/// Los parámetros que se pasan són:
-/// * [_token] por defecto null
-/// * [conToken] por defecto su valor es true
-/// * [claveConstructor] Obligatorio, es la clave para utilizar el constructor de la pantalla a mostrar.
-/// * [menuLateral] booleano para indicar que queremos mostrar un menú lateral por defeto suvalor es true
-///
-class PantallasMenu extends StatefulWidget {
-  PantallasMenu(this.titulo, this.claveConstructor,
-      {Key? key, this.conToken = true, this.menuLateral = true})
-      : super(key: key);
+  /// Función al que le pasamos un [AppLocalizations] y nos
+  /// devuelve  una cadena traducida
+  final String Function(AppLocalizations) traduce;
 
-  /// Utilizado para saber si ya hemos mostrado el menú lateral la primera vez
-  /// que se carga una pantalla después de identificarnos y que contenga el menú lateral
-  /// Al cerrar la sesión esta variable se pone a false desde la classe [MyApp]
-  static bool abierto = false;
+  /// Utilizamos un [icon] y una función anonima [traduce]
+  IconTraduce(this.icon, {required this.traduce});
 
-  /// Titulo a mostrar en el [AppBar]
-  final Widget titulo;
-
-  /// Necesario si la pantalla a cargar necesita token
-  /// por defecto es null
-
-  /// Indica si se va a mostrar el menú lateral.
-  /// Por defecto true
-  final bool menuLateral;
-
-  /// Indica si se necesita un token la pantalla que vamos a cargar.
-  ///  Por defecto true
-  final bool conToken;
-
-  /// Clave obligatoria para identificar al constructor de widget que mostrá la pantalla
-  final String claveConstructor;
-
-  ArgumentsToken? args;
-
-  @override
-  State<StatefulWidget> createState() => _PantallasMenuState();
+  /// Con un [IconData] y la función anónima [traduce]
+  IconTraduce.iconData(IconData iconData, {required this.traduce})
+      : icon = Icon(iconData);
 }
 
-class _PantallasMenuState extends State<PantallasMenu> {
-  bool vesAlogin = false;
-  // _scaffoldKey para obtener, posteriormente, el currentcontext
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String? _tok;
+class Navega {
+  late final Ruta ruta;
+  late final PantallasConfig cfgPantalla;
+  final dynamic titulo;
+  final String id;
 
-  @override
-  void initState() {
-    super.initState();
-    //Añadimos una llamada al finalizar el estado inicial del widget
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      // Añadimo una llamada cuando finaliza la creación
-      // del widget y se presenta por pantalla
-      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-        // El widget ya tiene creado el estado final y se presenta por pantall
-        if (vesAlogin) {
-          if (_scaffoldKey.currentContext != null) {
-            // No hemos podido obtener el token nos vamos al wiget principal MyApp
-            // y que decida
-            MyApp.rutaSinToken(context);
-          }
-        } else if (MyApp.menuAbierto &&
-            widget.menuLateral &&
-            !PantallasMenu.abierto &&
-            _scaffoldKey.currentState != null) {
-          // La primera vez que se carga cualquier pantalla después de identificarnos
-          // se mostrará el menú abierto si tiene menulateral
-          PantallasMenu.abierto = true;
-          _scaffoldKey.currentState!.openDrawer();
-        }
-      });
-    });
+  static final Map<String, Navega> _navegantes = <String, Navega>{};
+  static Navega navegante(String id) => _navegantes[id]!;
+
+  ///añadir la ruta que será utilizada por el parámetro
+  /// routes de la clase [MaterialApp] que encontraremos en el fichero main.dart
+  /// Método encargado de preparar la navegación
+  /// - id: el identificador del elemento de Navegación, debe ser único. Obligatorio
+  /// - ruta: la cadena que identifica a la ruta, si no se pone se formará con el id
+  /// - conToken: indica si para acceder a esta pantalla necesita el token de sesión. Opcional -> true
+  /// - conItemMenu: nos pondrá un item de menú en lel menu lateral. Opcional -> true
+  /// - menuLateral: si aparece el menú lateral en la pantalla. Opcional -> true
+  Navega(this.id,
+      {required this.titulo,
+      required Widget Function(String?) constructor,
+      String? nombreRuta,
+      dynamic? itemMenu,
+      bool conToken = true,
+      bool menuLateral = true}) {
+    //
+    // si existe un id previo lanza un error
+    assert(() {
+      if (_navegantes.keys.contains(id)) {
+        throw FlutterError(
+          'Este id de navegación: $id, ya está uso.',
+        );
+      }
+      return true;
+    }());
+
+    // Añadimos el navegador a los navegantes
+    _navegantes[id] = this;
+
+    // Obtenemos la ruta
+    ruta = Ruta(id, nombreRuta, constructor);
+
+    //Pasamos valores configuración de pantalla
+    cfgPantalla = PantallasConfig(
+        conToken: conToken,
+        //conItemMenu: conItemMenu,
+        menuLateral: menuLateral,
+
+        // Añade Ejemplo, más opciones sobre [ItemMenu] en su archivo
+        // correspondiente
+        itemMenu: _creaItemIcon(itemMenu, conToken)
+        /*ItemMenu(Icons.login_rounded, ruta.hacia,
+          necesitaToken: conToken, funcionTraduce: (traduce) {
+        return traduce.iniciaSesion;
+      }),*/
+        );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // Obtenmos los argumentos que se pasan al cargar la ruta
-    RouteSettings routeSettings = ModalRoute.of(context)!.settings;
-    final objArgs = routeSettings.arguments;
-    if (objArgs != null) {
-      widget.args = objArgs as ArgumentsToken;
-      _tok = widget.args!.token;
+  Widget? _creaItemIcon(dynamic itemMenu, bool conToken) {
+    if (itemMenu != null) {
+      if (itemMenu is IconTraduce) {
+        return ItemMenu(itemMenu.icon, ruta.hacia,
+            necesitaToken: conToken, funcionTraduce: itemMenu.traduce);
+      } else if (itemMenu is Widget) {
+        return itemMenu;
+      }
     }
-
-    // si es un widget con token se ha de poner
-    vesAlogin = widget.conToken && _tok == null;
-    return vesAlogin
-
-        // Necesita token y no tiene, cargamos un container
-        // indicando que esperamos la carga
-        ? Esperando.esperandoA(
-            AppLocalizations.of(context)!.cargando,
-            key: _scaffoldKey,
-          )
-
-        // Ahora podemos cargar la pantalla a mostrar;
-        : Scaffold(
-            key: _scaffoldKey,
-            drawer: widget.menuLateral ? MenuLateral() : null,
-            appBar: AppBar(
-              title: widget.titulo,
-              actions: widget.menuLateral
-                  ? null
-                  : [LanguageDropDown().getDropDown(context)],
-              flexibleSpace: Container(
-                decoration: const BoxDecoration(
-                    gradient:
-                        LinearGradient(colors: PaletaColores.listaColores)),
-              ),
-            ),
-
-            //  Separamos el contenido principal en otro widget
-            body:
-                // Obtenemos el constructor de wiggets y le llamamos
-
-                Ruta.getConstructorWidgets(widget.claveConstructor)(_tok),
-          );
   }
-}
 
-// Clase utilizada para pasar el token a las diferentes rutas
-class ArgumentsToken {
-  final String token;
-  ArgumentsToken(
-    this.token,
-  );
-}
+  PantallasMenu muestraPantalla(BuildContext context, {Key? key}) {
+    late Widget titulo;
+    final String Function(AppLocalizations) funcionTraduce;
+    if (this.titulo is Function /*String Function(AppLocalizations)*/) {
+      titulo = Text(this.titulo(AppLocalizations.of(context)));
+    } else {
+      titulo = this.titulo;
+    }
+    return PantallasMenu(titulo, ruta.id,
+        key: key,
+        menuLateral: cfgPantalla.menuLateral,
+        conToken: cfgPantalla.conToken);
+  }
 
-/// Metodo que cargará la ruta indicada y vaciará el historial anterior
-/// Pasando los argumentos
-Future<T?> vesA<T extends Object?>(String ruta, BuildContext context,
-    {Object? arguments}) {
-  return Navigator.of(context)
-      .pushNamedAndRemoveUntil(ruta, (route) => false, arguments: arguments);
+  Future<T?> voy<T extends Object?>(BuildContext context, {Object? arguments}) {
+    return vesA(ruta.hacia, context, arguments: arguments);
+  }
 }

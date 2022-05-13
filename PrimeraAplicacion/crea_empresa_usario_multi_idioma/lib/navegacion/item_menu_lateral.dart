@@ -1,5 +1,5 @@
 import 'package:crea_empresa_usario/navegacion/menu_lateral.dart';
-import 'package:crea_empresa_usario/navegacion/navega.dart';
+import 'package:crea_empresa_usario/navegacion/pantalla.dart';
 import 'package:flutter/material.dart';
 
 // Imports multi-idioma ---------------------
@@ -7,7 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:crea_empresa_usario/colores.dart';
 // Fin imports multi-idioma ----------------
 
-/// Clase que crea un item del menu con un icono a partir un IconData [iconData]
+/// Clase que crea un item del menu con un icono a partir un IconData [icon]
 ///
 /// La acción que vaya a realizar [accion] puede ser:
 /// * un String que representa cualquiera de las rutas establecida en la clase [Rutas]
@@ -42,7 +42,7 @@ import 'package:crea_empresa_usario/colores.dart';
 // ignore: must_be_immutable
 class ItemMenu extends StatelessWidget {
   ItemMenu(
-    this.iconData,
+    this.icon,
     this.accion, {
     Key? key,
     required this.funcionTraduce,
@@ -51,7 +51,7 @@ class ItemMenu extends StatelessWidget {
     this.colorSeleccionado = PaletaColores.colorVerde,
   }) : super(key: key);
 
-  final IconData iconData;
+  final dynamic icon;
   final String Function(AppLocalizations) funcionTraduce;
   final dynamic accion;
   final necesitaToken;
@@ -95,7 +95,7 @@ class ItemMenu extends StatelessWidget {
           : Colors.grey[100],
       child: ListTile(
         enabled: enabled,
-        leading: Icon(iconData),
+        leading: icon is Icon ? icon : Icon(icon),
         title: Text(funcionTraduce(AppLocalizations.of(context)!),
             style: Theme.of(context).textTheme.headline6!.copyWith(
                 //Color de texto si está activo o no
