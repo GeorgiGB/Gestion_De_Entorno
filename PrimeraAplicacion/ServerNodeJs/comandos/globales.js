@@ -25,9 +25,8 @@ function msg(message){
     }
 }
 
-//  Función asincrona que permite la petición a la base de datos con la información solicitada
-// Esta función no és asíncrona
-/*async */function peticiones(response, res){
+//  Función que permite la petición a la base de datos con la información solicitada
+function peticiones(response, res){
 
     let responseErr = response[0].cod_error;
     let status = CodigosServidor.error;
@@ -56,7 +55,6 @@ function msg(message){
         }
     }
 
-   // status =status
     // Errores de la BBDD
     if(status == CodigosServidor.error){
         registrarErr(JSON.stringify(response[0]))
@@ -73,6 +71,7 @@ function msg(message){
     //  ctoken = bearer token
     //  Esta linea recoge el token del usuario
     try {
+        //no borrar para mostrar el registro de logs
         //header(res).status(parseInt('hola')).json("asa")
         let authorization = req.headers.authorization
         if(authorization){
