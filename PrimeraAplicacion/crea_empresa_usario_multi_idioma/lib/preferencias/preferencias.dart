@@ -21,8 +21,8 @@ Future<String?> cargaPreferencia() async {
   // Obtenemos locale
   await getLocale();
   // Obtenemos LenguageData
-  LanguageDropDown.languageData =  await getLenguajeData();
-  
+  LanguageDropDown.languageData = await getLenguajeData();
+
   // Obtenemos la session y la devolvemos
   return getSesion(claveSesion);
 }

@@ -1,10 +1,13 @@
-import 'package:crea_empresa_usario/navegacion/clases_constructoras.dart';
+import 'package:crea_empresa_usario/ejemplo_pantalla.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
-import 'package:crea_empresa_usario/navegacion/rutas.dart';
+import 'package:crea_empresa_usario/navegacion/rutas_pantallas.dart';
 import 'package:crea_empresa_usario/pantallas/login.dart';
+import 'package:crea_empresa_usario/pantallas/nueva_empr.dart';
+import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
 import 'package:crea_empresa_usario/preferencias/preferencias.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
+import 'package:crea_empresa_usario/pantallas/config_aplicacion.dart';
 import 'package:flutter/material.dart';
 import 'globales.dart' as globales;
 
@@ -15,35 +18,50 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'config_regional/model/locale_constant.dart' as const_reg;
 // Fin imports multi-idioma ----------------
 
-/// Cargamos preferencias y nos devuelve un Future con la sesion si ha sido guardada
 void main() {
+  // Preparamos  la estructur
+
+  // el orden de inicialización se corresponde con el orden
+  // de aparición en le menú lateral
+
+  PantallaNuevaEmpresa.preparaNavegacion('NuevaEmpresa');
+  PantallaLogin.preparaNavegacion('Login',
+      conToken: false, menuLateral: false, conItemMenu: false);
+  PantallaNuevoUsuario.preparaNavegacion('NuevoUsuario');
+  PantallaConfigAplicacion.preparaNavegacion('ConfigOpciones');
+
   runApp(MyApp());
 }
 
 // Necesitamos que el Widget sea stateful para mantener los cambios de idiomas
 // si se produce un cambio en la elección de idioma
 class MyApp extends StatefulWidget {
+  /// A qué página voy después de identificarme
+  static late final String despuesDeLoginVesA = PantallaNuevaEmpresa.ruta.hacia;
+  static const bool menuAbierto = true;
+  String? _token;
+
+  /// Constructor
   MyApp({Key? key, String? token}) : super(key: key) {
     _token = token;
   }
 
-  // Método estático disponible para todos las classes y así realizar el cambió de idioma
-  // desde donde queramos
+  /// Método estático disponible para todos las classes y así realizar
+  /// el cambio de idioma desde donde queramos
   static void setLocale(BuildContext context, Locale? newLocale) async {
     // buscamos el objeto state para establece la nueva configuración regional
     context.findAncestorStateOfType<_MyAppState>()?.setLocale(newLocale);
   }
 
-  String? _token;
-
+  /// Metodo estático que necesita de un [BuildContext] válido para establecer
+  /// el token
   static setToken(BuildContext context, String token) {
     // globales.debug("token es nulo " + (token == null).toString());
     MyApp mapp = context.findAncestorWidgetOfExactType<MyApp>() as MyApp;
     mapp._token = token;
   }
 
-  //static
-
+  /// Guardamos los datos de la sesión para la próxima vez que se abra la aplicación
   static mantenLaSesion(bool si, String? token) {
     if (si) {
       if (token != null) setPreferencias(claveSesion, token);
@@ -57,7 +75,10 @@ class MyApp extends StatefulWidget {
     }
   }
 
+  /// boolean para evitar que cuando estamos cerrando sesión se ignore una nueva llamada
   static bool _cerrandoSesion = false;
+
+  /// Cerramos sesion
   static void cierraSesion(BuildContext context) {
     final AppLocalizations traduce = AppLocalizations.of(context)!;
     MyApp mapp = context.findAncestorWidgetOfExactType<MyApp>() as MyApp;
@@ -71,24 +92,25 @@ class MyApp extends StatefulWidget {
       Servidor.cerrarSesion(context, token: mapp._token!).whenComplete(() {
         _cerrandoSesion = false;
         mapp._token = null;
-
-        aLogin(context);
+        PantallaLogin.voy(context);
       });
     }
   }
 
-  @override
-  _MyAppState createState() => _MyAppState();
-
+  /// Si la ruta solicitada necesita token y no exite el token
+  /// Enviamos la pantalla de [Login]
   static void rutaSinToken(BuildContext context) {
     MyApp mapp = context.findAncestorWidgetOfExactType<MyApp>() as MyApp;
     if (mapp._token != null) {
       vesA(ModalRoute.of(context)!.settings.name!, context,
           arguments: ArgumentsToken(mapp._token!));
     } else {
-      aLogin(context);
+      PantallaLogin.voy(context);
     }
   }
+
+  @override
+  _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -113,8 +135,6 @@ class _MyAppState extends State<MyApp> {
     });
     super.didChangeDependencies();
   }
-
-  String rutaInicial = Ruta.rutas['IniciaLogin']!;
 
   // Widget raíz de la aplicación
   @override
@@ -157,48 +177,17 @@ class _MyAppState extends State<MyApp> {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          initialRoute: Ruta.rutas['IniciaLogin']!,
+          initialRoute:
+              PantallaLogin.ruta.hacia, //Ruta.getRuta(PantallaLogin.id),
           routes: {
-            Ruta.rutas['IniciaLogin']!: (context) => Identificate(context),
-            Ruta.rutas['EmpresaNueva']!: (context) => EmpresaNueva(context),
-            Ruta.rutas['UsuarioNuevo']!: (context) => UsuarioNuevo(context),
-            Ruta.rutas['Configuracion']!: (context) => OpcionesConfig(context),
+            PantallaConfigAplicacion.ruta.hacia: (context) =>
+                PantallaConfigAplicacion(context),
+            PantallaLogin.ruta.hacia: (context) => PantallaLogin(context),
+            PantallaNuevaEmpresa.ruta.hacia: (context) =>
+                PantallaNuevaEmpresa(context),
+            PantallaNuevoUsuario.ruta.hacia: (context) =>
+                PantallaNuevoUsuario(context),
           },
-
-          // La ruta inicial es Login  y la hacemos sin transición
-          /*onGenerateRoute: (settings) {
-              if (settings.name == rutaInicial) {
-                return PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => Login(token: widget._token),
-                );
-              }
-
-              return null;
-            }*/
-          //home:
-          //    widget.token == null ? Login() : EscogeOpciones(token: widget.token!),
-
-          //home: Sesion(traducciones: AppLocalizations.of(context)!),
-          //home: getPreferencia(MyApp.claveGuardaSesion).whenComplete(() => Login()),
-
-          //home: EscogeOpciones(token: 'a'),
-
-/*
-      home: NuevaEmpresa(token: 'k'),
-*/
-          /*
-      home: const NuevoUsuario(token: "k"),
-      /*
-      */
-      home: const FiltrosUsuario(
-          token:
-              "k",
-          empCod: '60 - funcioncrearempresa1',
-          emp_cod: 60,
-          nombre: "oooo",
-          pwd: "wwwwwwwwwww",
-          auto_pwd: true),
-      */
         );
       },
 

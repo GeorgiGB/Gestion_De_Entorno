@@ -90,7 +90,7 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
           msg: traduce.recarga,
           icon: const Icon(Icons.refresh_rounded),
           // Recargamos la página de NuevoUsuario
-          accion: () => aUsuarioNuevo(context),
+          accion: () => PantallaNuevoUsuario.voy(context),
         );
       } else if (datos.hasData) {
         // Tenemos datos?
@@ -98,7 +98,7 @@ FutureBuilder<List<EmpresCod>> dropDownEmpresas(
           // No hay empresas en los datos recibidos por el servidor
           return AvisoAccion(
             // No hay empresas dadas de alta -> cargamos la pantalla de EmpresNueva
-            accion: () => {aEmpresaNueva(context)},
+            accion: () => {PantallaNuevaEmpresa.voy(context)},
             aviso: traduce.noSeEncuentraEmpresasDadeAlta,
             msg: traduce.anyadeEmpresa,
             icon: const Icon(Icons.add_business_rounded),

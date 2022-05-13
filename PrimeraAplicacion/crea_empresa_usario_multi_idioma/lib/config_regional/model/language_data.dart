@@ -17,7 +17,7 @@ class LanguageData {
   //  flag:bandera, name: nombre_idioma, lenguajeCodigo: codigo lenguaje
 
   static final List<LanguageData> languageList = <LanguageData>[
-    LanguageData("🇺🇸", "English", 'en'),
+    LanguageData("🇬🇧", "English", 'en'),
     LanguageData("🇪🇸", "Español", "es"),
     LanguageData("🇫🇷", "Frances", "fr"),
   ];

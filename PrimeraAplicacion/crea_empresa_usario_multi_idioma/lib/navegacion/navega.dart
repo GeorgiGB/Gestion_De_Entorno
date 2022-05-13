@@ -2,7 +2,6 @@ import 'package:crea_empresa_usario/colores.dart';
 import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
 import 'package:crea_empresa_usario/widgets/esperando_servidor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 
 import 'package:crea_empresa_usario/main.dart';
 import 'package:crea_empresa_usario/pantallas/login.dart';
@@ -11,7 +10,7 @@ import 'package:crea_empresa_usario/pantallas/login.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
-import 'rutas.dart';
+import 'rutas_pantallas.dart';
 import 'menu_lateral.dart';
 
 /// Clase abstracta que sirve de base para todas las pantalla muestren o no el
@@ -29,11 +28,8 @@ import 'menu_lateral.dart';
 /// * [menuLateral] booleano para indicar que queremos mostrar un menú lateral por defeto suvalor es true
 ///
 class PantallasMenu extends StatefulWidget {
-  PantallasMenu(this.titulo,
-      {Key? key,
-      this.conToken = true,
-      required this.claveConstructor,
-      this.menuLateral = true})
+  PantallasMenu(this.titulo, this.claveConstructor,
+      {Key? key, this.conToken = true, this.menuLateral = true})
       : super(key: key);
 
   /// Utilizado para saber si ya hemos mostrado el menú lateral la primera vez
@@ -85,7 +81,8 @@ class _PantallasMenuState extends State<PantallasMenu> {
             // y que decida
             MyApp.rutaSinToken(context);
           }
-        } else if (widget.menuLateral &&
+        } else if (MyApp.menuAbierto &&
+            widget.menuLateral &&
             !PantallasMenu.abierto &&
             _scaffoldKey.currentState != null) {
           // La primera vez que se carga cualquier pantalla después de identificarnos
@@ -109,7 +106,6 @@ class _PantallasMenuState extends State<PantallasMenu> {
 
     // si es un widget con token se ha de poner
     vesAlogin = widget.conToken && _tok == null;
-
     return vesAlogin
 
         // Necesita token y no tiene, cargamos un container
@@ -125,9 +121,9 @@ class _PantallasMenuState extends State<PantallasMenu> {
             drawer: widget.menuLateral ? MenuLateral() : null,
             appBar: AppBar(
               title: widget.titulo,
-              actions: routeSettings.name == Ruta.rutas['IniciaLogin']
-                  ? [LanguageDropDown().getDropDown(context)]
-                  : null,
+              actions: widget.menuLateral
+                  ? null
+                  : [LanguageDropDown().getDropDown(context)],
               flexibleSpace: Container(
                 decoration: const BoxDecoration(
                     gradient:
@@ -138,7 +134,8 @@ class _PantallasMenuState extends State<PantallasMenu> {
             //  Separamos el contenido principal en otro widget
             body:
                 // Obtenemos el constructor de wiggets y le llamamos
-                Ruta.constructoresWidgets[widget.claveConstructor]!(_tok),
+
+                Ruta.getConstructorWidgets(widget.claveConstructor)(_tok),
           );
   }
 }
@@ -149,27 +146,6 @@ class ArgumentsToken {
   ArgumentsToken(
     this.token,
   );
-}
-
-/// Cómo su nombre indica cargará la pantalla de [Login]
-/// utilizando el método [vesA]
-aLogin(BuildContext context, {Object? arguments}) {
-  //PantallasMenu.abierto = false;
-  return vesA(Ruta.rutas['IniciaLogin']!, context, arguments: arguments);
-}
-
-/// Cómo su nombre indica cargará la pantalla de [EmpresaNueva]
-/// utilizando el método [vesA]
-Future<T?> aEmpresaNueva<T extends Object?>(BuildContext context,
-    {Object? arguments}) {
-  return vesA(Ruta.rutas['EmpresaNueva']!, context, arguments: arguments);
-}
-
-/// Cómo su nombre indica cargará la pantalla de [UsuarioNuevo]
-/// utilizando el método [vesA]
-Future<T?> aUsuarioNuevo<T extends Object?>(BuildContext context,
-    {Object? arguments}) {
-  return vesA(Ruta.rutas['UsuarioNuevo']!, context, arguments: arguments);
 }
 
 /// Metodo que cargará la ruta indicada y vaciará el historial anterior

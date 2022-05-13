@@ -5,6 +5,9 @@ import 'package:crea_empresa_usario/widgets/labeled_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:crea_empresa_usario/preferencias/preferencias.dart'
     as Preferencias;
+import 'package:crea_empresa_usario/navegacion/rutas_pantallas.dart';
+import 'package:crea_empresa_usario/navegacion/item_menu_lateral.dart';
+import 'package:crea_empresa_usario/ejemplo_pantalla.dart';
 
 import '../globales.dart' as globales;
 
@@ -12,17 +15,74 @@ import '../globales.dart' as globales;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Constantes donde se guarda el idoma escogido y desde donde actualizamos
 
-class ConfigOpciones extends StatefulWidget {
-  ConfigOpciones({Key? key, token}) : super(key: key) {
+// Imports multi-idioma ---------------------
+// Fin imports multi-idioma ----------------
+
+/// En este fichero se encuentra un plantilla básica que sigue la estructura genérica
+/// para crear una pantalla que mantenga la estructura básica de la aplicación.
+///
+///
+/// Más información en [PantallaCambiarNombre] <-- este no se ha de cambiar
+class PantallaConfigAplicacion extends PantallasMenu {
+  /// Cadena utilizada para crear las rutas de navegación
+  /// Debe ser única ya que puede entrar en conflicto con las demás pantallas
+  static late final Ruta ruta;
+  static late final PantallasConfig cfgPantalla;
+
+  ///añadir la ruta que será utilizada por el parámetro
+  /// routes de la clase [MaterialApp] que encontraremos en el fichero main.dart
+  /// Método encargado de preparar la navegación
+  /// - id: el identificador del elemento de Navegación, debe ser único. Obligatorio
+  /// - ruta: la cadena que identifica a la ruta, si no se pone se formará con el id
+  /// - conToken: indica si para acceder a esta pantalla necesita el token de sesión. Opcional -> true
+  /// - conItemMenu: nos pondrá un item de menú en lel menu lateral. Opcional -> true
+  /// - menuLateral: si aparece el menú lateral en la pantalla. Opcional -> true
+  static void preparaNavegacion(String id,
+      {String? nombreRuta,
+      bool conToken = true,
+      bool conItemMenu = true,
+      bool menuLateral = true}) {
+    //
+    ruta = Ruta(id, nombreRuta, (token) => ConfigAplicacion(token: token));
+    //Pasamos valores configuración de pantalla
+    cfgPantalla = PantallasConfig(
+        conToken: conToken,
+        conItemMenu: conItemMenu,
+        menuLateral: menuLateral,
+
+        // Añade Ejemplo, más opciones sobre [ItemMenu] en su archivo
+        // correspondiente
+        itemMenu: ItemMenu(Icons.settings_rounded, ruta.hacia,
+            necesitaToken: conToken, funcionTraduce: (traduce) {
+          return traduce.configuracion;
+        }));
+  }
+
+  static Future<T?> voy<T extends Object?>(BuildContext context,
+      {Object? arguments}) {
+    return vesA(ruta.hacia, context, arguments: arguments);
+  }
+
+  PantallaConfigAplicacion(BuildContext context, {Key? key})
+      : super(Text(AppLocalizations.of(context)!.configuracion), ruta.id,
+            key: key,
+            menuLateral: cfgPantalla.menuLateral,
+            conToken: cfgPantalla.conToken);
+}
+
+// Aquí finalizan los elementos básicos de un wiget que siga la estructura básica de la aplicación
+
+class ConfigAplicacion extends StatefulWidget {
+  ConfigAplicacion({Key? key, token}) : super(key: key) {
     _token = token;
   }
   late final String? _token;
 
   @override
-  State<ConfigOpciones> createState() => _ConfigOpcionesState();
+  State<ConfigAplicacion> createState() => _ConfigAplicacionState();
 }
 
-class _ConfigOpcionesState extends State<ConfigOpciones> {
+class _ConfigAplicacionState extends State<ConfigAplicacion> {
   late AppLocalizations traduce;
   bool guardaSesion = false;
 
