@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../main.dart';
 
 class LanguageData {
   final String bandera;
@@ -17,53 +14,53 @@ class LanguageData {
   //  flag:bandera, name: nombre_idioma, lenguajeCodigo: codigo lenguaje
 
   static final List<LanguageData> languageList = <LanguageData>[
-    LanguageData("🇬🇧", "English", 'en'),
     LanguageData("🇪🇸", "Español", "es"),
+    LanguageData("🇬🇧", "English", 'en'),
     LanguageData("🇫🇷", "Frances", "fr"),
   ];
 
-  static LanguageData? getLanguageData(String? insignia) {
-    LanguageData? ld = null;
+  static LanguageData getLanguageData(String? insignia) {
     if (insignia == null) {
-      ld = languageList.first;
+      return languageList.first;
     } else {
-      //if (insignia != null) {
       for (var bd in languageList) {
         if (bd.bandera == insignia || bd.lenguajeCodigo == insignia) {
-          ld = bd;
-          break;
+          return bd;
         }
       }
-      //}
-      return ld;
+      return languageList.first;
     }
   }
 
-  static LanguageData? _lenguage = languageList.first;
-  static LanguageData? get lenguage => _lenguage;
+  static LanguageData _lenguage = languageList.first;
+  static LanguageData get lenguage => _lenguage;
 }
 
 // Para comentar  como funciona las SharedPreferences
 
 const String prefBandera = "SelectedLanguageData";
 
-Future<LanguageData?> setLenguaje(String bandera) async {
+/// Guardamos en preferéncia la bandra de referencia
+/// Si esa bandera no se encuentra en la lista de [LanguageData]
+/// devolverá e primer elemento de la lista [LanguageData]
+Future<LanguageData> setLenguaje(String bandera) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   await _prefs.setString(prefBandera, bandera);
   return _lenguage(bandera);
 }
 
-Future<LanguageData?> getLenguajeData() async {
+/// Obtenmos la bandera de las preferéncias.
+/// Si esa bandera no se encuentra en la lista de [LanguageData]
+/// devolverá e primer elemento de la lista [LanguageData]
+Future<LanguageData> getLenguajeData() async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   String? bandera = _prefs.getString(prefBandera);
   return _lenguage(bandera);
 }
 
-LanguageData? _lenguage(String? bandera) {
+LanguageData _lenguage(String? bandera) {
   LanguageData._lenguage = LanguageData.getLanguageData(bandera);
-  return bandera != null && bandera.isNotEmpty
-      ? LanguageData.getLanguageData(bandera)
-      : null;
+  return LanguageData._lenguage;
 }
 
 void changeLanguageData(String bandera) async {

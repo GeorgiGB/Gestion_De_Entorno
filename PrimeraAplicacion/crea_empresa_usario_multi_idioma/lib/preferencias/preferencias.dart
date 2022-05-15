@@ -1,11 +1,6 @@
-import 'dart:ui';
-
 import 'package:crea_empresa_usario/config_regional/model/language_data.dart';
 import 'package:crea_empresa_usario/config_regional/model/locale_constant.dart';
 import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
-import 'package:crea_empresa_usario/globales.dart';
-import 'package:crea_empresa_usario/main.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Para comentar  como funciona las SharedPreferences
@@ -20,6 +15,7 @@ Future<String?> cargaPreferencia() async {
   // encadenamos futuros
   // Obtenemos locale
   await getLocale();
+
   // Obtenemos LenguageData
   LanguageDropDown.languageData = await getLenguajeData();
 

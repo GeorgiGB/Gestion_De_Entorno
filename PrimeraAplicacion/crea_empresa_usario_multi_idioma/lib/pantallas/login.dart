@@ -4,6 +4,8 @@ import 'package:crea_empresa_usario/navegacion/pantalla.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/labeled_checkbox.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
+import 'package:crea_empresa_usario/preferencias/preferencias.dart'
+    as Preferencias;
 import 'package:flutter/material.dart';
 import '../globales.dart' as globales;
 
@@ -38,6 +40,21 @@ class _LoginState extends State<Login> {
   // Al realizar el login en el servidor y esperar su respuesta tenemos que saber
   // si estamos esperando la respuesta del servidor y así evitar múltiples peticiones al servidor
   bool esperandoLogin = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Activamos el campo Guardar sesion?
+    Preferencias.getSesion(Preferencias.mantenSesion).then((value) {
+      // globales.debug(value ?? 'vacio');
+      setState(() {
+        guardaSesion = value == null
+            ? false
+            : value.isNotEmpty && value == Preferencias.guardar;
+        MyApp.mantenLaSesion(guardaSesion, null);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,12 +134,11 @@ class _LoginState extends State<Login> {
                   label: traduce.guardaSesion,
                   chekBoxIzqda: false,
                   textStyle: globales.estiloNegrita_16,
-                  // Mientras este activo
-                  // No permitira al usuario escribir una contraseña
                   value: guardaSesion,
                   onChanged: (bool? value) {
                     setState(() {
                       guardaSesion = value!;
+                      MyApp.mantenLaSesion(guardaSesion, null);
                     });
                   },
                 ),

@@ -1,4 +1,3 @@
-import 'package:crea_empresa_usario/navegacion/item_menu_lateral.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/navegacion/pantalla.dart';
 import 'package:crea_empresa_usario/pantallas/login.dart';
@@ -9,7 +8,6 @@ import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:crea_empresa_usario/pantallas/config_aplicacion.dart';
 import 'package:flutter/material.dart';
-import 'globales.dart' as globales;
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -19,9 +17,17 @@ import 'config_regional/model/locale_constant.dart' as const_reg;
 // Fin imports multi-idioma ----------------
 
 void main() {
-  // Preparamos  la estructura de navegación
-  _inicializaNavegacion();
-  runApp(MyApp());
+  String? sesion = null;
+
+  cargaPreferencia().then((value) {
+    sesion = value;
+  }).whenComplete(() {
+    // Preparamos  la estructura de navegación
+    _inicializaNavegacion();
+
+    // Cargamos la aplicación
+    runApp(MyApp(token: sesion));
+  });
 }
 
 /// Aquí és donde debemos añadir el código de inicialización de la ruta de la
@@ -213,63 +219,52 @@ class _MyAppState extends State<MyApp> {
   // Widget raíz de la aplicación
   @override
   Widget build(BuildContext context) {
-    //widget._token;
-    return FutureBuilder(
-      // Cargamos las preferencias de sesión
-      future: cargaPreferencia().then((value) {
-        //PantallasMenu.abierto = false;
+    print(widget._token);
+    print('4');
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      // Establecemos la configuración regional del widget raíz
+      //que afecta todos los descendientes
+      locale: _locale,
 
-        // si el token no se guarda el valor es nulo
-        // pero si existe el token lo debemos pasar
-        widget._token = value != null ? value : widget._token;
-      }),
+      // indicamos las diferentes localizaciónes disponibles
+      // se encuentran en: 'package:flutter_gen/gen_l10n/app_localizations.dart'
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
 
-      builder: (context, datos) {
-        //sesion = datos.hasData? datos.data as String:null;
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          // Establecemos la configuración regional del widget raíz
-          //que afecta todos los descendientes
-          locale: _locale,
+      // hasta aquí 'package:flutter_gen/gen_l10n/app_localizations.dart'
 
-          // indicamos las diferentes localizaciónes disponibles
-          // se encuentran en: 'package:flutter_gen/gen_l10n/app_localizations.dart'
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-
-          // hasta aquí 'package:flutter_gen/gen_l10n/app_localizations.dart'
-
-          // Si queremos que el título de la aplicación realice el cambio
-          // de idioma, la aplicación del nombre la debemos realizar
-          // en este momento ya que si lo hacemos a traves de
-          // title:traducciones.appName,
-          // genera un error porque el objeto AppLocalizations devuelto es nulo
-          onGenerateTitle: (BuildContext context) {
-            _traduce = AppLocalizations.of(context)!;
-            return _traduce.nombreApp;
-          },
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          initialRoute: Navega.navegante(Login.id)
-              .ruta
-              .hacia, //Ruta.getRuta(PantallaLogin.id),
-          routes: (() {
-            // creamos un mapa de rutas de forma
-            // que podamos añadir otro tipo de rutas
-            Map<String, WidgetBuilder> r = {
-              // Aquí podemos añadir otras rutas
-              // String: (context) => WidgetBuilder(context),
-            };
-
-            // Añadimos las rutas con pantalla
-            r.addAll(MyApp._rutasPantalla);
-
-            // Devolvemos el mapa de rutas
-            return r;
-          })(),
-        );
+      // Si queremos que el título de la aplicación realice el cambio
+      // de idioma, la aplicación del nombre la debemos realizar
+      // en este momento ya que si lo hacemos a traves de
+      // title:traducciones.appName,
+      // genera un error porque el objeto AppLocalizations devuelto es nulo
+      onGenerateTitle: (BuildContext context) {
+        _traduce = AppLocalizations.of(context)!;
+        return _traduce.nombreApp;
       },
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      initialRoute: Navega.navegante(Login.id)
+          .ruta
+          .hacia, //Ruta.getRuta(PantallaLogin.id),
+      routes: (() {
+        // creamos un mapa de rutas de forma
+        // que podamos añadir otro tipo de rutas
+        Map<String, WidgetBuilder> r = {
+          // Aquí podemos añadir otras rutas
+          // String: (context) => WidgetBuilder(context),
+        };
+
+        // Añadimos las rutas con pantalla
+        r.addAll(MyApp._rutasPantalla);
+
+        // Devolvemos el mapa de rutas
+        return r;
+      })(),
     );
+    //},
+    //);
   }
 }
