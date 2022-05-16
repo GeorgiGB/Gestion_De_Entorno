@@ -219,8 +219,6 @@ class _MyAppState extends State<MyApp> {
   // Widget raíz de la aplicación
   @override
   Widget build(BuildContext context) {
-    print(widget._token);
-    print('4');
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // Establecemos la configuración regional del widget raíz
