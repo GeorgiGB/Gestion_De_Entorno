@@ -1,14 +1,15 @@
 // Conexión con la base de datos
 //------------------------------
 const { Pool } = require('pg')
-
+const config = require('../configdb.json')
 // Configuración de la base de datos
+
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'Empresa',
-    password: 'caslab',
-    port: 5432,
+    user: config.user,
+    host: config.host,
+    database: config.database,
+    password: config.password,
+    port: config.port,
   });
 
   module.exports = pool;
