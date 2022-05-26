@@ -37,7 +37,13 @@ class CabeceraMenu extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(8.0, 16.0, 16.0, 8.0),
         //  En un BoxDecoration indicamos los colores personalizados que queremos que tenga el programa
         decoration: const BoxDecoration(
-            gradient: LinearGradient(colors: PaletaColores.listaColores1)),
+            gradient: LinearGradient(
+                begin: Alignment.bottomRight,
+                end: Alignment(-0.7, 0.2),
+                colors: [
+              PaletaColores.colorVerde,
+              PaletaColores.colorAzulOscuro
+            ])),
         margin: EdgeInsets.zero,
         child: Stack(children: [
           Positioned(
@@ -45,13 +51,13 @@ class CabeceraMenu extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .headline6!
-                      .copyWith(color: PaletaColores.colorGrisOscuro))),
+                      .copyWith(color: PaletaColores.colorBlanco))),
           Positioned(
               top: -10,
               right: -10,
               child: IconButton(
                   icon: Icon(Icons.close),
-                  color: PaletaColores.colorGrisOscuro,
+                  color: PaletaColores.colorBlanco,
                   onPressed: () => Navigator.of(context).pop())),
           Positioned(
             bottom: 0,

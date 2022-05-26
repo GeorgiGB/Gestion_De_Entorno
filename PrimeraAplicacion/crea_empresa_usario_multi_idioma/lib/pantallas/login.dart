@@ -82,10 +82,12 @@ class _LoginState extends State<Login> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            //  Campo del nombre de usuario
             TextFormField(
               decoration: InputDecoration(
                   hintText: traduce.hintTuNombre,
                   labelText: AppLocalizations.of(context)!.usuario),
+              cursorColor: PaletaColores.colorMorado,
               controller: _usuario,
               onFieldSubmitted: (String value) {
                 // Al pulsar enter ponemos el foco en el campo contraseña
@@ -93,11 +95,12 @@ class _LoginState extends State<Login> {
               },
             ),
             const SizedBox(height: 30),
-
+            //  Campo de la pwd
             TextFormField(
               decoration: InputDecoration(
                   hintText: traduce.hintContrasena,
                   labelText: AppLocalizations.of(context)!.contrasena),
+              cursorColor: PaletaColores.colorMorado,
               controller: _pwd,
               obscureText: true,
               enableSuggestions: false,

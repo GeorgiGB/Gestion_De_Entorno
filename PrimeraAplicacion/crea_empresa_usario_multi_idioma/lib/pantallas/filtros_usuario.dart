@@ -1,3 +1,4 @@
+import 'package:crea_empresa_usario/colores.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/navegacion/pantalla.dart' as Navegacion;
 import 'package:crea_empresa_usario/pantallas/listado_empresas/empresa_future.dart';
@@ -130,7 +131,9 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
                 onPressed: () {
                   _enviar_filtro();
                 },
-              ),
+                style: ElevatedButton.styleFrom(
+                      primary: PaletaColores.colorMorado),
+                ),
             ],
           )),
     );

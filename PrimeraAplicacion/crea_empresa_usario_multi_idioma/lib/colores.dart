@@ -25,6 +25,9 @@ class PaletaColores {
   static const MaterialColor colorGrisClaro =
       MaterialColor(0xFFC6C6C6, <int, Color>{});
 
+  static const MaterialColor colorBlanco =
+      MaterialColor(0xFFFFFFFF, <int, Color>{});
+
   static const List<Color> listaColores = [colorAzulOscuro, colorVerde];
   static const List<Color> listaColores1 = [colorVerde, colorAzulOscuro];
 }

@@ -214,6 +214,7 @@ class Servidor {
       BuildContext context, String usuario, String pwd) async {
     // Encriptamos el usuario y la contraseña juntos
     String contra_encrypted = '';
+    
     if (pwd.isNotEmpty && usuario.isNotEmpty) {
       contra_encrypted = sha1.convert(utf8.encode(pwd + usuario)).toString();
     }

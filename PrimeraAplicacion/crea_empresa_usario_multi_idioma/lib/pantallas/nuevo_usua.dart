@@ -1,5 +1,5 @@
 //import 'package:crea_empresa_usario/drop_down/empresa.dart';
-
+import 'package:crea_empresa_usario/colores.dart';
 import 'package:crea_empresa_usario/navegacion/item_menu_lateral.dart';
 import 'package:crea_empresa_usario/navegacion/menu_lateral.dart';
 import 'package:crea_empresa_usario/navegacion/pantalla.dart';
@@ -258,6 +258,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
               // que nos permitira avanzar a la siguiente página
               _cargaFiltrosUsuario();
             },
+            style: ElevatedButton.styleFrom(primary: PaletaColores.colorMorado),
           ),
         ],
       ),

@@ -1,3 +1,4 @@
+import 'package:crea_empresa_usario/colores.dart';
 import 'package:crea_empresa_usario/navegacion/item_menu_lateral.dart';
 import 'package:crea_empresa_usario/navegacion/menu_lateral.dart';
 import 'package:crea_empresa_usario/navegacion/pantalla.dart';
@@ -80,6 +81,7 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
                 // Al pulsar intro pon el foco en el checkbox de contraseña auto generada
                 FocusScope.of(context).requestFocus(_auto_contrasenaFocus);
               },
+              cursorColor: PaletaColores.colorMorado,
             ),
             SizedBox(height: 30),
             Row(
@@ -88,6 +90,7 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
               children: <Widget>[
                 Text(traducciones.generaContrasena),
                 Checkbox(
+                    activeColor: PaletaColores.colorMorado,
                     // Mientras este activo
                     // No permitira al usuario escribir una contraseña
                     value: _emp_pwd_auto,
@@ -116,7 +119,7 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
                             _contraVisible
                                 ? Icons.visibility
                                 : Icons.visibility_off,
-                            color: Theme.of(context).primaryColorDark,
+                            color: PaletaColores.colorMorado,
                           ),
                           onPressed: () {
                             // Update the state i.e. toogle the state of passwordVisible variable
@@ -126,6 +129,7 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
                           },
                         ),
                       ),
+                      cursorColor: PaletaColores.colorMorado,
                       controller: _emp_pwd,
                       // para mostrar/ocultar la contraseña
                       obscureText: !_contraVisible,
@@ -148,6 +152,8 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
               onPressed: () {
                 _crearEmpresa();
               },
+              style:
+                  ElevatedButton.styleFrom(primary: PaletaColores.colorMorado),
             ),
           ],
         ),

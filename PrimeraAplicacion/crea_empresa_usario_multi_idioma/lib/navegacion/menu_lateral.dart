@@ -87,17 +87,6 @@ class MenuLateral extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final rutaActual = (ModalRoute.of(context)?.settings.name).toString();
-    /*for (var i = 1; i < items.length; i++) {
-      if (items[i] is ItemMenu) {
-        ItemMenu itlt = items[i] as ItemMenu;
-        // Si item está seleccionat
-        itlt.esSeleccionado(rutaActual);
-
-        /*
-        //Si el token es null i necesitaToken se desactivará el item
-        itlt.itemTieneToken(token);*/
-      }
-    }*/
     return Drawer(
       //backgroundColor: Theme.of(context).primaryColorLight,
       child: ListView(
