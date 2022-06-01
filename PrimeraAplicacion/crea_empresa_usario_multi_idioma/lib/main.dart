@@ -56,7 +56,7 @@ void _inicializaNavegacion() {
       },
       constructor: (token) => NuevaEmpresa(token: token!),
       itemMenu: IconTraduce.iconData(
-        Icons.add_business_rounded,//  ICONO de añadir empresa
+        Icons.add_business_rounded, //  ICONO de añadir empresa
         traduce: (traduce) {
           return traduce.anyadeEmpresa;
         },
@@ -69,7 +69,7 @@ void _inicializaNavegacion() {
       },
       constructor: (token) => NuevoUsuario(token: token!),
       itemMenu: IconTraduce.iconData(
-        Icons.account_box_rounded,// Icono de añade usuario
+        Icons.account_box_rounded, // Icono de añade usuario
         traduce: (traduce) {
           return traduce.anyadeUsuario;
         },
@@ -82,7 +82,7 @@ void _inicializaNavegacion() {
       },
       constructor: (token) => ConfigAplicacion(token: token!),
       itemMenu: IconTraduce.iconData(
-        Icons.construction_rounded,// Icono de configuración
+        Icons.construction_rounded, // Icono de configuración
         traduce: (traduce) {
           return traduce.configuracion;
         },

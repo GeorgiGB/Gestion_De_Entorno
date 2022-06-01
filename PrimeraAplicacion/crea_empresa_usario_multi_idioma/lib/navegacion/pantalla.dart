@@ -134,9 +134,31 @@ class _PantallasMenuState extends State<PantallasMenu> {
             //  Separamos el contenido principal en otro widget
             body:
                 // Obtenemos el constructor de wiggets y le llamamos
-
+                Stack(
+              children: [
+                Positioned(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image:
+                              AssetImage('images/puntos_arriba-sin-fondo.png'),
+                          alignment: Alignment.topRight),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('images/cola_abajo_sin-fondo.png'),
+                          alignment: Alignment.bottomRight,
+                          scale: 0.5),
+                    ),
+                  ),
+                ),
                 Ruta.getConstructorWidgets(widget.claveConstructor)(_tok),
-          );
+              ],
+            ));
   }
 }
 

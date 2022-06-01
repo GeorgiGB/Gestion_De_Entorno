@@ -68,12 +68,13 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
 
     _mostrar = getControlesVsibles();
 
-    return Scaffold(
+    return /*Scaffold(
       /*appBar: AppBar(
         title: Text(traducciones.nuevoUsuario),
       ),*/
       extendBody: true,
-      body: SingleChildScrollView(
+      body:*/ 
+      SingleChildScrollView(
         //Previene BOTTOM OVERFLOWED
         padding: EdgeInsets.all(20),
         child: Column(
@@ -90,7 +91,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
           ],
         ),
         //),
-      ),
+      //),
     );
   }
 

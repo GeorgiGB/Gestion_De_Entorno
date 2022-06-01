@@ -1,6 +1,6 @@
 {
-    "name": "crea_empresa_usario",
-    "short_name": "crea_empresa_usario",
+    "name": "Aplicacion_de_Gestion_de_Empresas",
+    "short_name": "apge",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

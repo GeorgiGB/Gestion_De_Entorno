@@ -66,90 +66,93 @@ class _LoginState extends State<Login> {
     _usuario.text = "Joselito";
     _pwd.text = "1234";
 
-    return Scaffold(
-      /*appBar: AppBar(
+    return /*Scaffold(
+      backgroundColor: Colors.transparent,
+     appBar: AppBar(
           // Barra aplicación tiutlo
           title: Text(AppLocalizations.of(context)!.identifica),
 
           // Añadimos el DropButton de elección de idioma
           actions: [
             LanguageDropDown().getDropDown(context),
-          ]),*/
-      body: SingleChildScrollView(
-        //Previene BOTTOM OVERFLOWED
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            //  Campo del nombre de usuario
-            TextFormField(
-              decoration: InputDecoration(
-                  hintText: traduce.hintTuNombre,
-                  labelText: AppLocalizations.of(context)!.usuario),
-              cursorColor: PaletaColores.colorMorado,
-              controller: _usuario,
-              onFieldSubmitted: (String value) {
-                // Al pulsar enter ponemos el foco en el campo contraseña
-                FocusScope.of(context).requestFocus(_contrasenaFocus);
-              },
-            ),
-            const SizedBox(height: 30),
-            //  Campo de la pwd
-            TextFormField(
-              decoration: InputDecoration(
-                  hintText: traduce.hintContrasena,
-                  labelText: AppLocalizations.of(context)!.contrasena),
-              cursorColor: PaletaColores.colorMorado,
-              controller: _pwd,
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              focusNode: _contrasenaFocus,
-              onFieldSubmitted: (String value) {
-                // al pulsar enter en este campo ya realizamos el login
-                _login();
-              },
-            ),
-            const SizedBox(height: 30),
+          ]),
+      body:*/
+        SingleChildScrollView(
+      //Previene BOTTOM OVERFLOWED
 
-            // Boton acceso y guardar sessión
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // Botón para realizar el login
-                ElevatedButton(
-                  child: Text(AppLocalizations.of(context)!.acceso),
-                  onPressed: () {
-                    _login();
-                  },
-                  style: ElevatedButton.styleFrom(
-                      primary: PaletaColores.colorMorado),
-                ),
-                // Separación
-                const SizedBox(
-                  width: 20,
-                ),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          //  Campo del nombre de usuario
+          TextFormField(
+            decoration: InputDecoration(
+                hintText: traduce.hintTuNombre,
+                labelText: AppLocalizations.of(context)!.usuario),
+            cursorColor: PaletaColores.colorMorado,
+            controller: _usuario,
+            onFieldSubmitted: (String value) {
+              // Al pulsar enter ponemos el foco en el campo contraseña
+              FocusScope.of(context).requestFocus(_contrasenaFocus);
+            },
+          ),
+          const SizedBox(height: 30),
+          //  Campo de la pwd
+          TextFormField(
+            decoration: InputDecoration(
+                hintText: traduce.hintContrasena,
+                labelText: AppLocalizations.of(context)!.contrasena),
+            cursorColor: PaletaColores.colorMorado,
+            controller: _pwd,
+            obscureText: true,
+            enableSuggestions: false,
+            autocorrect: false,
+            focusNode: _contrasenaFocus,
+            onFieldSubmitted: (String value) {
+              // al pulsar enter en este campo ya realizamos el login
+              _login();
+            },
+          ),
+          const SizedBox(height: 30),
 
-                // Guardamos Sesión?
-                LabeledCheckbox(
-                  label: traduce.guardaSesion,
-                  chekBoxIzqda: false,
-                  textStyle: globales.estiloNegrita_16,
-                  value: guardaSesion,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      guardaSesion = value!;
-                      MyApp.mantenLaSesion(guardaSesion, null);
-                    });
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
+          // Boton acceso y guardar sessión
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // Botón para realizar el login
+              ElevatedButton(
+                child: Text(AppLocalizations.of(context)!.acceso),
+                onPressed: () {
+                  _login();
+                },
+                style: ElevatedButton.styleFrom(
+                    primary: PaletaColores.colorMorado),
+              ),
+              // Separación
+              const SizedBox(
+                width: 20,
+              ),
+
+              // Guardamos Sesión?
+              LabeledCheckbox(
+                label: traduce.guardaSesion,
+                chekBoxIzqda: false,
+                textStyle: globales.estiloNegrita_16,
+                value: guardaSesion,
+                onChanged: (bool? value) {
+                  setState(() {
+                    guardaSesion = value!;
+                    MyApp.mantenLaSesion(guardaSesion, null);
+                  });
+                },
+              ),
+            ],
+          ),
+        ],
       ),
+      //),
     );
   }
 

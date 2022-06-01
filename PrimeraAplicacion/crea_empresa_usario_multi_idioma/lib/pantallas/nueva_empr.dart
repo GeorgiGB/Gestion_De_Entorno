@@ -62,8 +62,8 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
   Widget build(BuildContext context) {
     traducciones = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      body: SingleChildScrollView(
+    return /*Scaffold(
+      body:*/ SingleChildScrollView(
         //Previene BOTTOM OVERFLOWED
         padding: EdgeInsets.all(20),
         child: Column(
@@ -157,7 +157,7 @@ class _NuevaEmpresaState extends State<NuevaEmpresa> {
             ),
           ],
         ),
-      ),
+    //),
     );
   }
 

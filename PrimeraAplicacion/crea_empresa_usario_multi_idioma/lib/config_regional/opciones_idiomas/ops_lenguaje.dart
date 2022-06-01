@@ -5,7 +5,6 @@ import '../model/language_data.dart';
 import '../model/locale_constant.dart';
 
 class LanguageDropDown {
-  static late LanguageData languageData;
 
   DropdownButton getDropDown(BuildContext context) {
     return DropdownButton<LanguageData>(
@@ -38,7 +37,7 @@ class LanguageDropDown {
   }
 
   Widget _getHint(BuildContext context) {
-    LanguageData ld = LanguageDropDown.languageData;
+    LanguageData ld = LanguageData.lenguage;
     /*ld ??= LanguageData.getLanguageData(
         dimeLocal(context).languageCode.toString());*/
     return /*ld == null
