@@ -1,5 +1,5 @@
-import 'package:crea_empresa_usario/globales.dart' as globales;
-import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
+import 'package:crea_empresa_usuario_multi_idioma/globales.dart' as globales;
+import 'package:crea_empresa_usuario_multi_idioma/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';

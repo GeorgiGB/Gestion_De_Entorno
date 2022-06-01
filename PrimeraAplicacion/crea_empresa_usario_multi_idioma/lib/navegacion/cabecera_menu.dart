@@ -1,9 +1,9 @@
-import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
+import 'package:crea_empresa_usuario_multi_idioma/config_regional/opciones_idiomas/ops_lenguaje.dart';
 import 'package:flutter/material.dart';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:crea_empresa_usario/colores.dart';
+import 'package:crea_empresa_usuario_multi_idioma/colores.dart';
 // Fin imports multi-idioma ----------------
 
 /// Este widget crea la cabecera del menú

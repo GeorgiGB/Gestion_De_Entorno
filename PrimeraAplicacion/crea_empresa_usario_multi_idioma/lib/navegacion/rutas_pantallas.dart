@@ -1,5 +1,5 @@
-import 'package:crea_empresa_usario/navegacion/item_menu_lateral.dart';
-import 'package:crea_empresa_usario/navegacion/menu_lateral.dart';
+import 'package:crea_empresa_usuario_multi_idioma/navegacion/item_menu_lateral.dart';
+import 'package:crea_empresa_usuario_multi_idioma/navegacion/menu_lateral.dart';
 import 'package:flutter/material.dart';
 
 /// Clase que contiene las diferentes rutas de las pantallas que vamos a presentar

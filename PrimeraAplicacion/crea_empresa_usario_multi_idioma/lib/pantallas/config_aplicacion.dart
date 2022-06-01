@@ -1,13 +1,13 @@
-import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
-import 'package:crea_empresa_usario/main.dart';
-import 'package:crea_empresa_usario/navegacion/pantalla.dart';
-import 'package:crea_empresa_usario/widgets/labeled_checkbox.dart';
+import 'package:crea_empresa_usuario_multi_idioma/config_regional/opciones_idiomas/ops_lenguaje.dart';
+import 'package:crea_empresa_usuario_multi_idioma/main.dart';
+import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart';
+import 'package:crea_empresa_usuario_multi_idioma/widgets/labeled_checkbox.dart';
 import 'package:flutter/material.dart';
-import 'package:crea_empresa_usario/preferencias/preferencias.dart'
+import 'package:crea_empresa_usuario_multi_idioma/preferencias/preferencias.dart'
     as Preferencias;
-import 'package:crea_empresa_usario/navegacion/rutas_pantallas.dart';
-import 'package:crea_empresa_usario/navegacion/item_menu_lateral.dart';
-import 'package:crea_empresa_usario/ejemplo_pantalla.dart';
+import 'package:crea_empresa_usuario_multi_idioma/navegacion/rutas_pantallas.dart';
+import 'package:crea_empresa_usuario_multi_idioma/navegacion/item_menu_lateral.dart';
+import 'package:crea_empresa_usuario_multi_idioma/ejemplo_pantalla.dart';
 
 import '../globales.dart' as globales;
 

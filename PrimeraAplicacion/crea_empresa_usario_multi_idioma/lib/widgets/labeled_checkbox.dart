@@ -1,5 +1,5 @@
+import 'package:crea_empresa_usuario_multi_idioma/colores.dart';
 import 'package:flutter/material.dart';
-import 'package:crea_empresa_usario/colores.dart';
 
 class LabeledCheckbox extends StatelessWidget {
   const LabeledCheckbox(

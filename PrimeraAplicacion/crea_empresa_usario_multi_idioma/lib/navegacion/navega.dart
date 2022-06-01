@@ -1,6 +1,6 @@
-import 'package:crea_empresa_usario/navegacion/item_menu_lateral.dart';
-import 'package:crea_empresa_usario/navegacion/pantalla.dart';
-import 'package:crea_empresa_usario/navegacion/rutas_pantallas.dart';
+import 'package:crea_empresa_usuario_multi_idioma/navegacion/item_menu_lateral.dart';
+import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart';
+import 'package:crea_empresa_usuario_multi_idioma/navegacion/rutas_pantallas.dart';
 import 'package:flutter/material.dart';
 
 // Imports multi-idioma ---------------------

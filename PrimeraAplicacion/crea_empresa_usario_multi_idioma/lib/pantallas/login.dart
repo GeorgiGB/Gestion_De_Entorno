@@ -1,10 +1,10 @@
-import 'package:crea_empresa_usario/colores.dart';
-import 'package:crea_empresa_usario/main.dart';
-import 'package:crea_empresa_usario/navegacion/pantalla.dart';
-import 'package:crea_empresa_usario/servidor/servidor.dart';
-import 'package:crea_empresa_usario/widgets/labeled_checkbox.dart';
-import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
-import 'package:crea_empresa_usario/preferencias/preferencias.dart'
+import 'package:crea_empresa_usuario_multi_idioma/colores.dart';
+import 'package:crea_empresa_usuario_multi_idioma/main.dart';
+import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart';
+import 'package:crea_empresa_usuario_multi_idioma/servidor/servidor.dart';
+import 'package:crea_empresa_usuario_multi_idioma/widgets/labeled_checkbox.dart';
+import 'package:crea_empresa_usuario_multi_idioma/widgets/snack_en_cualquier_sitio.dart';
+import 'package:crea_empresa_usuario_multi_idioma/preferencias/preferencias.dart'
     as Preferencias;
 import 'package:flutter/material.dart';
 import '../globales.dart' as globales;
