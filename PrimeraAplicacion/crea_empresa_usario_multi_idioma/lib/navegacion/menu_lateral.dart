@@ -55,24 +55,6 @@ class MenuLateral extends StatelessWidget {
     CabeceraMenu(traduce: (traduce) {
       return traduce.nombreApp;
     }),
-
-    // Añade empresa
-    /*ItemMenu(Icons.add_business_rounded, Ruta.getRuta('EmpresaNueva'),
-        funcionTraduce: (traduce) {
-      return traduce.anyadeEmpresa;
-    }),*/
-    /*
-    // Añade usuario
-    ItemMenu(Icons.account_circle_rounded, Ruta.getRuta('UsuarioNuevo'),
-        funcionTraduce: (traduce) {
-      return traduce.nuevoUsuario;
-    }),
-
-    // Configuración
-    ItemMenu(Icons.settings_rounded, Ruta.getRuta('Configuracion'),
-        funcionTraduce: (traduce) {
-      return traduce.configuracion;
-    }),*/
     // Cierra sesion
     ItemMenu(Icons.logout_rounded, MyApp.cierraSesion, necesitaToken: false,
         funcionTraduce: (traduce) {

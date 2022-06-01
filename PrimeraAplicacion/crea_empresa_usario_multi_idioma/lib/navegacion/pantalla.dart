@@ -63,7 +63,7 @@ class PantallasMenu extends StatefulWidget {
 class _PantallasMenuState extends State<PantallasMenu> {
   bool vesAlogin = false;
   // _scaffoldKey para obtener, posteriormente, el currentcontext
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();//SE NECESITA
   String? _tok;
 
   @override
@@ -105,7 +105,7 @@ class _PantallasMenuState extends State<PantallasMenu> {
     }
 
     // si es un widget con token se ha de poner
-    vesAlogin = widget.conToken && _tok == null;
+    vesAlogin = widget.conToken && _tok == null;//CAPTURA DE PANTALLA
     return vesAlogin
 
         // Necesita token y no tiene, cargamos un container
@@ -136,16 +136,16 @@ class _PantallasMenuState extends State<PantallasMenu> {
                 // Obtenemos el constructor de wiggets y le llamamos
                 Stack(
               children: [
-                Positioned(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image:
-                              AssetImage('images/puntos_arriba-sin-fondo.png'),
-                          alignment: Alignment.topRight),
-                    ),
-                  ),
-                ),
+                //Positioned(
+                //   child: Container(
+                //     decoration: const BoxDecoration(
+                //       image: DecorationImage(
+                //           image:
+                //               AssetImage('images/puntos_arriba-sin-fondo.png'),
+                //           alignment: Alignment.bottomRight),
+                //     ),
+                //   ),
+                // ),
                 Positioned(
                   child: Container(
                     decoration: const BoxDecoration(

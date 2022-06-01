@@ -3,7 +3,7 @@ const conexion = require('../config/db.config')
 // Generar tokens con formato JWT
 const jwt = require('jsonwebtoken');
 const verificarJWT = require('../middleware/verificarJWT');
-const { msg } = require('./globales');
+const globales = require('./globales');
 
 //  Funcion asincrona que hara la conexion con la base de datos 
 //  y mirara si esta el usuario creado con su token
@@ -12,7 +12,7 @@ async function login(json_login){
             Petición del servidor
             Verificar si el usuario existe y proseguir con la operación
         */
-       
+       globales.msg("SELECT * FROM login('"+JSON.stringify(json_login)+"')")
        let reslogin = await conexion.query("SELECT * FROM login('"+JSON.stringify(json_login)+"')");
        //   Resultado de la operación
         let fila0 = reslogin.rows[0].jresultado;

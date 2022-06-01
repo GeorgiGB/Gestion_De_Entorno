@@ -89,7 +89,7 @@ class Servidor {
       bool relanzaOtrasExcepciones = false,
       bool muestraEspera = true,
       List<String> gestionoErrores = const []}) async {
-    url = globales.servidor + url;
+    url = servidor + url;
     AppLocalizations traduce = AppLocalizations.of(context)!;
 
     // Mostramos un SnackBar si tarda más de dos segundos en responmder el servidor

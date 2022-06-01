@@ -79,12 +79,13 @@ class _LoginState extends State<Login> {
       body:*/
         SingleChildScrollView(
       //Previene BOTTOM OVERFLOWED
-
+      
       padding: const EdgeInsets.all(20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+          
           //  Campo del nombre de usuario
           TextFormField(
             decoration: InputDecoration(
@@ -134,7 +135,6 @@ class _LoginState extends State<Login> {
               const SizedBox(
                 width: 20,
               ),
-
               // Guardamos Sesión?
               LabeledCheckbox(
                 label: traduce.guardaSesion,

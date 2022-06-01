@@ -1,6 +1,7 @@
 import 'package:crea_empresa_usario/config_regional/model/language_data.dart';
 import 'package:crea_empresa_usario/config_regional/model/locale_constant.dart';
 import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Para comentar  como funciona las SharedPreferences
@@ -12,6 +13,7 @@ const String mantenSesion = "mantenSesion";
 const String guardar = "ok";
 
 Future<String?> cargaPreferencia() async {
+  WidgetsFlutterBinding.ensureInitialized();
   // encadenamos futuros
   // Obtenemos locale
   await getLocale();
