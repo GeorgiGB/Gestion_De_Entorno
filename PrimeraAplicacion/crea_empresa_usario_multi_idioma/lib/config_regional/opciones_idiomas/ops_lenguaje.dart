@@ -1,4 +1,4 @@
-import 'package:crea_empresa_usario/globales.dart';
+import 'package:crea_empresa_usario/globales/globales.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../model/language_data.dart';

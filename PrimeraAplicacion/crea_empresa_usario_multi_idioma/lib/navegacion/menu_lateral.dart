@@ -1,12 +1,12 @@
 import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
-import 'package:crea_empresa_usario/globales.dart';
+import 'package:crea_empresa_usario/globales/globales.dart';
 import 'package:crea_empresa_usario/main.dart';
 import 'package:crea_empresa_usario/navegacion/cabecera_menu.dart';
 import 'package:crea_empresa_usario/navegacion/pantalla.dart';
 import 'package:crea_empresa_usario/navegacion/item_menu_lateral.dart';
 import 'package:crea_empresa_usario/navegacion/rutas_pantallas.dart';
 import 'package:flutter/material.dart';
-import 'package:crea_empresa_usario/colores.dart';
+import 'package:crea_empresa_usario/globales/colores.dart';
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------

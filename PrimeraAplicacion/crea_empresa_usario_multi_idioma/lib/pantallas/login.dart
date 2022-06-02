@@ -1,4 +1,4 @@
-import 'package:crea_empresa_usario/colores.dart';
+import 'package:crea_empresa_usario/globales/colores.dart';
 import 'package:crea_empresa_usario/main.dart';
 import 'package:crea_empresa_usario/navegacion/pantalla.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
@@ -7,7 +7,7 @@ import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:crea_empresa_usario/preferencias/preferencias.dart'
     as Preferencias;
 import 'package:flutter/material.dart';
-import '../globales.dart' as globales;
+import '../globales/globales.dart' as globales;
 
 import 'dart:convert';
 
@@ -66,26 +66,13 @@ class _LoginState extends State<Login> {
     _usuario.text = "Joselito";
     _pwd.text = "1234";
 
-    return /*Scaffold(
-      backgroundColor: Colors.transparent,
-     appBar: AppBar(
-          // Barra aplicación tiutlo
-          title: Text(AppLocalizations.of(context)!.identifica),
-
-          // Añadimos el DropButton de elección de idioma
-          actions: [
-            LanguageDropDown().getDropDown(context),
-          ]),
-      body:*/
-        SingleChildScrollView(
+    return SingleChildScrollView(
       //Previene BOTTOM OVERFLOWED
-      
       padding: const EdgeInsets.all(20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          
           //  Campo del nombre de usuario
           TextFormField(
             decoration: InputDecoration(
@@ -116,7 +103,6 @@ class _LoginState extends State<Login> {
             },
           ),
           const SizedBox(height: 30),
-
           // Boton acceso y guardar sessión
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -162,7 +148,7 @@ class _LoginState extends State<Login> {
     } else {
       // Obtenemos usuario y la contraseña introducidas
       String nombre = _usuario.text;
-      // Contraseña
+      // Password
       String pwd = _pwd.text;
 
       if (nombre.isEmpty || pwd.isEmpty) {
@@ -181,7 +167,7 @@ class _LoginState extends State<Login> {
             // Guardamos sesion?
             MyApp.mantenLaSesion(guardaSesion, token);
 
-            // Establecmos el token para uso de la aplicación
+            // Establecemos el token para uso de la aplicación
             MyApp.setToken(context, token);
             vesA(MyApp.despuesDeLoginVesA, context,
                 arguments: ArgumentsToken(token));

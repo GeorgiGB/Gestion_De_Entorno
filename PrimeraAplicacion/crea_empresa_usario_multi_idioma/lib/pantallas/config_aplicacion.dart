@@ -9,7 +9,7 @@ import 'package:crea_empresa_usario/navegacion/rutas_pantallas.dart';
 import 'package:crea_empresa_usario/navegacion/item_menu_lateral.dart';
 import 'package:crea_empresa_usario/ejemplo_pantalla.dart';
 
-import '../globales.dart' as globales;
+import '../globales/globales.dart' as globales;
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

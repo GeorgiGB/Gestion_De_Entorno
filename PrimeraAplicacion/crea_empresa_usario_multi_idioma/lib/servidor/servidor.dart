@@ -1,4 +1,4 @@
-import 'package:crea_empresa_usario/globales.dart' as globales;
+import 'package:crea_empresa_usario/globales/globales.dart' as globales;
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

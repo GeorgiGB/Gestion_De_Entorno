@@ -1,4 +1,4 @@
-import 'package:crea_empresa_usario/colores.dart';
+import 'package:crea_empresa_usario/globales/colores.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/navegacion/pantalla.dart' as Navegacion;
 import 'package:crea_empresa_usario/pantallas/listado_empresas/empresa_future.dart';
@@ -6,7 +6,7 @@ import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
-import '../globales.dart' as globales;
+import '../globales/globales.dart' as globales;
 import 'dart:convert';
 
 // Imports multi-idioma ---------------------

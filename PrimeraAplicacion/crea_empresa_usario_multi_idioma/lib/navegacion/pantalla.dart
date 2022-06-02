@@ -1,4 +1,4 @@
-import 'package:crea_empresa_usario/colores.dart';
+import 'package:crea_empresa_usario/globales/colores.dart';
 import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
 import 'package:crea_empresa_usario/widgets/esperando_servidor.dart';
 import 'package:flutter/material.dart';

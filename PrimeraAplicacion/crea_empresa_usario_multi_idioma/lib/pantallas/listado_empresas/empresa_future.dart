@@ -17,7 +17,7 @@ import 'dart:convert';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
-import '../../globales.dart' as globales;
+import '../../globales/globales.dart' as globales;
 
 // Qué empresa ha sido seleccionada?
 EmpresCod? get empreCod => ListaEmpresas._empresaSeleccionada;

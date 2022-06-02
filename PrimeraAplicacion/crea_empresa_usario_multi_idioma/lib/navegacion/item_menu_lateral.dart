@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:crea_empresa_usario/colores.dart';
+import 'package:crea_empresa_usario/globales/colores.dart';
 // Fin imports multi-idioma ----------------
 
 /// Clase que crea un item del menu con un icono a partir un IconData [icon]
