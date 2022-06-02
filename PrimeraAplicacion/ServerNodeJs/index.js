@@ -17,7 +17,7 @@ const crear_emp = require('./comandos/empresas');
 const crear_ute = require('./comandos/usuarios_telemetria');
 
 //  La conexion con el servidor obtener listado de empresas
-const obtener_lista = require('./comandos/obtener');
+const obtener_lista = require('./comandos/lista_empresas');
 
 //  Cambiara el estado del token del usuario
 const cerrar_sesion = require('./comandos/cerrar_sesion');
