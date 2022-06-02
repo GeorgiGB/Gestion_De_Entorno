@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:crea_empresa_usario/globales/colores.dart';
 import 'package:crea_empresa_usario/navegacion/navega.dart';
 import 'package:crea_empresa_usario/navegacion/pantalla.dart' as Navegacion;
@@ -5,6 +6,15 @@ import 'package:crea_empresa_usario/pantallas/listado_empresas/empresa_future.da
 import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
 import 'package:crea_empresa_usario/servidor/servidor.dart';
 import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
+=======
+import 'package:crea_empresa_usuario_multi_idioma/colores.dart';
+import 'package:crea_empresa_usuario_multi_idioma/navegacion/navega.dart';
+import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart' as Navegacion;
+import 'package:crea_empresa_usuario_multi_idioma/pantallas/listado_empresas/empresa_future.dart';
+import 'package:crea_empresa_usuario_multi_idioma/pantallas/nuevo_usua.dart';
+import 'package:crea_empresa_usuario_multi_idioma/servidor/servidor.dart';
+import 'package:crea_empresa_usuario_multi_idioma/widgets/snack_en_cualquier_sitio.dart';
+>>>>>>> 763b3dd56f7b95df1737b9377b63ba108200c0d6
 import 'package:flutter/material.dart';
 import '../globales/globales.dart' as globales;
 import 'dart:convert';

@@ -1,12 +1,12 @@
-import 'package:crea_empresa_usario/navegacion/navega.dart';
-import 'package:crea_empresa_usario/navegacion/pantalla.dart';
-import 'package:crea_empresa_usario/pantallas/login.dart';
-import 'package:crea_empresa_usario/pantallas/nueva_empr.dart';
-import 'package:crea_empresa_usario/pantallas/nuevo_usua.dart';
-import 'package:crea_empresa_usario/preferencias/preferencias.dart';
-import 'package:crea_empresa_usario/servidor/servidor.dart';
-import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
-import 'package:crea_empresa_usario/pantallas/config_aplicacion.dart';
+import 'package:crea_empresa_usuario_multi_idioma/navegacion/navega.dart';
+import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart';
+import 'package:crea_empresa_usuario_multi_idioma/pantallas/login.dart';
+import 'package:crea_empresa_usuario_multi_idioma/pantallas/nueva_empr.dart';
+import 'package:crea_empresa_usuario_multi_idioma/pantallas/nuevo_usua.dart';
+import 'package:crea_empresa_usuario_multi_idioma/preferencias/preferencias.dart';
+import 'package:crea_empresa_usuario_multi_idioma/servidor/servidor.dart';
+import 'package:crea_empresa_usuario_multi_idioma/pantallas/config_aplicacion.dart';
+import 'package:crea_empresa_usuario_multi_idioma/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
 
 // Imports multi-idioma ---------------------

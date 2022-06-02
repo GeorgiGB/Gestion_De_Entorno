@@ -1,10 +1,16 @@
+<<<<<<< HEAD
 import 'package:crea_empresa_usario/globales/colores.dart';
 import 'package:crea_empresa_usario/config_regional/opciones_idiomas/ops_lenguaje.dart';
 import 'package:crea_empresa_usario/widgets/esperando_servidor.dart';
+=======
+import 'package:crea_empresa_usuario_multi_idioma/colores.dart';
+import 'package:crea_empresa_usuario_multi_idioma/config_regional/opciones_idiomas/ops_lenguaje.dart';
+import 'package:crea_empresa_usuario_multi_idioma/widgets/esperando_servidor.dart';
+>>>>>>> 763b3dd56f7b95df1737b9377b63ba108200c0d6
 import 'package:flutter/material.dart';
 
-import 'package:crea_empresa_usario/main.dart';
-import 'package:crea_empresa_usario/pantallas/login.dart';
+import 'package:crea_empresa_usuario_multi_idioma/main.dart';
+import 'package:crea_empresa_usuario_multi_idioma/pantallas/login.dart';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

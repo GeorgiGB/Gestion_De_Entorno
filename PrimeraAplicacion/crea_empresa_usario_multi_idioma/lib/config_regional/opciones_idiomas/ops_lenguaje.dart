@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import 'package:crea_empresa_usario/globales/globales.dart';
+=======
+import 'package:crea_empresa_usuario_multi_idioma/globales.dart';
+>>>>>>> 763b3dd56f7b95df1737b9377b63ba108200c0d6
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../model/language_data.dart';

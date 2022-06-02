@@ -1,4 +1,4 @@
-import 'package:crea_empresa_usario/config_regional/model/language_data.dart';
+import 'package:crea_empresa_usuario_multi_idioma/config_regional/model/language_data.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

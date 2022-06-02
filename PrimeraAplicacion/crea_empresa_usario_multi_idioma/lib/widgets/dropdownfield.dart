@@ -8,7 +8,11 @@ import 'package:flutter/services.dart';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+<<<<<<< HEAD
 import 'package:crea_empresa_usario/globales/colores.dart';
+=======
+import 'package:crea_empresa_usuario_multi_idioma/colores.dart';
+>>>>>>> 763b3dd56f7b95df1737b9377b63ba108200c0d6
 // Fin imports multi-idioma ----------------
 
 ///DropDownField has customized autocomplete text field functionality
