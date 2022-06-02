@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import 'package:crea_empresa_usario/globales/globales.dart' as globales;
-import 'package:crea_empresa_usario/widgets/snack_en_cualquier_sitio.dart';
-=======
-import 'package:crea_empresa_usuario_multi_idioma/globales.dart' as globales;
+import 'package:crea_empresa_usuario_multi_idioma/globales/globales.dart' as globales;
 import 'package:crea_empresa_usuario_multi_idioma/widgets/snack_en_cualquier_sitio.dart';
->>>>>>> 763b3dd56f7b95df1737b9377b63ba108200c0d6
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';
