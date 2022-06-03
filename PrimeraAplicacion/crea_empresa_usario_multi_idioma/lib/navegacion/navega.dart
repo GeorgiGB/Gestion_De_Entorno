@@ -108,4 +108,9 @@ class Navega {
   Future<T?> voy<T extends Object?>(BuildContext context, {Object? arguments}) {
     return vesA(ruta.hacia, context, arguments: arguments);
   }
+
+  Future<T?> voyPuedoVolver<T extends Object?>(BuildContext context,
+      {Object? arguments}) {
+    return voyPuedoVoler(ruta.hacia, context, arguments: arguments);
+  }
 }

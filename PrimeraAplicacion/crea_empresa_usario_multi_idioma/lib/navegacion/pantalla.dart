@@ -1,5 +1,6 @@
 import 'package:crea_empresa_usuario_multi_idioma/globales/colores.dart';
 import 'package:crea_empresa_usuario_multi_idioma/config_regional/opciones_idiomas/ops_lenguaje.dart';
+import 'package:crea_empresa_usuario_multi_idioma/pantallas/listado_empresas/empresa_future.dart';
 import 'package:crea_empresa_usuario_multi_idioma/widgets/esperando_servidor.dart';
 import 'package:flutter/material.dart';
 
@@ -63,7 +64,8 @@ class PantallasMenu extends StatefulWidget {
 class _PantallasMenuState extends State<PantallasMenu> {
   bool vesAlogin = false;
   // _scaffoldKey para obtener, posteriormente, el currentcontext
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();//SE NECESITA
+  final GlobalKey<ScaffoldState> _scaffoldKey =
+      GlobalKey<ScaffoldState>(); //SE NECESITA
   String? _tok;
 
   @override
@@ -105,7 +107,7 @@ class _PantallasMenuState extends State<PantallasMenu> {
     }
 
     // si es un widget con token se ha de poner
-    vesAlogin = widget.conToken && _tok == null;//CAPTURA DE PANTALLA
+    vesAlogin = widget.conToken && _tok == null; //CAPTURA DE PANTALLA
     return vesAlogin
 
         // Necesita token y no tiene, cargamos un container
@@ -136,16 +138,6 @@ class _PantallasMenuState extends State<PantallasMenu> {
                 // Obtenemos el constructor de wiggets y le llamamos
                 Stack(
               children: [
-                //Positioned(
-                //   child: Container(
-                //     decoration: const BoxDecoration(
-                //       image: DecorationImage(
-                //           image:
-                //               AssetImage('images/puntos_arriba-sin-fondo.png'),
-                //           alignment: Alignment.bottomRight),
-                //     ),
-                //   ),
-                // ),
                 Positioned(
                   child: Container(
                     decoration: const BoxDecoration(
@@ -158,7 +150,8 @@ class _PantallasMenuState extends State<PantallasMenu> {
                 ),
                 Ruta.getConstructorWidgets(widget.claveConstructor)(_tok),
               ],
-            ));
+            ),
+          );
   }
 }
 
@@ -170,10 +163,28 @@ class ArgumentsToken {
   );
 }
 
+class ArgumentosFiltroUsuario extends ArgumentsToken {
+  //  Argumentos
+  final EmpresCod empCod;
+  final String nombre;
+  final String pwd;
+  final bool auto_pwd;
+
+  //  Constructor
+  ArgumentosFiltroUsuario(
+      String token, this.empCod, this.nombre, this.pwd, this.auto_pwd)
+      : super(token);
+}
+
 /// Metodo que cargará la ruta indicada y vaciará el historial anterior
 /// Pasando los argumentos
 Future<T?> vesA<T extends Object?>(String ruta, BuildContext context,
     {Object? arguments}) {
   return Navigator.of(context)
       .pushNamedAndRemoveUntil(ruta, (route) => false, arguments: arguments);
+}
+
+Future<T?> voyPuedoVoler<T extends Object?>(String ruta, BuildContext context,
+    {Object? arguments}) {
+  return Navigator.of(context).pushNamed(ruta, arguments: arguments);
 }

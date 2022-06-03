@@ -1,10 +1,7 @@
 //import 'package:crea_empresa_usuario_multi_idioma/drop_down/empresa.dart';
 import 'package:crea_empresa_usuario_multi_idioma/globales/colores.dart';
-import 'package:crea_empresa_usuario_multi_idioma/navegacion/item_menu_lateral.dart';
-import 'package:crea_empresa_usuario_multi_idioma/navegacion/menu_lateral.dart';
+import 'package:crea_empresa_usuario_multi_idioma/navegacion/navega.dart';
 import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart';
-import 'package:crea_empresa_usuario_multi_idioma/navegacion/rutas_pantallas.dart';
-import 'package:crea_empresa_usuario_multi_idioma/ejemplo_pantalla.dart';
 import 'package:flutter/material.dart';
 import '../globales/globales.dart' as globales;
 import 'filtros_usuario.dart';
@@ -48,13 +45,6 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
   // variable que hará que se muestren o no los campos de formulario
   bool _visible = false;
 
-  /*void initState() {
-    super.initState();
-    // Mostramos un mensaje al finalizar la carga
-    // El mostra el mensaje dependerà de la función
-    WidgetsBinding.instance?.addPostFrameCallback((_) => ef.dos(context));
-  }*/
-
   @override
   void initState() {
     super.initState();
@@ -73,24 +63,24 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
         title: Text(traducciones.nuevoUsuario),
       ),*/
       extendBody: true,
-      body:*/ 
-      SingleChildScrollView(
-        //Previene BOTTOM OVERFLOWED
-        padding: EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            // Para poder mostrar el formulario tienen que haber empresas dadas
-            // de alta y así poder seleccionar una empresa y asociarla al nuevo usuario
-            dropDownEmpresas('', this, context, widget._token),
-            // la función está preparada para pasar un string que buscará en el servidor
-            SizedBox(height: 30),
-            // Widget que contiene los controles de formulario
-            muestraFormulario,
-          ],
-        ),
-        //),
+      body:*/
+        SingleChildScrollView(
+      //Previene BOTTOM OVERFLOWED
+      padding: EdgeInsets.all(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          // Para poder mostrar el formulario tienen que haber empresas dadas
+          // de alta y así poder seleccionar una empresa y asociarla al nuevo usuario
+          dropDownEmpresas('', this, context, widget._token),
+          // la función está preparada para pasar un string que buscará en el servidor
+          SizedBox(height: 30),
+          // Widget que contiene los controles de formulario
+          muestraFormulario,
+        ],
+      ),
+      //),
       //),
     );
   }
@@ -140,19 +130,10 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
     if (_nombre.text.isNotEmpty &&
         (_pwd.text.isNotEmpty || _pwd_auto) &&
         empCod != null) {
-      // Pasamos los datos a la pantalla FiltrosUsuario
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => FiltrosUsuario(
-              token: widget._token,
-              empCod: empCod,
-              nombre: _nombre.text,
-              pwd: _pwd.text,
-              auto_pwd: _pwd_auto),
-        ),
-      );
-      //}
+      ArgumentosFiltroUsuario afu = ArgumentosFiltroUsuario(
+          widget._token, empCod, _nombre.text, _pwd.text, _pwd_auto);
+      Navega.navegante(FiltrosUsuario.id)
+          .voyPuedoVolver(context, arguments: afu);
     } else {
       // Mostramos avisos
       globales.muestraDialogo(context, traducciones.primerRellenaCampos);

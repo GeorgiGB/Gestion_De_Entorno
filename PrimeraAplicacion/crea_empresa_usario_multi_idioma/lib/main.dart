@@ -1,5 +1,6 @@
 import 'package:crea_empresa_usuario_multi_idioma/navegacion/navega.dart';
 import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart';
+import 'package:crea_empresa_usuario_multi_idioma/pantallas/filtros_usuario.dart';
 import 'package:crea_empresa_usuario_multi_idioma/pantallas/login.dart';
 import 'package:crea_empresa_usuario_multi_idioma/pantallas/nueva_empr.dart';
 import 'package:crea_empresa_usuario_multi_idioma/pantallas/nuevo_usua.dart';
@@ -50,7 +51,9 @@ void _inicializaNavegacion() {
   ));
 
   // Inicializamos NuevaEmpresa
-  MyApp._addruta(Navega(NuevaEmpresa.id,
+  MyApp._addruta(
+    Navega(
+      NuevaEmpresa.id,
       titulo: (AppLocalizations traduce) {
         return traduce.nuevaEmpresa;
       },
@@ -60,7 +63,17 @@ void _inicializaNavegacion() {
         traduce: (traduce) {
           return traduce.anyadeEmpresa;
         },
-      )));
+      ),
+    ),
+  );
+
+  // Inicializamos FiltroUsuario
+  MyApp._addruta(Navega(FiltrosUsuario.id,
+      titulo: (AppLocalizations traduce) {
+        return traduce.seleccionaFiltroUsuario;
+      },
+      constructor: (token) => FiltrosUsuario(token: token!),
+      menuLateral: false));
 
   // Inicializamos NuevoUsuario
   MyApp._addruta(Navega(NuevoUsuario.id,

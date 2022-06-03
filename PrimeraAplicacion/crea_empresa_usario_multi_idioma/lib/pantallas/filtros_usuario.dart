@@ -1,6 +1,8 @@
 import 'package:crea_empresa_usuario_multi_idioma/globales/colores.dart';
 import 'package:crea_empresa_usuario_multi_idioma/navegacion/navega.dart';
-import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart' as Navegacion;
+import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart'
+    as Navegacion;
+import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart';
 import 'package:crea_empresa_usuario_multi_idioma/pantallas/listado_empresas/empresa_future.dart';
 import 'package:crea_empresa_usuario_multi_idioma/pantallas/nuevo_usua.dart';
 import 'package:crea_empresa_usuario_multi_idioma/servidor/servidor.dart';
@@ -14,24 +16,22 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
 class FiltrosUsuario extends StatefulWidget {
-  const FiltrosUsuario(
-      {Key? key,
-      required this.token,
-      required this.empCod,
-      required this.nombre,
-      required this.pwd,
-      required this.auto_pwd})
-      : super(key: key);
+  static const String id = 'FiltrosUsuario';
+  const FiltrosUsuario({
+    Key? key,
+    required this.token,
+  }) : super(key: key);
   final String token;
-  final EmpresCod empCod;
-  final String nombre;
-  final String pwd;
-  final bool auto_pwd;
   @override
   State<FiltrosUsuario> createState() => _FiltrosUsuarioState();
 }
 
 class _FiltrosUsuarioState extends State<FiltrosUsuario> {
+  late EmpresCod _empCod;
+  late String _nombre;
+  late String _pwd;
+  late bool _auto_pwd;
+
   Locale? anteriorLocale;
   final TextEditingController _codigo_filtro = TextEditingController();
   bool esperandoFiltrado = false;
@@ -50,92 +50,95 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
 
   @override
   Widget build(BuildContext context) {
+    // Obtenmos los argumentos que se pasan al cargar la ruta
+    RouteSettings routeSettings = ModalRoute.of(context)!.settings;
+    final objArgs = routeSettings.arguments;
+    if (objArgs != null) {
+      ArgumentosFiltroUsuario args = objArgs as ArgumentosFiltroUsuario;
+      _empCod = args.empCod;
+      _nombre = args.nombre;
+      _pwd = args.pwd;
+      _auto_pwd = args.auto_pwd;
+    }
+
     traducciones = AppLocalizations.of(context)!;
     Filtro.traducciones = traducciones;
 
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(traducciones.seleccionaFiltroUsuario),
-      ),
-      body: SingleChildScrollView(
-          //Previene BOTTOM OVERFLOWED
-          padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                children: [
-                  campoValor(
-                      traducciones.empresa + ": ", widget.empCod.toString())
-                ],
-              ),
-              SizedBox(height: 10),
-              Row(children: [
-                campoValor(traducciones.nombre + ": ", widget.nombre)
-              ]),
-              SizedBox(height: 10),
-              Row(children: [
-                campoValor(traducciones.contrasena + ": ",
-                    (widget.auto_pwd ? traducciones.autoGenerada : '*********'))
-              ]),
-              SizedBox(height: 30),
-              Row(
-                children: [
-                  Text(
-                    traducciones.seleccionaFiltro,
-                    style: globales.estiloNegrita_16,
-                  ),
-                ],
-              ),
-              // Seleccionar tipo de filtro
-              DropdownButton<Filtro>(
-                isExpanded: true,
-                value: filtroActivo ?? _users.first,
-                icon: const Icon(Icons.arrow_downward),
-                iconSize: 24,
-                elevation: 16,
-                style: const TextStyle(color: Colors.deepPurple),
-                underline: Container(
-                  height: 2,
-                  color: Colors.deepPurpleAccent,
+    return SingleChildScrollView(
+        //Previene BOTTOM OVERFLOWED
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: [
+                campoValor(traducciones.empresa + ": ", _empCod.toString())
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(children: [campoValor(traducciones.nombre + ": ", _nombre)]),
+            const SizedBox(height: 10),
+            Row(children: [
+              campoValor(traducciones.contrasena + ": ",
+                  (_auto_pwd ? traducciones.autoGenerada : '*********'))
+            ]),
+            const SizedBox(height: 30),
+            Row(
+              children: [
+                Text(
+                  traducciones.seleccionaFiltro,
+                  style: globales.estiloNegrita_16,
                 ),
-                onChanged: (Filtro? filtro) {
-                  setState(() {
-                    filtroActivo = filtro;
-                  });
-                },
-                items: _users.map<DropdownMenuItem<Filtro>>((Filtro value) {
-                  return DropdownMenuItem<Filtro>(
-                    value: value,
-                    child: Text(value.traducc),
-                  );
-                }).toList(),
+              ],
+            ),
+            // Seleccionar tipo de filtro
+            DropdownButton<Filtro>(
+              isExpanded: true,
+              value: filtroActivo ?? _users.first,
+              icon: const Icon(Icons.arrow_downward),
+              iconSize: 24,
+              elevation: 16,
+              style: const TextStyle(color: Colors.deepPurple),
+              underline: Container(
+                height: 2,
+                color: Colors.deepPurpleAccent,
               ),
-              // Código de filtro
-              SizedBox(height: 30),
-              TextFormField(
-                decoration: InputDecoration(
-                    labelText: traducciones.dimeElCodigoDeFiltro,
-                    hintText: traducciones.numeroDeCodigo),
-                controller: _codigo_filtro,
-                // LLamamos a la datosCompletosr
-                onFieldSubmitted: (String value) {
-                  _enviar_filtro();
-                },
-              ),
-              SizedBox(height: 30),
-              ElevatedButton(
-                child: Text(traducciones.crear),
-                onPressed: () {
-                  _enviar_filtro();
-                },
-                style: ElevatedButton.styleFrom(
-                      primary: PaletaColores.colorMorado),
-                ),
-            ],
-          )),
+              onChanged: (Filtro? filtro) {
+                setState(() {
+                  filtroActivo = filtro;
+                });
+              },
+              items: _users.map<DropdownMenuItem<Filtro>>((Filtro value) {
+                return DropdownMenuItem<Filtro>(
+                  value: value,
+                  child: Text(value.traducc),
+                );
+              }).toList(),
+            ),
+            // Código de filtro
+            const SizedBox(height: 30),
+            TextFormField(
+              decoration: InputDecoration(
+                  labelText: traducciones.dimeElCodigoDeFiltro,
+                  hintText: traducciones.numeroDeCodigo),
+              controller: _codigo_filtro,
+              // LLamamos a la datosCompletos
+              onFieldSubmitted: (String value) {
+                _enviar_filtro();
+              },
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              child: Text(traducciones.crear),
+              onPressed: () {
+                _enviar_filtro();
+              },
+              style:
+                  ElevatedButton.styleFrom(primary: PaletaColores.colorMorado),
+            ),
+          ],
+        ),
+      //),
     );
   }
 
@@ -160,10 +163,10 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
         esperandoFiltrado = true;
         String json = jsonEncode(<String, String>{
           'ctoken': widget.token,
-          'emp_cod': widget.empCod.empCod.toString(),
-          'nombre': widget.nombre,
-          'pwd': widget.pwd,
-          'auto_pwd': widget.auto_pwd.toString(),
+          'emp_cod': _empCod.empCod.toString(),
+          'nombre': _nombre,
+          'pwd': _pwd,
+          'auto_pwd': _auto_pwd.toString(),
           'filtro': filtroActivo!.filtro_bbdd,
           'cod_filtro': _codigo_filtro.text
         });
@@ -179,8 +182,8 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
             case '0':
               EnCualquierLugar().muestraSnack(
                 context,
-                traducciones.elUsuarioHaSidoDadoDeAlta(widget.nombre),
-                duration: Duration(milliseconds: 1250),
+                traducciones.elUsuarioHaSidoDadoDeAlta(_nombre),
+                duration: const Duration(milliseconds: 1250),
                 onHide: () {
                   // Cargamos pantalla de escoger opciones
                   Navega.navegante(NuevoUsuario.id).voy(context);
@@ -189,8 +192,8 @@ class _FiltrosUsuarioState extends State<FiltrosUsuario> {
               );
               break;
             case BBDD.uniqueViolation:
-              globales.muestraDialogo(context,
-                  traducciones.elUsuarioYaEstaRegistrado(widget.nombre));
+              globales.muestraDialogo(
+                  context, traducciones.elUsuarioYaEstaRegistrado(_nombre));
               break;
             case BBDD.invalidTextRepresentation:
               globales.muestraDialogo(
