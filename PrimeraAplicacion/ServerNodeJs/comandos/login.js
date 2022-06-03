@@ -2,7 +2,7 @@ const conexion = require('../config/db.config')
 
 // Generar tokens con formato JWT
 const jwt = require('jsonwebtoken');
-const verificarJWT = require('../middleware/verificarJWT');
+const verificarJWT = require('../JWT/verificarJWT');
 const globales = require('./globales');
 
 //  Funcion asincrona que hara la conexion con la base de datos 
