@@ -1,9 +1,4 @@
 import 'package:crea_empresa_usuario_multi_idioma/globales/colores.dart';
-import 'package:crea_empresa_usuario_multi_idioma/navegacion/item_menu_lateral.dart';
-import 'package:crea_empresa_usuario_multi_idioma/navegacion/menu_lateral.dart';
-import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart';
-import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart' as Navegacion;
-import 'package:crea_empresa_usuario_multi_idioma/navegacion/rutas_pantallas.dart';
 import 'package:crea_empresa_usuario_multi_idioma/servidor/servidor.dart';
 import 'package:crea_empresa_usuario_multi_idioma/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +10,6 @@ import 'package:crea_empresa_usuario_multi_idioma/navegacion/navega.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Fin imports multi-idioma ----------------
 
-import '../ejemplo_pantalla.dart';
 
 class NuevaEmpresa extends StatefulWidget {
   static const String id = 'NuevaEmpresa';

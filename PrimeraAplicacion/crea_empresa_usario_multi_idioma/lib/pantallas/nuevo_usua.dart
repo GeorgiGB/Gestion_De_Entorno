@@ -1,4 +1,3 @@
-//import 'package:crea_empresa_usuario_multi_idioma/drop_down/empresa.dart';
 import 'package:crea_empresa_usuario_multi_idioma/globales/colores.dart';
 import 'package:crea_empresa_usuario_multi_idioma/navegacion/navega.dart';
 import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart';

@@ -21,7 +21,7 @@ import 'package:crea_empresa_usuario_multi_idioma/globales/colores.dart';
 ///    })
 /// ```
 class CabeceraMenu extends StatelessWidget {
-  CabeceraMenu({
+  const CabeceraMenu({
     Key? key,
     required this.traduce,
   }) : super(key: key);

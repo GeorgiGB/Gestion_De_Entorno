@@ -1,14 +1,9 @@
 import 'dart:io';
 import 'package:crea_empresa_usuario_multi_idioma/globales/globales.dart' as globales;
-import 'package:crea_empresa_usuario_multi_idioma/main.dart';
 import 'package:crea_empresa_usuario_multi_idioma/navegacion/navega.dart';
-import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart';
 import 'package:crea_empresa_usuario_multi_idioma/pantallas/login.dart';
-import 'package:crea_empresa_usuario_multi_idioma/servidor/servidor.dart';
 import 'package:crea_empresa_usuario_multi_idioma/widgets/snack_en_cualquier_sitio.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

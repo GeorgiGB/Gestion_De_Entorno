@@ -1,7 +1,5 @@
 import 'package:crea_empresa_usuario_multi_idioma/globales/colores.dart';
 import 'package:crea_empresa_usuario_multi_idioma/navegacion/navega.dart';
-import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart'
-    as Navegacion;
 import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart';
 import 'package:crea_empresa_usuario_multi_idioma/pantallas/listado_empresas/empresa_future.dart';
 import 'package:crea_empresa_usuario_multi_idioma/pantallas/nuevo_usua.dart';

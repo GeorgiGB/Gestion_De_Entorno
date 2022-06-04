@@ -1,6 +1,5 @@
 import 'package:crea_empresa_usuario_multi_idioma/excepciones_personalizadas/excepciones.dart';
 import 'package:crea_empresa_usuario_multi_idioma/navegacion/navega.dart';
-import 'package:crea_empresa_usuario_multi_idioma/navegacion/pantalla.dart';
 import 'package:crea_empresa_usuario_multi_idioma/pantallas/nueva_empr.dart';
 import 'package:crea_empresa_usuario_multi_idioma/pantallas/nuevo_usua.dart';
 import 'package:crea_empresa_usuario_multi_idioma/servidor/servidor.dart';

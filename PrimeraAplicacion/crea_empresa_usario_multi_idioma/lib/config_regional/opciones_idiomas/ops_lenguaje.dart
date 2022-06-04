@@ -1,11 +1,8 @@
-import 'package:crea_empresa_usuario_multi_idioma/globales/globales.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../model/language_data.dart';
 import '../model/locale_constant.dart';
 
 class LanguageDropDown {
-
   DropdownButton getDropDown(BuildContext context) {
     return DropdownButton<LanguageData>(
       elevation: 15,
@@ -25,7 +22,7 @@ class LanguageDropDown {
                 children: <Widget>[
                   Text(
                     e.bandera,
-                    style: TextStyle(fontSize: 15),
+                    style: const TextStyle(fontSize: 15),
                   ),
                   //Text(e.idioma)
                 ],
