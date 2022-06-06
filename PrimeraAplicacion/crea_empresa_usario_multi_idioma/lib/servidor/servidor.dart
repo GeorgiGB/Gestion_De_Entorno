@@ -82,7 +82,7 @@ class Servidor {
   /// realiza la llamad debe tratar con las psoibles Excepciones como [http.ClientException]
   /// u otras [Exception]
   ///
-  static Future<http.Response?> enviaPeticionAlservidor(
+  static Future<http.Response ?> enviaPeticionAlservidor(
       BuildContext context, String url, String json,
       {String? token,
       bool relanzaClientException = false,
