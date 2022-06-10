@@ -57,13 +57,7 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
 
     _mostrar = getControlesVsibles();
 
-    return /*Scaffold(
-      /*appBar: AppBar(
-        title: Text(traducciones.nuevoUsuario),
-      ),*/
-      extendBody: true,
-      body:*/
-        SingleChildScrollView(
+    return SingleChildScrollView(
       //Previene BOTTOM OVERFLOWED
       padding: EdgeInsets.all(20),
       child: Column(
@@ -94,13 +88,6 @@ class NuevoUsuarioState extends State<NuevoUsuario> {
       _pwd_auto = value;
     });
   }
-
-  // Recargamos la página desde el estado de inicial
-  /*recarga() {
-    setState(() {
-      _visible = false;
-    });
-  }*/
 
   avisoContraManual(bool hasFocus) {
     // Si la casilla de contraseña auto generada está marcada no permitirá

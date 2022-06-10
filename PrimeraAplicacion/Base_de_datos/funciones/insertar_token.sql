@@ -1,7 +1,3 @@
--- FUNCTION: public.insertar_token(jsonb)
-
-DROP FUNCTION IF EXISTS public.insertar_token(jsonb);
-
 CREATE OR REPLACE FUNCTION public.insertar_token(
 	jleer jsonb,
 	OUT jresultado jsonb)
@@ -48,7 +44,6 @@ BEGIN
 			FROM jsonb_populate_record(null::json_insert_token, jleer) j
 			RETURNING ust_token INTO cToken;
 
-
 		IF FOUND then
 			bOk := true;
 		END IF;
@@ -59,17 +54,7 @@ BEGIN
 			|| '", "bOk":"' || bOk
 			|| '", "token":"' ||cToken||'"}')::jsonb || jresultado ::jsonb INTO jresultado;
 
-
 	EXCEPTION WHEN OTHERS THEN
 		select excepcion from control_excepciones(SQLSTATE, SQLERRM) into jresultado;
 	END;
 $BODY$;
-
-ALTER FUNCTION public.insertar_token(jsonb)
-    OWNER TO postgres;
-
-
---	Función que asocia un token a un usuario,
---	cada token es único para cada usuario
---	este comprueba si el token esta activo
---	si no lo esta este creará uno nuevo

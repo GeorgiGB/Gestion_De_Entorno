@@ -36,10 +36,6 @@ app.use(bodyParser.json());
 app.use(express.json())
 app.listen(8080);
 
-//! -------------------------------------
-globales.msg("Servidor ok");
-//! -------------------------------------
-
 /*
     Iniciar sesión con el usuario
 */
@@ -83,3 +79,7 @@ app.post('/listado_empresas', (req, res) => {
 app.post('/cerrar_sesion', (req, res) => {
     globales.lanzarPeticion(cerrar_sesion, req, res)
 });
+
+//! -------------------------------------
+globales.msg("Servidor ok");
+//! -------------------------------------

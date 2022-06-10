@@ -1,7 +1,3 @@
--- FUNCTION: public.crear_empresa(jsonb)
-
-DROP FUNCTION IF EXISTS public.crear_empresa(jsonb);
-
 CREATE OR REPLACE FUNCTION public.crear_empresa(
 	jleer jsonb,
 	OUT jresultado jsonb)
@@ -22,7 +18,7 @@ AS $BODY$
 --	select * from crear_empresa('{"nombre":"pruebaempresaaa","pwd":"12333","auto_pwd":"false","ctoken":"a"}')
 
 --  Respuesta en jsonb correcta
---  [{"bOk": "true", "cod_error": "0"}]
+--  [{"bOk": "true", "cod_error": "200"}]
 
 --  Respuesta en jsonb error empresa existente --
 --  [
@@ -105,13 +101,9 @@ BEGIN
 	SELECT ('{"bOk":"' || bOk 
 			|| '", "cod_error":"' || icod_error || '"}')::jsonb || jresultado::jsonb into jresultado;
 
-
 	EXCEPTION
 	-- Códigos de error -> https://www.postgresql.org/docs/current/errcodes-appendix.html
 	WHEN OTHERS THEN
 		select excepcion from control_excepciones(SQLSTATE, SQLERRM) into jresultado;
 	END;
 $BODY$;
-
-ALTER FUNCTION public.crear_empresa(jsonb)
-    OWNER TO postgres;

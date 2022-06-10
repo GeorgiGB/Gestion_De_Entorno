@@ -1,7 +1,3 @@
--- FUNCTION: public.crear_usuarios_telemetria(jsonb)
-
-DROP FUNCTION IF EXISTS public.crear_usuarios_telemetria(jsonb);
-
 CREATE OR REPLACE FUNCTION public.crear_usuarios_telemetria(
 	jleer jsonb,
 	OUT jresultado jsonb)
@@ -16,7 +12,6 @@ AS $BODY$
 --	select * from crear_usuarios_telemetria('{"emp_cod": "41", "ctoken": "a", "nombre": "usunuevotele", "pwd": "1111111", "auto_pwd": "false", "filtro": "ute_ruta", "cod_filtro": "37"}');
 --	select * from usuarios_telemetria
 
-
 --	Función de creación de usuarios de telemetria
 --	el cual solo podra acceder un usuario principal con un token activo
 --	a la hora de la creación del usuario de telemetria
@@ -30,7 +25,7 @@ AS $BODY$
 
     BEGIN
         bOk := false;
-        icod_error := '0';
+        icod_error := 0;
         cError := '';
         jresultado := '[]';
 		
@@ -88,7 +83,7 @@ AS $BODY$
 			
 		ELSE
 			--	Token no válido, usuario no validado.
-			icod_error = '-404';
+			icod_error = -404;
         END IF;
 		
 		--	Añadimos la variable bOk i statusHTML al JSON jresultado
@@ -99,6 +94,3 @@ AS $BODY$
 		select excepcion from control_excepciones(SQLSTATE, SQLERRM) into jresultado;
     END;
 $BODY$;
-
-ALTER FUNCTION public.crear_usuarios_telemetria(jsonb)
-    OWNER TO postgres;

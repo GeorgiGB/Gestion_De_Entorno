@@ -1,7 +1,3 @@
--- FUNCTION: public.cerrar_sesion(jsonb)
-
--- DROP FUNCTION IF EXISTS public.cerrar_sesion(jsonb);
-
 CREATE OR REPLACE FUNCTION public.cerrar_sesion(
 	jleer jsonb,
 	OUT jresultado jsonb)
@@ -51,6 +47,3 @@ BEGIN
 		select excepcion from control_excepciones(SQLSTATE, SQLERRM) into jresultado;
 		END;
 $BODY$;
-
-ALTER FUNCTION public.cerrar_sesion(jsonb)
-    OWNER TO postgres;

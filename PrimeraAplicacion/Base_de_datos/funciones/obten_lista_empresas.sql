@@ -1,7 +1,3 @@
--- FUNCTION: public.obten_lista_empresas(jsonb)
-
--- DROP FUNCTION IF EXISTS public.obten_lista_empresas(jsonb);
-
 CREATE OR REPLACE FUNCTION public.obten_lista_empresas(
 	jleer jsonb,
 	OUT jresultado jsonb)
@@ -46,7 +42,7 @@ BEGIN
 		--  importante añadir COALESCE(jresultado, '{}') porque jresultado puede ser null
 		SELECT (COALESCE(jresultado, '[]'))::jsonb into jresultado;
 	ELSE
-		icod_error := 401;
+		icod_error := -401;
 	END IF;
 				
 		SELECT ('{"bOk":"' || bOk
@@ -57,6 +53,3 @@ BEGIN
 		select excepcion from control_excepciones(SQLSTATE, SQLERRM) into jresultado;
 		END;
 $BODY$;
-
-ALTER FUNCTION public.obten_lista_empresas(jsonb)
-    OWNER TO postgres;

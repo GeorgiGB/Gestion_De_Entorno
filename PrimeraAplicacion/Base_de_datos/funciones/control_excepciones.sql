@@ -1,7 +1,3 @@
--- FUNCTION: public.control_excepciones(character varying, character varying)
-
--- DROP FUNCTION IF EXISTS public.control_excepciones(character varying, character varying);
-
 CREATE OR REPLACE FUNCTION public.control_excepciones(
 	cod_error character varying,
 	cerror character varying,
@@ -30,6 +26,9 @@ AS $BODY$
 					WHEN cod_error = '22P02' THEN
 						--cod_error :='-22P02';
 						cerror := 'invalid_text_representation';
+						
+					WHEN cod_error ='22007' THEN
+						cerror :='sintaxis de entrada es incorrecta';
 					
 					-- Otros posibles errores no contemplados
 					ELSE
@@ -39,7 +38,4 @@ AS $BODY$
 				excepcion :='[{"cod_error":"' || '-' || cod_error || '", "msg_error":"' || cerror || '"}]';
 			END;
 $BODY$;
-
-ALTER FUNCTION public.control_excepciones(character varying, character varying)
-    OWNER TO postgres;
 

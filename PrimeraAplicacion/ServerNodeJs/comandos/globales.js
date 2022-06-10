@@ -30,6 +30,7 @@ function peticiones(response, res){
 
     let responseErr = response[0].cod_error;
     let status = CodigosServidor.error;
+    //Controlamos las respuestas
     with(RespuestasBBDD){
         switch (responseErr){
             case ok:
@@ -39,40 +40,36 @@ function peticiones(response, res){
             case userNotAuth:
                 status = CodigosServidor.userNotAuth;
                 break;
-
+            // No se ha podido encontrar el recurso solicitado
+            // La respuesta de la BBDD contiene el motivo
             case uniqueViolation:
-
             case foreignKeyViolation:
-
             case invalidTextRepresentation:
-                
             case userOrPwdNotFound:
                 status = CodigosServidor.recursoNoEncontrado
                 break;
-                
+            // Cualquier otro código és un error del servidor
+            // de la BBDD
             default:
                 status = CodigosServidor.error;
         }
     }
 
-    // Errores de la BBDD
+    // Errores de la BBDD y lo registramos
     if(status == CodigosServidor.error){
         registrarErr(JSON.stringify(response[0]))
     }
 
-
-    msg(status)
+    // Enviamos la respuesta del servidor
     header(res).status(status).json(response)
 }
 
 //  Función asincrona que añade un try cath para evitar errores
 //  y manda la peticion deseada
  function lanzarPeticion(x, req, res){
-    //  ctoken = bearer token
-    //  Esta linea recoge el token del usuario
+    // Capturamos los posibles errores y los registramos
+    // con la función error de servidor
     try {
-        //no borrar para mostrar el registro de logs
-        //header(res).status(parseInt('hola')).json("asa")
         let authorization = req.headers.authorization
         if(authorization){
             req.body.ctoken = authorization.split(' ')[1]
