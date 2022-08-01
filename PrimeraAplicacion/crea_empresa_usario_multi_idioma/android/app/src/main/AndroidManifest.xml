@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.crea_empresa_usario">
    <application
-        android:label="crea_empresa_usario"
+        android:label="Gestion Telemetria"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

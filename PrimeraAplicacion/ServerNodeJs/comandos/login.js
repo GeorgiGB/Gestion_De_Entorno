@@ -29,6 +29,7 @@ async function login(json_login){
             msg(fila0)
             fila = fila0
         }
+        globales.msg(fila)
         return fila;
     }
 

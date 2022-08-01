@@ -1,7 +1,3 @@
--- FUNCTION: public.login(json)
-
-DROP FUNCTION IF EXISTS public.login(jsonb);
-
 CREATE OR REPLACE FUNCTION public.login(
 	jleer jsonb,
 	OUT jresultado jsonb)
@@ -48,17 +44,6 @@ BEGIN
 		cError := 'user_or_pwd_not_found';
 	END IF;
 	
-	
-	-- Añadimos el resultado a la salida jresultado
-
-	-- SELECT ('{"status":"' || icod_error
-	-- 	|| '", "cod":"' || iUsu_cod 
-	-- 	|| '", "bOk":"' || bOk||'"}')::jsonb || jresultado::jsonb into jresultado;
-
-	-- esto no es correcto
-	-- SELECT ('{"bOk":"' || bOk 
-	--		|| '", "cod_error":"' || icod_error || '"}')::jsonb || jresultado::jsonb into jresultado;
-	
 	SELECT ('{"bOk":"' || bOk 
 		 	|| '", "cod":"' || iUsu_cod 
 			|| '", "cod_error":"' || icod_error
@@ -68,6 +53,3 @@ BEGIN
 		select excepcion from control_excepciones(SQLSTATE, SQLERRM) into jresultado;
 		END;
 $BODY$;
-
-ALTER FUNCTION public.login(jsonb)
-    OWNER TO postgres;

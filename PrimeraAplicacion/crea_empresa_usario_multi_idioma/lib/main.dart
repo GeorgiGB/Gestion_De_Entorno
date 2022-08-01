@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 
 // Imports multi-idioma ---------------------
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 // Constantes donde se guarda el idoma escogido y desde donde actualizamos
 // la configuración de la aplicación
 import 'config_regional/model/locale_constant.dart' as const_reg;
