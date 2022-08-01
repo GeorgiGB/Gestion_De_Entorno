@@ -29,7 +29,8 @@ let app = express();
 app.set('accesTokenSecret', verificar.llaveSecreta)
 
 //! Configuración de cors
-var corsOptions = require("./config/cors.config")
+var corsOptions = require("./config/cors.config");
+const correo = require('./comandos/correo');
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
@@ -54,6 +55,7 @@ app.post('/login', (req, res) => {
 */
 app.post('/crear_empresa', (req, res) => {
     globales.lanzarPeticion(crear_emp, req, res)
+    
 });
 
 /*
@@ -63,6 +65,7 @@ app.post('/crear_empresa', (req, res) => {
 
 app.post('/crear_usuarios_telemetria', (req, res) => {
     globales.lanzarPeticion(crear_ute, req, res)
+    globales.lanzarPeticion(correo.mandaCorreos, req, res)
 });
 
 /*
